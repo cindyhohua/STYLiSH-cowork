@@ -20,6 +20,8 @@ class MyOrderListViewController: UIViewController, UITableViewDelegate, UITableV
         orderListTable.dataSource = self
         setOutlay()
         setTable()
+        setNavigationAndTab()
+        
     }
     
 
@@ -36,6 +38,18 @@ class MyOrderListViewController: UIViewController, UITableViewDelegate, UITableV
     let numberOfOrder = 3
     var orderIDs: [String] = []
     var orderTimes: [String] = []
+    
+    func setNavigationAndTab(){
+        self.tabBarController?.tabBar.isHidden = true
+        self.title = "我的訂單"
+        // 設定導航條背景顏色
+        self.navigationController?.navigationBar.barTintColor = .white
+        
+        // 設定導航條文字顏色
+        self.navigationController?.navigationBar.titleTextAttributes = [NSAttributedString.Key.foregroundColor: UIColor.black]
+        view.backgroundColor = .white
+        
+    }
     func setOutlay(){
         view.addSubview(orderListTable)
         orderListTable.translatesAutoresizingMaskIntoConstraints = false
@@ -44,7 +58,7 @@ class MyOrderListViewController: UIViewController, UITableViewDelegate, UITableV
             orderListTable.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor),
             orderListTable.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 0),
             orderListTable.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor),
-            orderListTable.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor)
+            orderListTable.bottomAnchor.constraint(equalTo: view.bottomAnchor)
             
         ])
     }
@@ -60,10 +74,10 @@ class MyOrderListViewController: UIViewController, UITableViewDelegate, UITableV
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         if let cell = orderListTable.dequeueReusableCell(withIdentifier: "orderCell") as? OrderListTableViewCell {
             print("in cell")
-//            if orderTimes.count >= indexPath.row{
-//                cell.orderIDLabel.text = "訂單編號：" + orderIDs[indexPath.row]
-//                cell.orderTimeLabel.text = "購賣日期：" + orderTimes[indexPath.row]
-//            }
+            if orderTimes.isEmpty == false{
+                cell.orderIDLabel.text = "訂單編號：" + orderIDs[indexPath.row]
+                cell.orderTimeLabel.text = "購賣日期：" + orderTimes[indexPath.row]
+            }
             cell.orderIDLabel.text = "訂單編號："
             cell.orderTimeLabel.text = "購賣日期："
             return cell
@@ -72,4 +86,6 @@ class MyOrderListViewController: UIViewController, UITableViewDelegate, UITableV
             return UITableViewCell()
         }
     }
+    
+    
 }
