@@ -106,7 +106,12 @@ extension ProfileViewController: UICollectionViewDataSource {
 }
 
 extension ProfileViewController: UICollectionViewDelegateFlowLayout {
-
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        
+        if indexPath.section == 0 && indexPath.row == 3{
+            navigationController?.pushViewController(MyOrderListViewController(), animated: true)
+        }
+    }
     func collectionView(
         _ collectionView: UICollectionView,
         layout collectionViewLayout: UICollectionViewLayout,
