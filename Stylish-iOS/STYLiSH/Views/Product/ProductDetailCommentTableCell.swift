@@ -26,7 +26,6 @@ class CommentCell: UITableViewCell {
         contentView.addSubview(nameLabel)
         nameLabel.translatesAutoresizingMaskIntoConstraints = false
         nameLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 16).isActive = true
-        nameLabel.bottomAnchor.constraint(equalTo: contentView.centerYAnchor, constant: -16).isActive = true
         nameLabel.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 8).isActive = true
         nameLabel.text = "name"
         

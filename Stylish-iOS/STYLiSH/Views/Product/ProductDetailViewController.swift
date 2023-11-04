@@ -153,6 +153,28 @@ class ProductDetailViewController: STBaseViewController {
 
 // MARK: - UITableViewDataSource
 extension ProductDetailViewController: UITableViewDataSource, UITableViewDelegate {
+    func maskString(_ input: String) -> String {
+        let length = input.count
+        if length == 2 {
+            let startIndex = input.index(input.startIndex, offsetBy: 1)
+            return String(input[..<startIndex]) + "*"
+        } else if length < 2 {
+            return "*"
+        }
+        
+        let startIndex = input.index(input.startIndex, offsetBy: 1)
+        let endIndex = input.index(input.endIndex, offsetBy: -1)
+        
+        let head = String(input[..<startIndex])
+        let tail = String(input[endIndex...])
+        
+        let middle = String(repeating: "*", count: length - 2)
+        
+        let maskedString = head + middle + tail
+        
+        return maskedString
+    }
+
 
     func numberOfSections(in tableView: UITableView) -> Int {
         2
@@ -176,20 +198,22 @@ extension ProductDetailViewController: UITableViewDataSource, UITableViewDelegat
             return datas[indexPath.row].cellForIndexPath(indexPath, tableView: tableView, data: product)
         } else {
             let cell = CommentCell()
+            let name = "陸瑋恩"
             cell.configure(withRating: 4.5)
-            cell.commentLabel.text = "qqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqq"
+            cell.commentLabel.text = "qqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqq"
+            cell.nameLabel.text = maskString(name)
             return cell
         }
     }
     
-    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        switch indexPath.section {
-        case 1:
-            return UITableView.automaticDimension
-        default:
-            return UITableView.automaticDimension
-        }
-    }
+//    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+//        switch indexPath.section {
+//        case 1:
+//            return UITableView.automaticDimension
+//        default:
+//            return UITableView.automaticDimension
+//        }
+//    }
 }
 
 extension ProductDetailViewController: LKGalleryViewDelegate {
