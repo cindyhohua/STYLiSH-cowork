@@ -10,7 +10,7 @@ import UIKit
 
 class CommentHeader: UITableViewHeaderFooterView {
     var starImageViews: [UIImageView] = []
-    private var title = UILabel()
+    var title = UILabel()
     var starsLabel = UILabel()
     var commentsCounts = UILabel()
     var seeMoreComments = UIButton()
@@ -25,7 +25,7 @@ class CommentHeader: UITableViewHeaderFooterView {
         setupUI()
     }
     
-    private func setupUI() {
+    func setupUI() {
         for _ in 0..<5 {
             let starImageView = UIImageView()
             starImageView.contentMode = .scaleAspectFit
@@ -102,3 +102,61 @@ class CommentHeader: UITableViewHeaderFooterView {
     }
 }
 
+class SeeAllCommentHeader: CommentHeader {
+    override init(reuseIdentifier: String?) {
+        super.init(reuseIdentifier: reuseIdentifier)
+        setupUI()
+    }
+    
+    required init?(coder: NSCoder) {
+        super.init(coder: coder)
+        setupUI()
+    }
+    
+    override func setupUI() {
+        for _ in 0..<5 {
+            let starImageView = UIImageView()
+            starImageView.contentMode = .scaleAspectFit
+            starImageView.translatesAutoresizingMaskIntoConstraints = false
+            starImageViews.append(starImageView)
+            contentView.addSubview(starImageView)
+        }
+        
+        var previousStarImageView: UIImageView?
+        for (_, starImageView) in starImageViews.enumerated() {
+            NSLayoutConstraint.activate([
+                starImageView.widthAnchor.constraint(equalToConstant: 30),
+                starImageView.heightAnchor.constraint(equalToConstant: 30)
+            ])
+            if let previousStarImageView = previousStarImageView {
+                NSLayoutConstraint.activate([
+                    starImageView.leadingAnchor.constraint(equalTo: previousStarImageView.trailingAnchor, constant: 5)
+                ])
+            } else {
+                NSLayoutConstraint.activate([
+                    starImageView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 16)
+                ])
+            }
+            
+            NSLayoutConstraint.activate([
+                starImageView.centerYAnchor.constraint(equalTo: contentView.centerYAnchor, constant: -10)
+            ])
+            
+            previousStarImageView = starImageView
+        }
+        
+        contentView.addSubview(starsLabel)
+        starsLabel.translatesAutoresizingMaskIntoConstraints = false
+        starsLabel.text = "4.5/5"
+        starsLabel.leadingAnchor.constraint(equalTo: starImageViews.last?.trailingAnchor ?? contentView.centerXAnchor, constant: 16).isActive = true
+        starsLabel.centerYAnchor.constraint(equalTo: contentView.centerYAnchor, constant: -10).isActive = true
+        
+        contentView.addSubview(commentsCounts)
+        commentsCounts.translatesAutoresizingMaskIntoConstraints = false
+        commentsCounts.text = "(58則評論)"
+        commentsCounts.textColor = .lightGray
+        commentsCounts.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -16).isActive = true
+        commentsCounts.centerYAnchor.constraint(equalTo: contentView.centerYAnchor, constant: -10).isActive = true
+
+    }
+}

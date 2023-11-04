@@ -209,9 +209,15 @@ extension ProductDetailViewController: UITableViewDataSource, UITableViewDelegat
         if section == 1 {
             let headerView = CommentHeader(reuseIdentifier: "commentHeader")
             headerView.configure(withRating: 4.5)
+            headerView.seeMoreComments.addTarget(self, action: #selector(seeAllComment), for: .touchUpInside)
             return headerView
         }
         return nil
+    }
+    
+    @objc func seeAllComment() {
+        let nextVC = SeeAllCommentViewController()
+        self.navigationController?.pushViewController(nextVC, animated: true)
     }
     
     func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
@@ -220,7 +226,6 @@ extension ProductDetailViewController: UITableViewDataSource, UITableViewDelegat
         }
         return 0
     }
-
 }
 
 extension ProductDetailViewController: LKGalleryViewDelegate {
