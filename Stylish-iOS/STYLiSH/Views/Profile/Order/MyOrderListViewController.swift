@@ -35,13 +35,13 @@ class MyOrderListViewController: UIViewController, UITableViewDelegate, UITableV
     }
     */
     let orderListTable =  UITableView()
-    let numberOfOrder = 3
-    var orderIDs: [String] = []
-    var orderTimes: [String] = []
+    
+    var orderIDs: [String] = ["111"]
+    var orderTimes: [String] = ["2023.01.02"]
     
     func setNavigationAndTab(){
         self.tabBarController?.tabBar.isHidden = true
-        self.title = "我的訂單"
+        self.title = "購買記錄"
         // 設定導航條背景顏色
         self.navigationController?.navigationBar.barTintColor = .white
         
@@ -51,8 +51,7 @@ class MyOrderListViewController: UIViewController, UITableViewDelegate, UITableV
         
     }
     func setOutlay(){
-        view.addSubview(orderListTable)
-        orderListTable.translatesAutoresizingMaskIntoConstraints = false
+        addSubToSuperView(superview: view, subview: orderListTable)
         
         NSLayoutConstraint.activate([
             orderListTable.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor),
@@ -68,7 +67,8 @@ class MyOrderListViewController: UIViewController, UITableViewDelegate, UITableV
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        numberOfOrder
+        let numberOfOrder = orderIDs.count
+        return numberOfOrder
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -77,9 +77,11 @@ class MyOrderListViewController: UIViewController, UITableViewDelegate, UITableV
             if orderTimes.isEmpty == false{
                 cell.orderIDLabel.text = "訂單編號：" + orderIDs[indexPath.row]
                 cell.orderTimeLabel.text = "購賣日期：" + orderTimes[indexPath.row]
+            }else{
+                cell.orderIDLabel.text = "訂單編號："
+                cell.orderTimeLabel.text = "購賣日期："
             }
-            cell.orderIDLabel.text = "訂單編號："
-            cell.orderTimeLabel.text = "購賣日期："
+            
             return cell
         } else {
             // 如果轉型失敗，這裡可以處理錯誤情況或者返回一個默認的儲存格
@@ -87,5 +89,9 @@ class MyOrderListViewController: UIViewController, UITableViewDelegate, UITableV
         }
     }
     
-    
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        let productsVC = ProductsOfOrderViewController()
+        productsVC.orderInfo = OrderInfo(orderID: orderIDs[indexPath.row], orderTime: orderTimes[indexPath.row])
+        navigationController?.pushViewController(productsVC, animated: true)
+    }
 }
