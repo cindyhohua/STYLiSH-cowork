@@ -10,17 +10,30 @@ import UIKit
 
 class AuthViewController: STBaseViewController {
 
+    @IBOutlet weak var emailTextField: UITextField!
     @IBOutlet weak var contentView: UIView!
-
+    @IBOutlet weak var passwordTextField: UITextField!
+    @IBOutlet weak var signInButton: UIButton!
     private let userProvider = UserProvider(httpClient: HTTPClient())
 
     override func viewDidLoad() {
         super.viewDidLoad()
         contentView.isHidden = true
+        passwordTextField.isSecureTextEntry = true
+        signInButton.addTarget(self, action: #selector(signInTapped), for: .touchUpInside)
+    }
+    
+    @objc func signInTapped() {
+        print(emailTextField.text)
+        print(passwordTextField.text)
+        emailTextField.text = ""
+        passwordTextField.text = ""
+        self.presentingViewController?.dismiss(animated: false, completion: nil)
     }
 
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
+
         UIView.animate(withDuration: 1, animations: { [weak self] in
             self?.contentView.isHidden = false
         })
