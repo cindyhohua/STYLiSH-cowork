@@ -9,7 +9,7 @@
 import UIKit
 
 class ProductDetailViewController: STBaseViewController {
-
+    
     private struct Segue {
         static let picker = "SeguePicker"
     }
@@ -17,6 +17,7 @@ class ProductDetailViewController: STBaseViewController {
     @IBOutlet weak var tableView: UITableView! {
         didSet {
             tableView.dataSource = self
+            tableView.delegate = self
         }
     }
 
@@ -151,16 +152,43 @@ class ProductDetailViewController: STBaseViewController {
 }
 
 // MARK: - UITableViewDataSource
-extension ProductDetailViewController: UITableViewDataSource {
+extension ProductDetailViewController: UITableViewDataSource, UITableViewDelegate {
 
+    func numberOfSections(in tableView: UITableView) -> Int {
+        2
+    }
+    
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         guard product != nil else { return 0 }
-        return datas.count
+        switch section {
+        case 0:
+            return datas.count
+        case 1:
+            return 6
+        default:
+            return 0
+        }
     }
 
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         guard let product = product else { return UITableViewCell() }
-        return datas[indexPath.row].cellForIndexPath(indexPath, tableView: tableView, data: product)
+        if indexPath.section == 0 {
+            return datas[indexPath.row].cellForIndexPath(indexPath, tableView: tableView, data: product)
+        } else {
+            let cell = CommentCell()
+            cell.configure(withRating: 4.5)
+            cell.commentLabel.text = "qqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqq"
+            return cell
+        }
+    }
+    
+    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        switch indexPath.section {
+        case 1:
+            return UITableView.automaticDimension
+        default:
+            return UITableView.automaticDimension
+        }
     }
 }
 
