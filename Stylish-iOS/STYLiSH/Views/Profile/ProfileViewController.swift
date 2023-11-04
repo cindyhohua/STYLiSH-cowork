@@ -22,6 +22,10 @@ class ProfileViewController: UIViewController {
             collectionView.dataSource = self
         }
     }
+    
+    private var memberCoupon: Int = 0
+    
+    private var couponLabel = UILabel()
 
     private let manager = ProfileManager()
     
@@ -40,6 +44,12 @@ class ProfileViewController: UIViewController {
         fetchData()
         // if 今日首次登入==true
         couponGame()
+        view.addSubview(couponLabel)
+        couponLabel.translatesAutoresizingMaskIntoConstraints = false
+        couponLabel.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -10).isActive = true
+        couponLabel.centerYAnchor.constraint(equalTo: imageProfile.centerYAnchor, constant: -10).isActive = true
+        couponLabel.text = "會員點數：\(50)點"
+        couponLabel.textColor = .white
     }
 
     // MARK: - Action
@@ -66,6 +76,7 @@ class ProfileViewController: UIViewController {
         labelName.text = user.name
         labelInfo.text = user.getUserInfo()
         labelInfo.isHidden = false
+        
     }
 }
 
