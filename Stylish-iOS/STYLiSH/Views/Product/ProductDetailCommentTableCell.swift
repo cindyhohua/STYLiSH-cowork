@@ -11,7 +11,7 @@ class CommentCell: UITableViewCell {
     var nameLabel = UILabel()
     var starImageViews: [UIImageView] = []
     var commentLabel = UILabel()
-    
+    private var saperateLine = UIView()
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         setupUI()
@@ -23,6 +23,14 @@ class CommentCell: UITableViewCell {
     }
     
     func setupUI() {
+        contentView.addSubview(saperateLine)
+        saperateLine.translatesAutoresizingMaskIntoConstraints = false
+        saperateLine.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 16).isActive = true
+        saperateLine.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -16).isActive = true
+        saperateLine.topAnchor.constraint(equalTo: contentView.topAnchor,constant: 0).isActive = true
+        saperateLine.heightAnchor.constraint(equalToConstant: 1).isActive = true
+        saperateLine.backgroundColor = .B5
+        
         contentView.addSubview(nameLabel)
         nameLabel.translatesAutoresizingMaskIntoConstraints = false
         nameLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 16).isActive = true

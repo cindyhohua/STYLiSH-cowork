@@ -175,9 +175,8 @@ extension ProductDetailViewController: UITableViewDataSource, UITableViewDelegat
         return maskedString
     }
 
-
     func numberOfSections(in tableView: UITableView) -> Int {
-        2
+        return 2
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -206,14 +205,22 @@ extension ProductDetailViewController: UITableViewDataSource, UITableViewDelegat
         }
     }
     
-//    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-//        switch indexPath.section {
-//        case 1:
-//            return UITableView.automaticDimension
-//        default:
-//            return UITableView.automaticDimension
-//        }
-//    }
+    func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
+        if section == 1 {
+            let headerView = CommentHeader(reuseIdentifier: "commentHeader")
+            headerView.configure(withRating: 4.5)
+            return headerView
+        }
+        return nil
+    }
+    
+    func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
+        if section == 1 {
+            return 100
+        }
+        return 0
+    }
+
 }
 
 extension ProductDetailViewController: LKGalleryViewDelegate {
