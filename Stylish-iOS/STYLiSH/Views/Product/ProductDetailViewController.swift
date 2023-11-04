@@ -197,6 +197,7 @@ extension ProductDetailViewController: UITableViewDataSource, UITableViewDelegat
             return datas[indexPath.row].cellForIndexPath(indexPath, tableView: tableView, data: product)
         } else {
             let cell = CommentCell()
+            cell.isUserInteractionEnabled = false
             let name = "陸瑋恩"
             cell.configure(withRating: 4.5)
             cell.commentLabel.text = "qqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqq"

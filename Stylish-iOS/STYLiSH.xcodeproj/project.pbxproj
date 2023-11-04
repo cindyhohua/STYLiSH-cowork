@@ -133,6 +133,7 @@
 		CA7C603A2AF5262F00C00E8D /* ProductDetailCommentTableCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = CA7C60392AF5262E00C00E8D /* ProductDetailCommentTableCell.swift */; };
 		CA7C603C2AF5FB1000C00E8D /* ProductDetailCommentTableHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = CA7C603B2AF5FB1000C00E8D /* ProductDetailCommentTableHeader.swift */; };
 		CA7C603E2AF60D9900C00E8D /* SeeAllCommentViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CA7C603D2AF60D9900C00E8D /* SeeAllCommentViewController.swift */; };
+		CA7C60402AF628FC00C00E8D /* CouponGameViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CA7C603F2AF628FC00C00E8D /* CouponGameViewController.swift */; };
 		D306B883B370DFD3ED8ACD74 /* Pods_STYLiSH.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 42C2B4AF3EF2ABFF2BB9F7AB /* Pods_STYLiSH.framework */; };
 /* End PBXBuildFile section */
 
@@ -288,6 +289,7 @@
 		CA7C60392AF5262E00C00E8D /* ProductDetailCommentTableCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProductDetailCommentTableCell.swift; sourceTree = "<group>"; };
 		CA7C603B2AF5FB1000C00E8D /* ProductDetailCommentTableHeader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProductDetailCommentTableHeader.swift; sourceTree = "<group>"; };
 		CA7C603D2AF60D9900C00E8D /* SeeAllCommentViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SeeAllCommentViewController.swift; sourceTree = "<group>"; };
+		CA7C603F2AF628FC00C00E8D /* CouponGameViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CouponGameViewController.swift; sourceTree = "<group>"; };
 		E921004E251C9FC3CBC174F5 /* Pods-STYLiSH.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-STYLiSH.release.xcconfig"; path = "Target Support Files/Pods-STYLiSH/Pods-STYLiSH.release.xcconfig"; sourceTree = "<group>"; };
 		F551E8F447D7C8DC42B53B98 /* Pods-STYLiSH.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-STYLiSH.debug.xcconfig"; path = "Target Support Files/Pods-STYLiSH/Pods-STYLiSH.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -359,6 +361,7 @@
 			isa = PBXGroup;
 			children = (
 				3C1ACFE322151F50005583E2 /* ProfileViewController.swift */,
+				CA7C603F2AF628FC00C00E8D /* CouponGameViewController.swift */,
 				3C1ACFE822152D29005583E2 /* ProfileCollectionViewCell.swift */,
 				3C1ACFEA22153114005583E2 /* ProfileCollectionReusableView.swift */,
 			);
@@ -1006,6 +1009,7 @@
 				3C4B10E222292EBB009942B7 /* STTapPayViewController.swift in Sources */,
 				3C831C8A22EAAF7A00112298 /* STPaymentInfoTableViewCell.swift in Sources */,
 				3C990F6C22E5C78200F2FCEA /* ProductDetailView.swift in Sources */,
+				CA7C60402AF628FC00C00E8D /* CouponGameViewController.swift in Sources */,
 				CA7C603C2AF5FB1000C00E8D /* ProductDetailCommentTableHeader.swift in Sources */,
 				3C546BE722EAC79D0082C655 /* STOrderHeaderView.swift in Sources */,
 				3C5DD7CC2227EFFF0053B67A /* TrolleyViewController.swift in Sources */,

@@ -24,6 +24,7 @@ class SeeAllCommentViewController: UIViewController {
         tableView.register(SeeAllCommentCell.self, forCellReuseIdentifier: "commentCell")
         tableView.dataSource = self
         tableView.delegate = self
+        tableView.separatorStyle = .none
     }
     
     @objc func back(sender: AnyObject) {
@@ -37,12 +38,36 @@ class SeeAllCommentViewController: UIViewController {
 }
 
 extension SeeAllCommentViewController: UITableViewDataSource, UITableViewDelegate {
+    func maskString(_ input: String) -> String {
+        let length = input.count
+        if length == 2 {
+            let startIndex = input.index(input.startIndex, offsetBy: 1)
+            return String(input[..<startIndex]) + "*"
+        } else if length < 2 {
+            return "*"
+        }
+        
+        let startIndex = input.index(input.startIndex, offsetBy: 1)
+        let endIndex = input.index(input.endIndex, offsetBy: -1)
+        
+        let head = String(input[..<startIndex])
+        let tail = String(input[endIndex...])
+        
+        let middle = String(repeating: "*", count: length - 2)
+        
+        let maskedString = head + middle + tail
+        
+        return maskedString
+    }
+    
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return 6
     }
 
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = SeeAllCommentCell()
+        cell.isUserInteractionEnabled = false
+        cell.nameLabel.text = maskString("陸瑋恩")
         cell.configure(withRating: 4.5)
         cell.commentLabel.text = "QQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQ"
 
@@ -55,11 +80,33 @@ extension SeeAllCommentViewController: UITableViewDataSource, UITableViewDelegat
     
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
         let headerView = SeeAllCommentHeader(reuseIdentifier: "seeAllCommentHeader")
-        headerView.configure(withRating: 4.8)
+        headerView.configure(withRating: 4.5)
+        headerView.isUserInteractionEnabled = false
         return headerView
     }
     
     func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
         return 60
+    }
+    
+    func footerLoader() {
+        tableView.endFooterRefreshing()
+//        guard let paging = paging else {
+//            endWithNoMoreData()
+//            return
+//        }
+//        provider?.fetchData(paging: paging, completion: { [weak self] result in
+//            self?.endFooterRefreshing()
+//            guard let self = self else { return }
+//            switch result {
+//            case .success(let response):
+//                guard let originalData = self.datas.first else { return }
+//                let newDatas = response.data
+//                self.datas = [originalData + newDatas]
+//                self.paging = response.paging
+//            case .failure(let error):
+//                LKProgressHUD.showFailure(text: error.localizedDescription)
+//            }
+//        })
     }
 }

@@ -38,6 +38,8 @@ class ProfileViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         fetchData()
+        // if 今日首次登入==true
+        couponGame()
     }
 
     // MARK: - Action
@@ -50,6 +52,12 @@ class ProfileViewController: UIViewController {
                 LKProgressHUD.showFailure(text: "讀取資料失敗！")
             }
         })
+    }
+    
+    private func couponGame(){
+        let couponViewController = CouponGameViewController()
+        couponViewController.modalPresentationStyle = .overFullScreen
+        present(couponViewController, animated: true)
     }
     
     private func updateUser(_ user: User) {
