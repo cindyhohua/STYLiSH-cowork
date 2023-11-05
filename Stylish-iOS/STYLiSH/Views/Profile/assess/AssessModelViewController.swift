@@ -1,5 +1,5 @@
 //
-//  AssessModelViewController.swift
+//  ReviewModelViewController.swift
 //  STYLiSH
 //
 //  Created by 莊羚羊 on 2023/11/5.
@@ -8,7 +8,7 @@
 
 import UIKit
 
-class AssessModelViewController: UIViewController {
+class ReviewModelViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -47,6 +47,15 @@ class AssessModelViewController: UIViewController {
         return label
     }()
     
+    let checkButton: UIButton = {
+        let button = UIButton()
+        button.backgroundColor = .B1
+        button.setTitle("確     認", for: .normal)
+        button.setTitleColor(.white, for: .normal)
+        button.layer.cornerRadius = 10
+        return button
+    }()
+    
     func setColorAndSize(){
         if productOfColors != nil {
             for _ in 0..<productOfColors.count{
@@ -77,7 +86,7 @@ class AssessModelViewController: UIViewController {
     func setView(){
         addSubToSuperView(superview: view, subview: productImage)
         addSubToSuperView(superview: view, subview: titleLabel)
-        
+        addSubToSuperView(superview: view, subview: checkButton)
 
         setColorAndSize()
         productImage.setContentCompressionResistancePriority(.required, for: .vertical)
@@ -94,7 +103,10 @@ class AssessModelViewController: UIViewController {
             titleLabel.leadingAnchor.constraint(equalTo: productImage.trailingAnchor, constant: 20),
             titleLabel.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 16),
         
-            
+            checkButton.widthAnchor.constraint(equalTo: view.widthAnchor, multiplier: 0.8),
+            checkButton.heightAnchor.constraint(equalToConstant: 48),
+            checkButton.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            checkButton.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -80)
             
         ])
         

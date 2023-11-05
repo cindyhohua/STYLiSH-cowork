@@ -10,7 +10,7 @@ import UIKit
 
 
 protocol ProductsOfOrderTableViewCellDelegate{
-    func assessActive(cell: ProductsOfOrderTableViewCell)
+    func reviewActive(cell: ProductsOfOrderTableViewCell)
 }
 
 class ProductsOfOrderTableViewCell: UITableViewCell {
@@ -63,14 +63,16 @@ class ProductsOfOrderTableViewCell: UITableViewCell {
     }()
     
     func setButtonActive(){
-        checkButton.addTarget(self, action: #selector(assessAction), for: .touchUpInside)
+        checkButton.addTarget(self, action: #selector(reviewAction), for: .touchUpInside)
     }
     
-    @objc func assessAction(){
-        delegate?.assessActive(cell: self)
+    @objc func reviewAction(){
+        delegate?.reviewActive(cell: self)
     }
     
     func setColorAndSize(){
+        colorView.removeAll()
+        sizeLabel.removeAll()
         if productOfColors != nil {
             for _ in 0..<productOfColors.count{
                 let cView: UIView = {

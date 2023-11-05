@@ -107,6 +107,10 @@ class ProductsOfOrderViewController: UIViewController {
 }
 
 extension ProductsOfOrderViewController: UITableViewDelegate, UITableViewDataSource, ProductsOfOrderTableViewCellDelegate{
+  
+    
+    
+    
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         numberOfProducts
     }
@@ -125,11 +129,11 @@ extension ProductsOfOrderViewController: UITableViewDelegate, UITableViewDataSou
         126
     }
     
-    func assessActive(cell: ProductsOfOrderTableViewCell) {
-        let assessVC = AssessViewController()
-        assessVC.productOfColors = cell.productOfColors
-        assessVC.productOfSize = cell.productOfSize
-        navigationController?.pushViewController(assessVC, animated: true)
+    func reviewActive(cell: ProductsOfOrderTableViewCell) {
+        let reviewVC = ReviewViewController()
+        reviewVC.productOfColors = cell.productOfColors
+        reviewVC.productOfSize = cell.productOfSize
+        navigationController?.pushViewController(reviewVC, animated: true)
     }
     
 }
