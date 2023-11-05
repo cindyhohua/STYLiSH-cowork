@@ -61,6 +61,8 @@ class STPaymentInfoTableViewCell: UITableViewCell {
         }
     }
     
+    @IBOutlet weak var memberPointButton: UIButton!
+    
     @IBOutlet weak var checkoutBtn: UIButton!
     
     private lazy var paymentMethod: [String] = self.delegate?.textsForPickerView(self) ?? []

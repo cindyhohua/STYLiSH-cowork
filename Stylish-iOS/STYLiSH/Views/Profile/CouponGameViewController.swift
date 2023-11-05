@@ -55,7 +55,7 @@ class CouponGameViewController: UIViewController {
         dismissButton.topAnchor.constraint(equalTo: lotteryView.topAnchor, constant: 8).isActive = true
         
         lotteryView.addSubview(titleLabel)
-        titleLabel.text = " 恭喜獲得抽獎機會！"
+        titleLabel.text = "  幸運抽抽樂！"
         titleLabel.textColor = blue
         titleLabel.font = UIFont(name: "Helvetica-Bold", size: 33)
         titleLabel.translatesAutoresizingMaskIntoConstraints = false
@@ -84,8 +84,6 @@ class CouponGameViewController: UIViewController {
             
             for _ in 0..<3 {
                 let button = UIButton(type: .custom)
-//                button.setTitle("?", for: .normal)
-//                button.setTitleColor(blue, for: .normal)
                 if let image = UIImage(named: "hanger") {
                     let resizedImage = image.resizableImage(withCapInsets: UIEdgeInsets(top: 10, left: 10, bottom: 10, right: 10), resizingMode: .stretch)
                     button.setImage(resizedImage, for: .normal)
@@ -111,10 +109,12 @@ class CouponGameViewController: UIViewController {
         
     }
     @objc func lotteryButtonTapped(_ sender: UIButton) {
-        sender.backgroundColor = blue
-        sender.setImage(.none, for: .normal)
-        sender.setTitle("!", for: .normal)
-        sender.setTitleColor(orange, for: .normal)
+        UIView.transition(with: sender, duration: 0.8, options: .transitionFlipFromRight, animations: {
+            sender.backgroundColor = self.blue
+            sender.setImage(.none, for: .normal)
+            sender.setTitle("!", for: .normal)
+            sender.setTitleColor(self.orange, for: .normal)
+        }, completion: nil)
         showLotteryResult()
     }
     
@@ -126,7 +126,7 @@ class CouponGameViewController: UIViewController {
     }
     
     func showLotteryResult() {
-        UIView.animate(withDuration: 1,delay: 0.5) {
+        UIView.animate(withDuration: 1,delay: 0.8) {
             self.titleLabel.alpha = 0
             self.stackView.alpha = 0
             self.contentLabel.alpha = 0
