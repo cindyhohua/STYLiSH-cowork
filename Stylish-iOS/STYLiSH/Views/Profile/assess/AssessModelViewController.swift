@@ -29,8 +29,8 @@ class AssessModelViewController: UIViewController {
     }
     */
     
-    var productOfColors: [UIColor] = [.B2!]
-    var productOfSize: [String] = ["m", "l"]
+    var productOfColors: [UIColor] = []
+    var productOfSize: [String] = []
     var colorView: [UIView] = []
     var sizeLabel: [UIView] = []
     

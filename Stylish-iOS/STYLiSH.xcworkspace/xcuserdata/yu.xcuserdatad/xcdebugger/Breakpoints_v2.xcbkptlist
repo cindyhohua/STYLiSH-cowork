@@ -3,4 +3,54 @@
    uuid = "A2A4D6AB-7373-4BC4-BFCD-4BA33B1F7C4E"
    type = "0"
    version = "2.0">
+   <Breakpoints>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "7B0D808D-38FF-459E-A18F-E3163B666F5A"
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "STYLiSH/Views/Profile/Order/ProductsOfOrderViewController.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "131"
+            endingLineNumber = "131"
+            landmarkName = "assessActive(cell:)"
+            landmarkType = "7">
+            <Locations>
+               <Location
+                  uuid = "7B0D808D-38FF-459E-A18F-E3163B666F5A - 18bf0b6e82962f68"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "STYLiSH.ProductsOfOrderViewController.tableView(_: __C.UITableView, didSelectRowAt: Foundation.IndexPath) -&gt; ()"
+                  moduleName = "STYLiSH"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/yu/Documents/iOS/AppWorks/%E9%A7%90%E9%BB%9E/STYLiSH-cowork/Stylish-iOS/STYLiSH/Views/Profile/Order/ProductsOfOrderViewController.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "131"
+                  endingLineNumber = "131"
+                  offsetFromSymbolStart = "240">
+               </Location>
+               <Location
+                  uuid = "7B0D808D-38FF-459E-A18F-E3163B666F5A - dba7bfac608e2a8e"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "STYLiSH.ProductsOfOrderViewController.assessActive(cell: STYLiSH.ProductsOfOrderTableViewCell) -&gt; ()"
+                  moduleName = "STYLiSH"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/yu/Documents/iOS/AppWorks/%E9%A7%90%E9%BB%9E/STYLiSH-cowork/Stylish-iOS/STYLiSH/Views/Profile/Order/ProductsOfOrderViewController.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "131"
+                  endingLineNumber = "131"
+                  offsetFromSymbolStart = "181">
+               </Location>
+            </Locations>
+         </BreakpointContent>
+      </BreakpointProxy>
+   </Breakpoints>
 </Bucket>

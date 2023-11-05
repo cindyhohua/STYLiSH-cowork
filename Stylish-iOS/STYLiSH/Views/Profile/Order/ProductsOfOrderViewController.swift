@@ -106,14 +106,14 @@ class ProductsOfOrderViewController: UIViewController {
    
 }
 
-extension ProductsOfOrderViewController: UITableViewDelegate, UITableViewDataSource{
+extension ProductsOfOrderViewController: UITableViewDelegate, UITableViewDataSource, ProductsOfOrderTableViewCellDelegate{
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         numberOfProducts
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         if let cell = productListTable.dequeueReusableCell(withIdentifier: "productCell") as? ProductsOfOrderTableViewCell {
-        
+            cell.delegate = self
             return cell
         } else {
             // 如果轉型失敗，這裡可以處理錯誤情況或者返回一個默認的儲存格
@@ -125,8 +125,11 @@ extension ProductsOfOrderViewController: UITableViewDelegate, UITableViewDataSou
         126
     }
     
-    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+    func assessActive(cell: ProductsOfOrderTableViewCell) {
         let assessVC = AssessViewController()
+        assessVC.productOfColors = cell.productOfColors
+        assessVC.productOfSize = cell.productOfSize
         navigationController?.pushViewController(assessVC, animated: true)
     }
+    
 }

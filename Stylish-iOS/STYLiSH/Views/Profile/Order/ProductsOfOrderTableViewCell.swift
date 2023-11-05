@@ -8,17 +8,24 @@
 
 import UIKit
 
+
+protocol ProductsOfOrderTableViewCellDelegate{
+    func assessActive(cell: ProductsOfOrderTableViewCell)
+}
+
 class ProductsOfOrderTableViewCell: UITableViewCell {
 
     override func awakeFromNib() {
         super.awakeFromNib()
         // Initialization code
         setCellView()
+        setButtonActive()
         
     }
     override func didMoveToWindow() {
         super.didMoveToWindow()
         setCellView()
+        setButtonActive()
     }
     override func setSelected(_ selected: Bool, animated: Bool) {
         super.setSelected(selected, animated: animated)
@@ -26,6 +33,8 @@ class ProductsOfOrderTableViewCell: UITableViewCell {
         
 
     }
+    
+    var delegate: ProductsOfOrderTableViewCellDelegate?
     
     var productOfColors: [UIColor] = [.B2!]
     var productOfSize: [String] = ["m", "l"]
@@ -53,7 +62,13 @@ class ProductsOfOrderTableViewCell: UITableViewCell {
         return button
     }()
     
+    func setButtonActive(){
+        checkButton.addTarget(self, action: #selector(assessAction), for: .touchUpInside)
+    }
     
+    @objc func assessAction(){
+        delegate?.assessActive(cell: self)
+    }
     
     func setColorAndSize(){
         if productOfColors != nil {
