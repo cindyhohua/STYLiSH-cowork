@@ -134,6 +134,7 @@
 		CA7C603C2AF5FB1000C00E8D /* ProductDetailCommentTableHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = CA7C603B2AF5FB1000C00E8D /* ProductDetailCommentTableHeader.swift */; };
 		CA7C603E2AF60D9900C00E8D /* SeeAllCommentViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CA7C603D2AF60D9900C00E8D /* SeeAllCommentViewController.swift */; };
 		CA7C60402AF628FC00C00E8D /* CouponGameViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CA7C603F2AF628FC00C00E8D /* CouponGameViewController.swift */; };
+		CABD7F1C2AF7658B00420070 /* couponInputViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CABD7F1B2AF7658B00420070 /* couponInputViewController.swift */; };
 		D306B883B370DFD3ED8ACD74 /* Pods_STYLiSH.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 42C2B4AF3EF2ABFF2BB9F7AB /* Pods_STYLiSH.framework */; };
 /* End PBXBuildFile section */
 
@@ -290,6 +291,7 @@
 		CA7C603B2AF5FB1000C00E8D /* ProductDetailCommentTableHeader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProductDetailCommentTableHeader.swift; sourceTree = "<group>"; };
 		CA7C603D2AF60D9900C00E8D /* SeeAllCommentViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SeeAllCommentViewController.swift; sourceTree = "<group>"; };
 		CA7C603F2AF628FC00C00E8D /* CouponGameViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CouponGameViewController.swift; sourceTree = "<group>"; };
+		CABD7F1B2AF7658B00420070 /* couponInputViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = couponInputViewController.swift; sourceTree = "<group>"; };
 		E921004E251C9FC3CBC174F5 /* Pods-STYLiSH.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-STYLiSH.release.xcconfig"; path = "Target Support Files/Pods-STYLiSH/Pods-STYLiSH.release.xcconfig"; sourceTree = "<group>"; };
 		F551E8F447D7C8DC42B53B98 /* Pods-STYLiSH.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-STYLiSH.debug.xcconfig"; path = "Target Support Files/Pods-STYLiSH/Pods-STYLiSH.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -373,6 +375,7 @@
 			children = (
 				3C5DD7CB2227EFFF0053B67A /* TrolleyViewController.swift */,
 				3C546BE422EABB6D0082C655 /* CheckoutViewController.swift */,
+				CABD7F1B2AF7658B00420070 /* couponInputViewController.swift */,
 				3C75FD0E22F1767D0068FEA5 /* CheckoutResultViewController.swift */,
 				3CE7A5082230464A009FF003 /* Checkout */,
 				3C33691D2227DC63008A5A7A /* TrolleySelectionView */,
@@ -1017,6 +1020,7 @@
 				3CB80E76222FCBE60095F18C /* STConstant.swift in Sources */,
 				3C1ACFE422151F50005583E2 /* ProfileViewController.swift in Sources */,
 				3C34794C222E82F600969C30 /* AmountSelectionCell.swift in Sources */,
+				CABD7F1C2AF7658B00420070 /* couponInputViewController.swift in Sources */,
 				3C75FD0F22F1767D0068FEA5 /* CheckoutResultViewController.swift in Sources */,
 				3CE7A51C223089C3009FF003 /* OrderProvider.swift in Sources */,
 				3C0DD87A221350B300F5237E /* UIColor+Extension.swift in Sources */,

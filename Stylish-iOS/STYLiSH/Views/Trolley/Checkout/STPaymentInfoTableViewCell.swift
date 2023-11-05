@@ -65,13 +65,14 @@ class STPaymentInfoTableViewCell: UITableViewCell {
     
     @IBOutlet weak var checkoutBtn: UIButton!
     
+    @IBOutlet weak var couponButton: UIButton!
+    
     private lazy var paymentMethod: [String] = self.delegate?.textsForPickerView(self) ?? []
     
     weak var delegate: STPaymentInfoTableViewCellDelegate?
     
     override func awakeFromNib() {
         super.awakeFromNib()
-        
     }
     
     func layoutCellWith(

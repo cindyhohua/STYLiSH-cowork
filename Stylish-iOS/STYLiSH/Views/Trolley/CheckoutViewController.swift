@@ -8,6 +8,7 @@
 
 import UIKit
 
+
 class CheckoutViewController: STBaseViewController {
     
     private struct Segue {
@@ -179,10 +180,29 @@ extension CheckoutViewController: UITableViewDataSource, UITableViewDelegate {
         case .products:
             return mappingCellWtih(order: orderProvider.order, at: indexPath)
         case .paymentInfo:
-            return mappingCellWtih(payment: "", at: indexPath)
+            let cell = tableView.dequeueReusableCell(withIdentifier: STPaymentInfoTableViewCell.identifier,for: indexPath) as? STPaymentInfoTableViewCell
+            cell?.couponButton.addTarget(self, action: #selector(couponButtonTapped), for: .touchUpInside)
+            cell?.creditView.stickSubView(tappayVC.view)
+            cell?.delegate = self
+            cell?.layoutCellWith(
+                productPrice: orderProvider.order.productPrices,
+                shipPrice: orderProvider.order.freight,
+                productCount: orderProvider.order.amount,
+                payment: orderProvider.order.payment.title(),
+                isCheckoutEnable: canCheckout()
+            )
+            cell?.checkoutBtn.isEnabled = canCheckout()
+            
+            return cell ?? STPaymentInfoTableViewCell()
         case .reciever:
             return mappingCellWtih(reciever: orderProvider.order.reciever, at: indexPath)
         }
+    }
+    @objc func couponButtonTapped() {
+        // if alreadylogin
+        let couponViewController = CouponInputViewController()
+        couponViewController.modalPresentationStyle = .overFullScreen
+        present(couponViewController, animated: true)
     }
     
     // MARK: - Layout Cell
@@ -219,27 +239,29 @@ extension CheckoutViewController: UITableViewDataSource, UITableViewDelegate {
         return inputCell
     }
     
-    private func mappingCellWtih(payment: String, at indexPath: IndexPath) -> UITableViewCell {
-        guard
-            let inputCell = tableView.dequeueReusableCell(
-                withIdentifier: STPaymentInfoTableViewCell.identifier,
-                for: indexPath
-            ) as? STPaymentInfoTableViewCell
-        else {
-            return UITableViewCell()
-        }
-        inputCell.creditView.stickSubView(tappayVC.view)
-        inputCell.delegate = self
-        inputCell.layoutCellWith(
-            productPrice: orderProvider.order.productPrices,
-            shipPrice: orderProvider.order.freight,
-            productCount: orderProvider.order.amount,
-            payment: orderProvider.order.payment.title(),
-            isCheckoutEnable: canCheckout()
-        )
-        inputCell.checkoutBtn.isEnabled = canCheckout()
-        return inputCell
-    }
+//    private func mappingCellWtih(payment: String, at indexPath: IndexPath) -> UITableViewCell {
+//        guard
+//            let inputCell = tableView.dequeueReusableCell(
+//                withIdentifier: STPaymentInfoTableViewCell.identifier,
+//                for: indexPath
+//            ) as? STPaymentInfoTableViewCell
+//        else {
+//            return UITableViewCell()
+//        }
+//        inputCell.couponButton.addTarget(self, action: #selector(couponButtonTapped), for: .touchUpInside)
+//        inputCell.creditView.stickSubView(tappayVC.view)
+//        inputCell.delegate = self
+//        inputCell.layoutCellWith(
+//            productPrice: orderProvider.order.productPrices,
+//            shipPrice: orderProvider.order.freight,
+//            productCount: orderProvider.order.amount,
+//            payment: orderProvider.order.payment.title(),
+//            isCheckoutEnable: canCheckout()
+//        )
+//        inputCell.checkoutBtn.isEnabled = canCheckout()
+//        return inputCell
+//    }
+//
     
     func updateCheckoutButton() {
         guard

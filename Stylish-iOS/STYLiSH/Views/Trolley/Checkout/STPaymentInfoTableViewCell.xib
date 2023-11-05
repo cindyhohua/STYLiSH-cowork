@@ -144,9 +144,8 @@
             <viewLayoutGuide key="safeArea" id="njF-e1-oar"/>
             <connections>
                 <outlet property="checkoutBtn" destination="Jg8-e7-47O" id="Rdv-gI-U7C"/>
+                <outlet property="couponButton" destination="aXP-dj-cVS" id="Fam-eb-swS"/>
                 <outlet property="creditView" destination="nue-Rk-3kZ" id="2mE-Xs-Z0g"/>
-                <outlet property="memberPoint" destination="nFX-XG-rYr" id="Bkz-ak-fH1"/>
-                <outlet property="memberPointButton" destination="aXP-dj-cVS" id="NJD-qc-Ek9"/>
                 <outlet property="paymentTextField" destination="da4-NM-yrP" id="eia-6w-AhH"/>
                 <outlet property="productAmountLabel" destination="8ov-ov-dSM" id="rep-49-JCF"/>
                 <outlet property="productPriceLabel" destination="Umo-U6-mXM" id="lO9-CN-8hm"/>
