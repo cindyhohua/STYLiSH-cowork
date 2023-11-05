@@ -1,36 +1,39 @@
 //
-//  ProductsOfOrderTableViewCell.swift
+//  AssessModelViewController.swift
 //  STYLiSH
 //
-//  Created by 莊羚羊 on 2023/11/4.
+//  Created by 莊羚羊 on 2023/11/5.
 //  Copyright © 2023 AppWorks School. All rights reserved.
 //
 
 import UIKit
 
-class ProductsOfOrderTableViewCell: UITableViewCell {
+class AssessModelViewController: UIViewController {
 
-    override func awakeFromNib() {
-        super.awakeFromNib()
-        // Initialization code
-        setCellView()
-        
-    }
-    override func didMoveToWindow() {
-        super.didMoveToWindow()
-        setCellView()
-    }
-    override func setSelected(_ selected: Bool, animated: Bool) {
-        super.setSelected(selected, animated: animated)
-        // Configure the view for the selected state
-        
+    override func viewDidLoad() {
+        super.viewDidLoad()
 
+        // Do any additional setup after loading the view.
+        setView()
+        view.backgroundColor = .white
     }
+    
+
+    /*
+    // MARK: - Navigation
+
+    // In a storyboard-based application, you will often want to do a little preparation before navigation
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        // Get the new view controller using segue.destination.
+        // Pass the selected object to the new view controller.
+    }
+    */
     
     var productOfColors: [UIColor] = [.B2!]
     var productOfSize: [String] = ["m", "l"]
     var colorView: [UIView] = []
     var sizeLabel: [UIView] = []
+    
     var productImage: UIImageView = {
         let image = UIImage(named: "Image_Placeholder")
         let imageView = UIImageView(image: image)
@@ -44,17 +47,6 @@ class ProductsOfOrderTableViewCell: UITableViewCell {
         return label
     }()
     
-    
-    let checkButton: UIButton = {
-        let button = UIButton()
-        button.setTitle(CheckButtonText.init().edit, for: .normal)
-        button.setTitleColor(.white, for: .normal)
-        button.backgroundColor = .B4
-        return button
-    }()
-    
-    
-    
     func setColorAndSize(){
         if productOfColors != nil {
             for _ in 0..<productOfColors.count{
@@ -63,7 +55,7 @@ class ProductsOfOrderTableViewCell: UITableViewCell {
                     view.backgroundColor = .B2
                     return view
                 }()
-                addSubToSuperView(superview: contentView, subview: cView)
+                addSubToSuperView(superview: view, subview: cView)
                 colorView.append(cView)
             }
         }
@@ -76,19 +68,15 @@ class ProductsOfOrderTableViewCell: UITableViewCell {
                     label.textColor = .B1
                     return label
                 }()
-                addSubToSuperView(superview: contentView, subview: sLabel)
+                addSubToSuperView(superview: view, subview: sLabel)
                 sizeLabel.append(sLabel)
             }
         }
-        
-        
-        
     }
     
-    func setCellView(){
-        addSubToSuperView(superview: contentView, subview: checkButton)
-        addSubToSuperView(superview: contentView, subview: productImage)
-        addSubToSuperView(superview: contentView, subview: titleLabel)
+    func setView(){
+        addSubToSuperView(superview: view, subview: productImage)
+        addSubToSuperView(superview: view, subview: titleLabel)
         
 
         setColorAndSize()
@@ -96,21 +84,16 @@ class ProductsOfOrderTableViewCell: UITableViewCell {
         productImage.setContentHuggingPriority(.required, for: .vertical)
         
         NSLayoutConstraint.activate([
-            checkButton.widthAnchor.constraint(equalToConstant: 80),
-            checkButton.heightAnchor.constraint(equalToConstant: 30),
-            checkButton.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -16),
-            checkButton.bottomAnchor.constraint(equalTo: productImage.bottomAnchor, constant: 0),
             
-            productImage.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 16),
-            productImage.topAnchor.constraint(equalTo: topAnchor, constant: 8),
-            productImage.widthAnchor.constraint(equalToConstant: 82),
-            productImage.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -8),
+            
+            productImage.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16),
+            productImage.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 8),
             productImage.heightAnchor.constraint(equalToConstant: 110),
+            productImage.widthAnchor.constraint(equalToConstant: 82),
             
             titleLabel.leadingAnchor.constraint(equalTo: productImage.trailingAnchor, constant: 20),
-            titleLabel.topAnchor.constraint(equalTo: topAnchor, constant: 16),
-            
-            
+            titleLabel.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 16),
+        
             
             
         ])
@@ -152,7 +135,9 @@ class ProductsOfOrderTableViewCell: UITableViewCell {
     }
     
     func addTO(sub: UIView){
-        addSubview(sub)
+        view.addSubview(sub)
         sub.translatesAutoresizingMaskIntoConstraints = false
     }
+    
+    
 }

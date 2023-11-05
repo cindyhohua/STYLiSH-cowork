@@ -125,4 +125,8 @@ extension ProductsOfOrderViewController: UITableViewDelegate, UITableViewDataSou
         126
     }
     
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        let assessVC = AssessViewController()
+        navigationController?.pushViewController(assessVC, animated: true)
+    }
 }
