@@ -12,3 +12,14 @@ func addSubToSuperView(superview: UIView, subview: UIView){
     superview.addSubview(subview)
     subview.translatesAutoresizingMaskIntoConstraints = false
 }
+
+
+struct OrderInfo{
+    var orderID: String
+    var orderTime: String
+}
+
+struct CheckButtonText{
+    var edit = "前往評價"
+    var see = "查看評價"
+}

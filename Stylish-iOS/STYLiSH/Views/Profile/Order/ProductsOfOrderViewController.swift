@@ -8,10 +8,6 @@
 
 import UIKit
 
-struct OrderInfo{
-    var orderID: String
-    var orderTime: String
-}
 
 class ProductsOfOrderViewController: UIViewController {
    
@@ -63,8 +59,8 @@ class ProductsOfOrderViewController: UIViewController {
     
     func setOrderInfoView(){
         if orderInfo != nil{
-            orderIDLabel.text = orderInfo?.orderID
-            orderTimeLabel.text = orderInfo?.orderTime
+            orderIDLabel.text = "訂單編號：" + orderInfo!.orderID
+            orderTimeLabel.text = "購買日期：" + orderInfo!.orderTime
         }
         
         addSubToSuperView(superview: view, subview: orderInfoView)
@@ -123,6 +119,10 @@ extension ProductsOfOrderViewController: UITableViewDelegate, UITableViewDataSou
             // 如果轉型失敗，這裡可以處理錯誤情況或者返回一個默認的儲存格
             return UITableViewCell()
         }
+    }
+    
+    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        126
     }
     
 }
