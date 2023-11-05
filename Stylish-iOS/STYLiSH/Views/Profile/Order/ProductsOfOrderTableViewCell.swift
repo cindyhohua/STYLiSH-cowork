@@ -7,10 +7,15 @@
 //
 
 import UIKit
-
+//
+//struct CheckButton{
+//    var review: "前往評價"
+//    var seeReview: "前往查看"
+//}
 
 protocol ProductsOfOrderTableViewCellDelegate{
     func reviewActive(cell: ProductsOfOrderTableViewCell)
+    func seeReviewActive(cell: ProductsOfOrderTableViewCell)
 }
 
 class ProductsOfOrderTableViewCell: UITableViewCell {
@@ -38,6 +43,7 @@ class ProductsOfOrderTableViewCell: UITableViewCell {
     
     var productOfColors: [UIColor] = [.B2!]
     var productOfSize: [String] = ["m", "l"]
+    var checkButtonText: String = ""
     var colorView: [UIView] = []
     var sizeLabel: [UIView] = []
     var productImage: UIImageView = {
@@ -56,18 +62,24 @@ class ProductsOfOrderTableViewCell: UITableViewCell {
     
     let checkButton: UIButton = {
         let button = UIButton()
-        button.setTitle(CheckButtonText.init().edit, for: .normal)
+        button.layer.cornerRadius = 10
         button.setTitleColor(.white, for: .normal)
-        button.backgroundColor = .B4
+        button.backgroundColor = .B1
         return button
     }()
     
     func setButtonActive(){
+        checkButton.setTitle(checkButtonText, for: .normal)
         checkButton.addTarget(self, action: #selector(reviewAction), for: .touchUpInside)
     }
     
     @objc func reviewAction(){
-        delegate?.reviewActive(cell: self)
+        if checkButtonText == CheckButtonText.init().edit{
+            delegate?.reviewActive(cell: self)
+        }else{
+            delegate?.seeReviewActive(cell: self)
+        }
+        
     }
     
     func setColorAndSize(){
@@ -113,7 +125,7 @@ class ProductsOfOrderTableViewCell: UITableViewCell {
         productImage.setContentHuggingPriority(.required, for: .vertical)
         
         NSLayoutConstraint.activate([
-            checkButton.widthAnchor.constraint(equalToConstant: 80),
+            checkButton.widthAnchor.constraint(equalToConstant: 90),
             checkButton.heightAnchor.constraint(equalToConstant: 30),
             checkButton.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -16),
             checkButton.bottomAnchor.constraint(equalTo: productImage.bottomAnchor, constant: 0),

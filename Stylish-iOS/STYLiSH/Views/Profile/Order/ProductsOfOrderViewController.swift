@@ -43,7 +43,7 @@ class ProductsOfOrderViewController: UIViewController {
     let productListTable =  UITableView()
     let numberOfProducts = 3
    
-    
+    var didReview = false
     
     func setNavigationAndTab(){
         self.tabBarController?.tabBar.isHidden = true
@@ -107,6 +107,14 @@ class ProductsOfOrderViewController: UIViewController {
 }
 
 extension ProductsOfOrderViewController: UITableViewDelegate, UITableViewDataSource, ProductsOfOrderTableViewCellDelegate{
+    func seeReviewActive(cell: ProductsOfOrderTableViewCell) {
+        let seeVC = SeeReviewViewController()
+        seeVC.productOfColors = cell.productOfColors
+        seeVC.productOfSize = cell.productOfSize
+        navigationController?.pushViewController(seeVC, animated: true)
+       
+    }
+    
   
     
     
@@ -118,6 +126,12 @@ extension ProductsOfOrderViewController: UITableViewDelegate, UITableViewDataSou
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         if let cell = productListTable.dequeueReusableCell(withIdentifier: "productCell") as? ProductsOfOrderTableViewCell {
             cell.delegate = self
+            if didReview {
+                cell.checkButtonText = CheckButtonText.init().see
+            }else{
+                cell.checkButtonText = CheckButtonText.init().edit
+            }
+            
             return cell
         } else {
             // 如果轉型失敗，這裡可以處理錯誤情況或者返回一個默認的儲存格

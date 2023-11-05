@@ -39,6 +39,10 @@ class ProfileViewController: UIViewController {
         super.viewDidLoad()
         fetchData()
     }
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        self.tabBarController?.tabBar.isHidden = false
+    }
 
     // MARK: - Action
     private func fetchData() {

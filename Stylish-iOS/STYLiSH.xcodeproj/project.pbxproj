@@ -136,6 +136,7 @@
 		9A97B8852AF614BE00FC539E /* ProductsOfOrderViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A97B8842AF614BE00FC539E /* ProductsOfOrderViewController.swift */; };
 		9A97B8872AF616BA00FC539E /* addSubviewToSuper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A97B8862AF616BA00FC539E /* addSubviewToSuper.swift */; };
 		9A97B8892AF61A0200FC539E /* ProductsOfOrderTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A97B8882AF61A0200FC539E /* ProductsOfOrderTableViewCell.swift */; };
+		9AA0D3D52AF7732400D43681 /* SeeReviewViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9AA0D3D42AF7732400D43681 /* SeeReviewViewController.swift */; };
 		9ABD62252AF5569100E9F295 /* MyOrderListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9ABD62242AF5569100E9F295 /* MyOrderListViewController.swift */; };
 		D306B883B370DFD3ED8ACD74 /* Pods_STYLiSH.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 42C2B4AF3EF2ABFF2BB9F7AB /* Pods_STYLiSH.framework */; };
 /* End PBXBuildFile section */
@@ -295,6 +296,7 @@
 		9A97B8842AF614BE00FC539E /* ProductsOfOrderViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProductsOfOrderViewController.swift; sourceTree = "<group>"; };
 		9A97B8862AF616BA00FC539E /* addSubviewToSuper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = addSubviewToSuper.swift; sourceTree = "<group>"; };
 		9A97B8882AF61A0200FC539E /* ProductsOfOrderTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProductsOfOrderTableViewCell.swift; sourceTree = "<group>"; };
+		9AA0D3D42AF7732400D43681 /* SeeReviewViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SeeReviewViewController.swift; sourceTree = "<group>"; };
 		9ABD62242AF5569100E9F295 /* MyOrderListViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyOrderListViewController.swift; sourceTree = "<group>"; };
 		E921004E251C9FC3CBC174F5 /* Pods-STYLiSH.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-STYLiSH.release.xcconfig"; path = "Target Support Files/Pods-STYLiSH/Pods-STYLiSH.release.xcconfig"; sourceTree = "<group>"; };
 		F551E8F447D7C8DC42B53B98 /* Pods-STYLiSH.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-STYLiSH.debug.xcconfig"; path = "Target Support Files/Pods-STYLiSH/Pods-STYLiSH.debug.xcconfig"; sourceTree = "<group>"; };
@@ -783,6 +785,7 @@
 			isa = PBXGroup;
 			children = (
 				9A0F0A202AF732CB00690B44 /* AssessViewController.swift */,
+				9AA0D3D42AF7732400D43681 /* SeeReviewViewController.swift */,
 				9A0F0A222AF7340F00690B44 /* AssessModelViewController.swift */,
 			);
 			path = assess;
@@ -1094,6 +1097,7 @@
 				3C6020E6222BB03400312958 /* STBaseViewController.swift in Sources */,
 				3CEBE07E222F979F0064EF82 /* JGProgressHUDWrapper.swift in Sources */,
 				3CCB3BC6222AAC8300976A1C /* LKGalleryView.swift in Sources */,
+				9AA0D3D52AF7732400D43681 /* SeeReviewViewController.swift in Sources */,
 				3C9C0D552215443900595689 /* ProfileManager.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

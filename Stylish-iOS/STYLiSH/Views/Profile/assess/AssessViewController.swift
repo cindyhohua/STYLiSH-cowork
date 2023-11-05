@@ -17,6 +17,7 @@ class ReviewViewController: ReviewModelViewController, UITextViewDelegate {
         
         setReviewView()
         reviewTextView.delegate = self
+        
         reviewTextView.toolbarPlaceholder = "請輸入評論（字數上限：\(maxText)）"
     }
     
@@ -64,6 +65,8 @@ class ReviewViewController: ReviewModelViewController, UITextViewDelegate {
                 button.setImage(UIImage(named: "star-3"), for: .normal)
                 return button
             }()
+            startB.addTarget(self, action: #selector(starButtonActive(_:)), for: .touchUpInside)
+            startB.tag = index
             startButton.append(startB)
             addSubToSuperView(superview: startView, subview: startB)
             let width: CGFloat = 50
@@ -83,6 +86,19 @@ class ReviewViewController: ReviewModelViewController, UITextViewDelegate {
         }
     }
     
+    @objc func starButtonActive(_ sender: UIButton){
+        print("\(sender.tag)")
+        for index in 0...4{
+            if index <= sender.tag{
+                startButton[index].setImage(UIImage(named: "star-2"), for: .normal)
+            }else{
+                startButton[index].setImage(UIImage(named: "star-3"), for: .normal)
+            }
+        }
+        checkButton.isEnabled = true
+        checkButton.backgroundColor = .B1
+    }
+                             
     func setReviewView(){
         addSubToSuperView(superview: view, subview: reviewTextView)
         addSubToSuperView(superview: view, subview: startView)

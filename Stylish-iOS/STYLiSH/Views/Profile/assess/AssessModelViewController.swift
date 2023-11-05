@@ -49,7 +49,8 @@ class ReviewModelViewController: UIViewController {
     
     let checkButton: UIButton = {
         let button = UIButton()
-        button.backgroundColor = .B1
+        button.backgroundColor = .B5
+        button.isEnabled = false
         button.setTitle("確     認", for: .normal)
         button.setTitleColor(.white, for: .normal)
         button.layer.cornerRadius = 10
