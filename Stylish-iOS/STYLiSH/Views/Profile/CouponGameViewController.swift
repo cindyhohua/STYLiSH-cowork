@@ -8,10 +8,16 @@
 
 import UIKit
 
+protocol CouponPageToProfile {
+    func couponPageToProfile()
+}
+
 class CouponGameViewController: UIViewController {
     private let blue = UIColor(red: CGFloat(99)/250, green: CGFloat(123)/250, blue: CGFloat(127)/250, alpha: 1)
     private let orange = UIColor(red: CGFloat(235)/250, green: CGFloat(181)/250, blue: CGFloat(90)/250, alpha: 1)
     private let lightOrange = UIColor(red: CGFloat(253)/250, green: CGFloat(248)/250, blue: CGFloat(239)/250, alpha: 1)
+    private let userProvider = UserProvider(httpClient: HTTPClient())
+    var delegate: CouponToCheckoutPage?
     let dismissButton = UIButton()
     let titleLabel = UILabel()
     let contentLabel = UILabel()
@@ -34,7 +40,6 @@ class CouponGameViewController: UIViewController {
         let dimView = UIView(frame: UIScreen.main.bounds)
         dimView.backgroundColor = UIColor.black.withAlphaComponent(0.6)
         self.view.addSubview(dimView)
-        
         
         self.view.addSubview(lotteryView)
         lotteryView.translatesAutoresizingMaskIntoConstraints = false
@@ -68,7 +73,6 @@ class CouponGameViewController: UIViewController {
         contentLabel.translatesAutoresizingMaskIntoConstraints = false
         contentLabel.centerXAnchor.constraint(equalTo: lotteryView.centerXAnchor).isActive = true
         contentLabel.bottomAnchor.constraint(equalTo: lotteryView.bottomAnchor, constant: -40).isActive = true
-        
         
         stackView.axis = .vertical
         stackView.alignment = .fill
@@ -126,7 +130,7 @@ class CouponGameViewController: UIViewController {
     }
     
     func showLotteryResult() {
-        UIView.animate(withDuration: 1,delay: 0.8) {
+        UIView.animate(withDuration: 1 ,delay: 0.8) {
             self.titleLabel.alpha = 0
             self.stackView.alpha = 0
             self.contentLabel.alpha = 0
@@ -145,6 +149,7 @@ class CouponGameViewController: UIViewController {
         
         let randomNumber = Int.random(in: 1...10)
         self.memberCoupon = 5*randomNumber
+        uploadDailyevent(point: memberCoupon, token: KeyChainManager.shared.token ?? "")
         var lotteryContent = UILabel()
         lotteryView.addSubview(lotteryContent)
         let text = "會員點數 \n\(self.memberCoupon)點"
@@ -169,7 +174,18 @@ class CouponGameViewController: UIViewController {
         }
     }
     
+    private func uploadDailyevent(point: Int, token: String) {
+        userProvider.updatePoint(point: point, token: token, completion: { [weak self] result in
+            switch result {
+            case .success:
+                print("Update success")
+            case .failure:
+                print("failed to update")
+            }
+        })
+    }
+    
     func updateCoupon(coupon: Int) {
-        
+        delegate?.couponToCheckoutPage(coupon: memberCoupon)
     }
 }

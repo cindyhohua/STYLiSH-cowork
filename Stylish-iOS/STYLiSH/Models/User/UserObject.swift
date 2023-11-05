@@ -8,10 +8,14 @@
 
 import Foundation
 
+struct DailyEvent: Codable {
+    let userId: Int
+    let points: Int
+}
+
 struct UserObject: Codable {
     let accessToken: String
     let user: User
-    
     enum CodingKeys: String, CodingKey {
         case user
         case accessToken = "access_token"
@@ -20,10 +24,11 @@ struct UserObject: Codable {
 
 struct User: Codable {
     let id: Int?
-    let provider: String
     let name: String
     let email: String
     let picture: String
+    let points: Int
+    let isDailyEvent: Bool
 }
 
 struct Reciept: Codable {

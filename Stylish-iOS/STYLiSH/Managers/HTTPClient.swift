@@ -41,9 +41,11 @@ extension STRequest {
     
     func makeRequest() -> URLRequest {
         let urlString = Bundle.STValueForString(key: STConstant.urlKey) + endPoint
+        print(urlString)
         let url = URL(string: urlString)!
         var request = URLRequest(url: url)
         request.allHTTPHeaderFields = headers
+        print(headers,body,method)
         request.httpBody = body
         request.httpMethod = method
         return request
@@ -96,6 +98,7 @@ class HTTPClient: HTTPClientProtocol {
                 }
             }).resume()
     }
+    
     func requestHots(
         _ stRequest: STRequest,
         completion: @escaping (Result<Data, STHTTPClientError>) -> Void

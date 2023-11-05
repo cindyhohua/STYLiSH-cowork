@@ -44,6 +44,41 @@ class UserProvider {
             }
         })
     }
+    
+    func signInNativeToSTYLiSH(email: String,password: String,completion: @escaping (Result<Void, Error>) -> Void) {
+        httpClient.request(STUserRequest.nativeSignin(email: email, password: password), completion: { result in
+            switch result {
+            case .success(let data):
+                do {
+                    let userObject = try JSONDecoder().decode(STSuccessParser<UserObject>.self, from: data)
+                    KeyChainManager.shared.token = userObject.data.accessToken
+                    completion(.success(()))
+                } catch {
+                    completion(.failure(error))
+                }
+            case .failure(let error):
+                completion(.failure(error))
+            }
+        })
+    }
+    
+    func updatePoint(point: Int, token: String ,completion: @escaping (Result<Void, Error>) -> Void) {
+        httpClient.request(STUserRequest.dailyevent(point: point, token: token) , completion: { result in
+            switch result {
+            case .success(let data):
+                do {
+                    let userObject = try JSONDecoder().decode(DailyEvent.self, from: data)
+                    completion(.success(()))
+                    print(userObject)
+                    print("niceee")
+                } catch {
+                    completion(.failure(error))
+                }
+            case .failure(let error):
+                completion(.failure(error))
+            }
+        })
+    }
 
     func loginWithFaceBook(from: UIViewController, completion: @escaping FacebookResponse) {
         LoginManager().logIn(permissions: ["email"], from: from, handler: { (result, error) in
@@ -107,14 +142,20 @@ class UserProvider {
             switch result {
             case .success(let data):
                 do {
+                    print("yeas")
+                    print(data)
+                    print(token)
                     let user = try JSONDecoder().decode(STSuccessParser<User>.self, from: data)
+                    print(user.data)
                     DispatchQueue.main.async {
                         completion(.success(user.data))
                     }
                 } catch {
                     completion(.failure(error))
+                    print("error1")
                 }
             case .failure(let error):
+                print("error2")
                 completion(.failure(error))
             }
         })

@@ -14,6 +14,7 @@ class CouponInputViewController: UIViewController {
     let contentLabel = UILabel()
     let pointTextField = UITextField()
     let commitButton = UIButton()
+    var delegate: CouponToCheckoutPage?
     private let blue = UIColor(red: CGFloat(99)/250, green: CGFloat(123)/250, blue: CGFloat(127)/250, alpha: 1)
     private let orange = UIColor(red: CGFloat(235)/250, green: CGFloat(181)/250, blue: CGFloat(90)/250, alpha: 1)
     private let lightOrange = UIColor(red: CGFloat(253)/250, green: CGFloat(248)/250, blue: CGFloat(239)/250, alpha: 1)
@@ -102,6 +103,7 @@ class CouponInputViewController: UIViewController {
         commitButton.backgroundColor = orange
         commitButton.isEnabled = true
         commitButton.layer.cornerRadius = 5
+        commitButton.addTarget(self, action: #selector(commitButtonTapped), for: .touchUpInside)
         commitButton.translatesAutoresizingMaskIntoConstraints = false
         commitButton.centerXAnchor.constraint(equalTo: lotteryView.centerXAnchor).isActive = true
         commitButton.topAnchor.constraint(equalTo: pointTextField.bottomAnchor, constant: 30).isActive = true
@@ -116,17 +118,20 @@ class CouponInputViewController: UIViewController {
         pointTextField.inputAccessoryView = toolbar
     }
     
+    @objc func commitButtonTapped() {
+        delegate?.couponToCheckoutPage(coupon: currentValue)
+        self.dismiss(animated: true)
+    }
+    
     @objc func doneButtonTapped() {
         if let text = pointTextField.text, let number = Int(text) {
                     currentValue = number
                 }
         pointTextField.resignFirstResponder()
-        self.dismiss(animated: true)
 //        stepperToTableDelegate?.stepperToTable(cell: self, stepperToTable: currentValue)
     }
     
     @objc func dismissButtonTapped() {
-        
         self.dismiss(animated: true)
     }
 }

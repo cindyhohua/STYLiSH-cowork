@@ -24,11 +24,27 @@ class AuthViewController: STBaseViewController {
     }
     
     @objc func signInTapped() {
-        print(emailTextField.text)
-        print(passwordTextField.text)
-        emailTextField.text = ""
-        passwordTextField.text = ""
-        self.presentingViewController?.dismiss(animated: false, completion: nil)
+        LKProgressHUD.show()
+        userProvider.signInNativeToSTYLiSH(email: emailTextField.text ?? "", password: passwordTextField.text ?? "", completion: { [weak self] result in
+            LKProgressHUD.dismiss()
+
+            switch result {
+            case .success:
+                DispatchQueue.main.async {
+                    self?.presentingViewController?.dismiss(animated: false, completion: nil)
+                    print("success")
+                }
+                LKProgressHUD.showSuccess(text: "STYLiSH 登入成功")
+            case .failure:
+                DispatchQueue.main.async {
+                    self?.emailTextField.text = ""
+                    self?.passwordTextField.text = ""
+                    print("fail")
+                }
+                LKProgressHUD.showSuccess(text: "STYLiSH 登入失敗!")
+            }
+        })
+        
     }
 
     override func viewDidAppear(_ animated: Bool) {
