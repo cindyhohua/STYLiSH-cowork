@@ -41,6 +41,7 @@ extension STRequest {
     
     func makeRequest() -> URLRequest {
         let urlString = Bundle.STValueForString(key: STConstant.urlKey) + endPoint
+        print(urlString)
         let url = URL(string: urlString)!
         var request = URLRequest(url: url)
         request.allHTTPHeaderFields = headers

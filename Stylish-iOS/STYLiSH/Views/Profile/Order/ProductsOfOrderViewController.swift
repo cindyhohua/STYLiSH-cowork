@@ -25,7 +25,8 @@ class ProductsOfOrderViewController: UIViewController {
         
     }
     override func viewWillAppear(_ animated: Bool) {
-        
+        fetchData()
+        setOrderInfoView()
     }
     
 
@@ -50,10 +51,11 @@ class ProductsOfOrderViewController: UIViewController {
     
     private let marketProvider = MarketProvider(httpClient: HTTPClient())
     var token = KeyChainManager.shared.token
-    let testToken = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjM3LCJpYXQiOjE2OTkyNDg1MTcsImV4cCI6MTY5OTI1MjExN30.yqdIAKHjhQe7IqNFLtiFlt8XrHA8W2feidr2YqlYIgY"
+    let testToken = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjM3LCJpYXQiOjE2OTkyNTg5ODMsImV4cCI6MTY5OTI2MjU4M30.1ZOurs2eGwA7bXrvCcnwNjlVOMeSlMX4tIR9VpqHGeI"
     
-    private var datas: [OrderDetail] = []  {
+    private var datas: OrderDetail? = nil  {
         didSet {
+            
             productListTable.reloadData()
         }
     }
@@ -65,14 +67,13 @@ class ProductsOfOrderViewController: UIViewController {
 //        }
 //    }
     func fetchData() {
-        guard let token = token else {return print("no token") }
-       marketProvider.fetchOrderDetail(token: token, productID: productID, completion:{ [weak self] result in
+//        guard let token = testToken else {return print("no token") }
+        print("------------------\(productID)")
+       marketProvider.fetchOrderDetail(token: testToken, productID: productID, completion:{ [weak self] result in
            switch result {
            case .success(let ordersDetail):
                self?.datas = ordersDetail
-//               if let dList = self?.datas[0]{
-//                   self?.datasList = dList
-//               }
+               print("\(self?.datas)")
               
            case .failure:
                LKProgressHUD.showFailure(text: "讀取資料失敗！")
@@ -93,8 +94,8 @@ class ProductsOfOrderViewController: UIViewController {
     
     func setOrderInfoView(){
         
-//        orderIDLabel.text = "訂單編號：\(datas[0])"
-//            orderTimeLabel.text = "購買日期：\(datas[0].createTime)"
+//        orderIDLabel.text = "訂單編號：\()"
+//        orderTimeLabel.text = "購買日期：\(datas[0].createTime)"
         
         
         addSubToSuperView(superview: view, subview: orderInfoView)
@@ -154,17 +155,17 @@ extension ProductsOfOrderViewController: UITableViewDelegate, UITableViewDataSou
     
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return datas.count
+        return 0
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         if let cell = productListTable.dequeueReusableCell(withIdentifier: "productCell") as? ProductsOfOrderTableViewCell {
             cell.delegate = self
-            if datas[0].order.list[indexPath.row].isFeedback {
-                cell.checkButtonText = CheckButtonText.init().see
-            }else{
-                cell.checkButtonText = CheckButtonText.init().edit
-            }
+//            if datas[0].order.list[indexPath.row].isFeedback {
+//                cell.checkButtonText = CheckButtonText.init().see
+//            }else{
+//                cell.checkButtonText = CheckButtonText.init().edit
+//            }
 //            cell.productImage = datasList[indexPath.row].
 //            cell.titleLabel.text = datasList[indexPath.row].name
             

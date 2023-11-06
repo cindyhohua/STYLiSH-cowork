@@ -22,7 +22,7 @@ enum STMarketRequest: STRequest {
     case accessories(paging: Int)
     case userOrder(token: String)
     case orderDetail(token: String, productID: String)
-    case feedbackForProduct(token: String, body: Data)
+    case feedbackForProduct(token: String, productID: Int, orderID: String, score: Int, comment: String)
     case feedbackByUser(token: String)
     var headers: [String: String] {
         switch self {
@@ -30,7 +30,7 @@ enum STMarketRequest: STRequest {
         case .userOrder(let token): return ["Authorization": token]
         case .orderDetail(let token,_):
             return ["Authorization": token]
-        case .feedbackForProduct(let token, let body):
+        case .feedbackForProduct(let token, _, _, _, _):
             return ["Authorization": token]
         case .feedbackByUser(let token):
             return ["Authorization": token]
@@ -41,7 +41,14 @@ enum STMarketRequest: STRequest {
     var body: Data? {
         switch self {
         case .hots, .women, .men, .accessories, .userOrder, .orderDetail, .feedbackByUser: return nil
-        case .feedbackForProduct(_, let body): return body
+        case .feedbackForProduct(_, let productID, let orderID, let score, let comment):
+          let  dict = [
+            "productID": productID,
+            "orderID": orderID,
+            "score": score,
+            "comment": comment
+          ] as [String : Any]
+        return try? JSONSerialization.data(withJSONObject: dict, options: .prettyPrinted)
         }
     }
 
@@ -59,7 +66,7 @@ enum STMarketRequest: STRequest {
         case .men(let paging): return "/products/men?paging=\(paging)"
         case .accessories(let paging): return "/products/accessories?paging=\(paging)"
         case .userOrder: return "/user/order"
-        case .orderDetail(_,let id): return "/order:\(id)"
+        case .orderDetail(_,let id): return "/order/\(id)"
         case .feedbackForProduct: return "/feedback"
         case .feedbackByUser: return "/feedback/user"
         }

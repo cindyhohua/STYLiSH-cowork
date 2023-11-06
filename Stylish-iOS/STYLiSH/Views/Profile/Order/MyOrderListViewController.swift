@@ -43,7 +43,7 @@ class MyOrderListViewController: UIViewController, UITableViewDelegate, UITableV
     let orderListTable =  UITableView()
     
     var token = KeyChainManager.shared.token
-    let testToken = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjM3LCJpYXQiOjE2OTkyNDc2NjksImV4cCI6MTY5OTI1MTI2OX0.C-YiObBATFaGEGedihiXV_VeHNcpMwovyqixUf1qjks"
+    let testToken = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjM3LCJpYXQiOjE2OTkyNTg5ODMsImV4cCI6MTY5OTI2MjU4M30.1ZOurs2eGwA7bXrvCcnwNjlVOMeSlMX4tIR9VpqHGeI"
     
     private var datas: [UserOrder] = []  {
         didSet {
@@ -55,7 +55,7 @@ class MyOrderListViewController: UIViewController, UITableViewDelegate, UITableV
        marketProvider.fetchUserOrder(token: testToken, completion: { [weak self] result in
            switch result {
            case .success(let orders):
-               self?.datas = orders
+               self?.datas = [orders]
                return
            case .failure:
                LKProgressHUD.showFailure(text: "讀取資料失敗！")
@@ -98,7 +98,7 @@ class MyOrderListViewController: UIViewController, UITableViewDelegate, UITableV
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         if let cell = orderListTable.dequeueReusableCell(withIdentifier: "orderCell") as? OrderListTableViewCell {
             print("in cell")
-            let dateString = datas[indexPath.row].order.createTime
+            let dateString = datas[0].orders[indexPath.row].order.orderID
             // 创建日期格式化器
             let dateFormatter = DateFormatter()
             dateFormatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss.SSSZ"
@@ -113,7 +113,7 @@ class MyOrderListViewController: UIViewController, UITableViewDelegate, UITableV
             } else {
                 cell.orderTimeLabel.text = "購賣日期：" + String(dateString.prefix(10))
             }
-                cell.orderIDLabel.text = "訂單編號：" + "\(datas[indexPath.row].order.orderID)"
+                cell.orderIDLabel.text = "訂單編號：" + "\(datas[0].orders[indexPath.row].order.orderID)"
                 
             
             
@@ -126,7 +126,7 @@ class MyOrderListViewController: UIViewController, UITableViewDelegate, UITableV
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let productsVC = ProductsOfOrderViewController()
-        productsVC.productID = "\(datas[indexPath.row].order.orderID)"
+        productsVC.productID = "\(datas[0].orders[indexPath.row].order.orderID)"
         navigationController?.pushViewController(productsVC, animated: true)
     }
 }

@@ -57,7 +57,9 @@ class ReviewViewController: ReviewModelViewController, UITextViewDelegate {
         textView.returnKeyType = .route
         return textView
     }()
-    
+    struct ReqBody{
+        var productID: String
+    }
     func setButton(){
         for index in 0..<5{
             let startB: UIButton = {
