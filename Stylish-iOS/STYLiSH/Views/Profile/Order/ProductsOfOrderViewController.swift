@@ -7,7 +7,7 @@
 //
 
 import UIKit
-
+import Kingfisher
 
 class ProductsOfOrderViewController: UIViewController {
    
@@ -55,7 +55,8 @@ class ProductsOfOrderViewController: UIViewController {
     
     private var datas: OrderDetail? = nil  {
         didSet {
-            
+            orderIDLabel.text = "訂單編號：\(datas!.order.orderID)"
+            orderTimeLabel.text = "購買日期：\(datas!.order.orderID)"
             productListTable.reloadData()
         }
     }
@@ -94,8 +95,8 @@ class ProductsOfOrderViewController: UIViewController {
     
     func setOrderInfoView(){
         
-//        orderIDLabel.text = "訂單編號：\()"
-//        orderTimeLabel.text = "購買日期：\(datas[0].createTime)"
+        orderIDLabel.text = "訂單編號：\(datas?.order.orderID)"
+        orderTimeLabel.text = "購買日期：\(datas?.order.orderID)"
         
         
         addSubToSuperView(superview: view, subview: orderInfoView)
@@ -155,19 +156,31 @@ extension ProductsOfOrderViewController: UITableViewDelegate, UITableViewDataSou
     
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return 0
+        if let data = datas{
+            return (datas?.order.list!.count)!
+        }else{
+            return 0
+        }
+        
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         if let cell = productListTable.dequeueReusableCell(withIdentifier: "productCell") as? ProductsOfOrderTableViewCell {
             cell.delegate = self
-//            if datas[0].order.list[indexPath.row].isFeedback {
-//                cell.checkButtonText = CheckButtonText.init().see
-//            }else{
-//                cell.checkButtonText = CheckButtonText.init().edit
-//            }
-//            cell.productImage = datasList[indexPath.row].
-//            cell.titleLabel.text = datasList[indexPath.row].name
+            if let data = datas?.order.list![indexPath.row]{
+                if data.isFeedback{
+                    cell.checkButtonText = CheckButtonText.init().see
+                }else{
+                    cell.checkButtonText = CheckButtonText.init().edit
+                }
+                cell.productImage.kf.setImage(with: URL(string: data.mainImage))
+                cell.titleLabel.text = data.name
+                cell.productOfColors.removeAll()
+                cell.productOfSize.removeAll()
+                cell.productOfSize.append(data.size)
+                cell.productOfColors.append(UIColor.hexStringToUIColor(hex: data.color.code))
+                
+            }
             
             return cell
         } else {
@@ -182,8 +195,9 @@ extension ProductsOfOrderViewController: UITableViewDelegate, UITableViewDataSou
     
     func reviewActive(cell: ProductsOfOrderTableViewCell) {
         let reviewVC = ReviewViewController()
-        reviewVC.productOfColors = cell.productOfColors
-        reviewVC.productOfSize = cell.productOfSize
+//        reviewVC.productOfColors = cell.productOfColors
+//        reviewVC.productOfSize = cell.productOfSize
+        
         navigationController?.pushViewController(reviewVC, animated: true)
     }
     
