@@ -21,9 +21,13 @@ class MyOrderListViewController: UIViewController, UITableViewDelegate, UITableV
         setOutlay()
         setTable()
         setNavigationAndTab()
+    
         
     }
-    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        fetchData()
+    }
 
     /*
     // MARK: - Navigation
@@ -34,10 +38,29 @@ class MyOrderListViewController: UIViewController, UITableViewDelegate, UITableV
         // Pass the selected object to the new view controller.
     }
     */
-    let orderListTable =  UITableView()
     
+    private let marketProvider = MarketProvider(httpClient: HTTPClient())
+    let orderListTable =  UITableView()
+    var token = KeyChainManager.shared.token
+    let testToken = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjI3LCJpYXQiOjE2OTkyMzQ5NjAsImV4cCI6MTY5OTIzODU2MH0.e1fdvNJ46LEEsi9RaMLaebfgqqrrl8PIhYoqQH8q334"
     var orderIDs: [String] = ["111"]
     var orderTimes: [String] = ["2023.01.02"]
+    private var datas: [OrderElement] = []  {
+        didSet {
+            orderListTable.reloadData()
+        }
+    }
+    func fetchData() {
+        guard let token = token else {return print("no token") }
+       marketProvider.fetchUserOrder(token: token, completion: { [weak self] result in
+           switch result {
+           case .success(let orders):
+               self?.datas = orders.orders
+           case .failure:
+               LKProgressHUD.showFailure(text: "讀取資料失敗！")
+           }
+       })
+   }
     
     func setNavigationAndTab(){
         self.tabBarController?.tabBar.isHidden = true
@@ -67,7 +90,7 @@ class MyOrderListViewController: UIViewController, UITableViewDelegate, UITableV
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        let numberOfOrder = orderIDs.count
+        let numberOfOrder = datas.count
         return numberOfOrder
     }
     
@@ -75,8 +98,8 @@ class MyOrderListViewController: UIViewController, UITableViewDelegate, UITableV
         if let cell = orderListTable.dequeueReusableCell(withIdentifier: "orderCell") as? OrderListTableViewCell {
             print("in cell")
             if orderTimes.isEmpty == false{
-                cell.orderIDLabel.text = "訂單編號：" + orderIDs[indexPath.row]
-                cell.orderTimeLabel.text = "購賣日期：" + orderTimes[indexPath.row]
+                cell.orderIDLabel.text = "訂單編號：" + "\(datas[indexPath.row].order.orderID)"
+                cell.orderTimeLabel.text = "購賣日期：" + "\(datas[indexPath.row].order.createTime)"
             }else{
                 cell.orderIDLabel.text = "訂單編號："
                 cell.orderTimeLabel.text = "購賣日期："

@@ -8,7 +8,7 @@
 
 import Foundation
 
-struct feedbackBody: Encodable {
+struct FeedbackBody: Encodable {
     var productID: Int
     var orderID: Int
     var score: Int

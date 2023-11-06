@@ -10,6 +10,7 @@ import Foundation
 
 typealias PromotionHanlder = (Result<[PromotedProducts], Error>) -> Void
 typealias ProductsResponseWithPaging = (Result<STSuccessParser<[Product]>, Error>) -> Void
+typealias UserOrderResponse = (Result<UserOrder, Error>) -> Void
 
 class MarketProvider {
 
@@ -27,8 +28,26 @@ class MarketProvider {
     }
 
     // MARK: - Public method
-    func fetchUserOrder(){
-        
+    func fetchUserOrder(token: String, completion: @escaping UserOrderResponse){
+        httpClient.request(STMarketRequest.userOrder(token: token), completion: { [weak self] result in
+            guard let self = self else { return }
+            switch result {
+            case .success(let data):
+                do {
+                    let order = try self.decoder.decode(
+                        STSuccessParser<UserOrder>.self,
+                        from: data
+                    )
+                    DispatchQueue.main.async {
+                        completion(.success(order.data))
+                    }
+                } catch {
+                    completion(.failure(error))
+                }
+            case .failure(let error):
+                completion(.failure(error))
+            }
+        })
     }
     func fetchHots(completion: @escaping PromotionHanlder) {
         httpClient.requestHots(STMarketRequest.hots, completion: { [weak self] result in
