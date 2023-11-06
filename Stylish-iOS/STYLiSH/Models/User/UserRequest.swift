@@ -14,6 +14,7 @@ enum STUserRequest: STRequest {
     case profile(token: String)
     case nativeSignin(email: String, password: String)
     case dailyevent(point: Int, token: String)
+    case productComment(id: Int)
 
     var headers: [String: String] {
         switch self {
@@ -31,6 +32,8 @@ enum STUserRequest: STRequest {
         case .dailyevent(_, let token):
             return [STHTTPHeaderField.contentType.rawValue: STHTTPHeaderValue.json.rawValue,
                     STHTTPHeaderField.auth.rawValue: "Bearer \(token)"]
+        case .productComment(_):
+            return [STHTTPHeaderField.contentType.rawValue: STHTTPHeaderValue.json.rawValue]
         }
     }
 
@@ -59,13 +62,15 @@ enum STUserRequest: STRequest {
             ]
             print(dict)
             return try? JSONSerialization.data(withJSONObject: dict, options: .prettyPrinted)
+        case .productComment(_):
+            return try? JSONSerialization.data(withJSONObject: [:], options: .prettyPrinted)
         }
     }
 
     var method: String {
         switch self {
         case .signin, .checkout, .nativeSignin, .dailyevent: return STHTTPMethod.POST.rawValue
-        case .profile: return STHTTPMethod.GET.rawValue
+        case .profile, .productComment: return STHTTPMethod.GET.rawValue
         }
     }
 
@@ -75,6 +80,7 @@ enum STUserRequest: STRequest {
         case .checkout: return "/order/checkout"
         case .profile: return "/user/profile"
         case .dailyevent: return "/user/dailyevent"
+        case .productComment(let id) : return "product?productID=\(id)"
         }
     }
 }

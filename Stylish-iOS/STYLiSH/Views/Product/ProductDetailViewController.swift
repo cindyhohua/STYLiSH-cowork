@@ -57,15 +57,50 @@ class ProductDetailViewController: STBaseViewController {
     
     override var preferredStatusBarStyle: UIStatusBarStyle { return .lightContent }
 
+    private let marketProvider = MarketProvider(httpClient: HTTPClient())
+    
+    var comments: ProductComment?
     // MARK: - View Life Cycle
     override func viewDidLoad() {
         super.viewDidLoad()
-
-        setupTableView()
-
         guard let product = product else { return }
         galleryView.datas = product.images
+        fetchData(id: product.id, paging: 0)
+        setupTableView()
     }
+    
+    private func fetchData(id: Int, paging: Int) {
+        marketProvider.fetchProductComment(id: id, paging: paging, completion: { [weak self] result in
+            switch result {
+            case .success(let products):
+                print(products.averageScore)
+                self?.comments = products
+                DispatchQueue.main.async {
+                    self?.tableView.reloadData()
+                }
+            case .failure:
+                print("no comment")
+//                LKProgressHUD.showFailure(text: "讀取資料失敗！")
+            }
+        })
+    }
+//
+//    func fetchComment(id: Int, completion: @escaping ProductComment) {
+//        userProvider.getProductComment(id: id, completion: { result in
+//            switch result {
+//            case .success(let data):
+//                do {
+//                    let comment = try JSONDecoder().decode(ProductComment.self, from: data)
+//
+//                    completion(.success(()))
+//                } catch {
+//                    completion(.failure(error))
+//                }
+//            case .failure(let error):
+//                completion(.failure(error))
+//            }
+//        }))
+//    }
 
     private func setupTableView() {
         tableView.lk_registerCellWithNib(
@@ -185,7 +220,11 @@ extension ProductDetailViewController: UITableViewDataSource, UITableViewDelegat
         case 0:
             return datas.count
         case 1:
-            return 6
+            if let comments = comments {
+                return comments.feedbacks.count
+            } else {
+                return 0
+            }
         default:
             return 0
         }
@@ -196,28 +235,38 @@ extension ProductDetailViewController: UITableViewDataSource, UITableViewDelegat
         if indexPath.section == 0 {
             return datas[indexPath.row].cellForIndexPath(indexPath, tableView: tableView, data: product)
         } else {
-            let cell = CommentCell()
-            cell.isUserInteractionEnabled = false
-            let name = "陸瑋恩"
-            cell.configure(withRating: 4.5)
-            cell.commentLabel.text = "qqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqq"
-            cell.nameLabel.text = maskString(name)
-            return cell
+            if let comments = comments {
+                let cell = CommentCell()
+                cell.isUserInteractionEnabled = false
+                cell.configure(withRating: Double(comments.feedbacks[indexPath.row].score))
+                cell.commentLabel.text = comments.feedbacks[indexPath.row].comment
+                cell.nameLabel.text = maskString(comments.feedbacks[indexPath.row].name)
+                return cell
+            } else {
+                return CommentCell()
+            }
         }
     }
     
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
         if section == 1 {
             let headerView = CommentHeader(reuseIdentifier: "commentHeader")
-            headerView.configure(withRating: 4.5)
-            headerView.seeMoreComments.addTarget(self, action: #selector(seeAllComment), for: .touchUpInside)
+            if let comments = comments {
+                headerView.configure(withRating: Float(round(10*comments.averageScore)/10))
+                headerView.commentsCounts.text = "（\(comments.feedbackAmounts)則評論）"
+                headerView.starsLabel.text = "\(round(10*comments.averageScore)/10)/5.0"
+                headerView.seeMoreComments.setTitle("查看全部 >", for: .normal)
+                headerView.seeMoreComments.addTarget(self, action: #selector(seeAllComment), for: .touchUpInside)
+            }
             return headerView
+                
         }
         return nil
     }
     
     @objc func seeAllComment() {
         let nextVC = SeeAllCommentViewController()
+        nextVC.id = product?.id
         self.navigationController?.pushViewController(nextVC, animated: true)
     }
     

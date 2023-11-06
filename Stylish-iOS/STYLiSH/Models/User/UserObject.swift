@@ -8,6 +8,27 @@
 
 import Foundation
 
+struct ProductComment: Codable {
+    let averageScore: Double
+    let feedbackAmounts: Int
+    let feedbacks: [Feedback]
+    let nextPaging: Int
+
+    enum CodingKeys: String, CodingKey {
+        case averageScore, feedbackAmounts, feedbacks
+        case nextPaging = "next_paging"
+    }
+}
+
+// MARK: - Feedback
+struct Feedback: Codable {
+    let name: String
+    let color: Color
+    let size: String
+    let score: Int
+    let comment, feedbackCreateTime: String
+}
+
 struct DailyEvent: Codable {
     let userId: Int
     let points: Int

@@ -112,8 +112,6 @@ class UserProvider {
             return completion(.failure(STYLiSHSignInError.noToken))
         }
         let body = CheckoutAPIBody(order: order, prime: prime)
-        print("qq",body.order,"qq",body.order.totalPrice,body.order.payment.rawValue, body.order.deliverTime)
-        
         let request = STUserRequest.checkout(
             token: token,
             body: try? JSONEncoder().encode(body)
@@ -154,6 +152,30 @@ class UserProvider {
                     print(user.data)
                     DispatchQueue.main.async {
                         completion(.success(user.data))
+                    }
+                } catch {
+                    completion(.failure(error))
+                    print("error1")
+                }
+            case .failure(let error):
+                print("error2")
+                completion(.failure(error))
+            }
+        })
+    }
+    
+    func getProductComment(id: Int,completion: @escaping (Result<ProductComment, Error>) -> Void) {
+        let request = STUserRequest.productComment(id: id)
+        httpClient.request(request, completion: { result in
+            switch result {
+            case .success(let data):
+                do {
+                    print("yeas")
+                    print(data)
+                    let user = try JSONDecoder().decode(ProductComment.self, from: data)
+                    print(user.averageScore)
+                    DispatchQueue.main.async {
+                        completion(.success(user))
                     }
                 } catch {
                     completion(.failure(error))

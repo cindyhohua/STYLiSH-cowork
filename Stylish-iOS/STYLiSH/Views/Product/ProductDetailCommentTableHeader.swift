@@ -66,35 +66,41 @@ class CommentHeader: UITableViewHeaderFooterView {
         
         contentView.addSubview(starsLabel)
         starsLabel.translatesAutoresizingMaskIntoConstraints = false
-        starsLabel.text = "4.5/5"
+        starsLabel.text = ""
         starsLabel.leadingAnchor.constraint(equalTo: starImageViews.last?.trailingAnchor ?? contentView.centerXAnchor, constant: 16).isActive = true
         starsLabel.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -12).isActive = true
         
         contentView.addSubview(commentsCounts)
         commentsCounts.translatesAutoresizingMaskIntoConstraints = false
-        commentsCounts.text = "(58則評論)"
+        commentsCounts.text = "目前尚無評價"
         commentsCounts.textColor = .lightGray
         commentsCounts.leadingAnchor.constraint(equalTo: starsLabel.trailingAnchor, constant: 5).isActive = true
         commentsCounts.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -12).isActive = true
         
         contentView.addSubview(seeMoreComments)
         seeMoreComments.translatesAutoresizingMaskIntoConstraints = false
-        seeMoreComments.setTitle("查看全部 >", for: .normal)
+        seeMoreComments.setTitle("", for: .normal)
         seeMoreComments.setTitleColor(.B4, for: .normal)
         seeMoreComments.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -16).isActive = true
         seeMoreComments.bottomAnchor.constraint(equalTo: starImageViews[0].topAnchor, constant: -3).isActive = true
         
     }
     
-    func configure(withRating rating: Double) {
+    func configure(withRating rating: Float) {
         for (index, starImageView) in starImageViews.enumerated() {
             let wholeStarRating = Int(rating)
-            let remainderRating = rating - Double(wholeStarRating)
+            let remainderRating = rating - Float(wholeStarRating)
+            
+            
+//            let wholeStarRating = Int(rating)
+//            let remainderRating = rating - Float(wholeStarRating)
 
             if index < wholeStarRating {
                 starImageView.image = UIImage(named: "fullStar")
             } else if index == wholeStarRating && remainderRating >= 0.3 && remainderRating < 0.8 {
                 starImageView.image = UIImage(named: "halfStar")
+            } else if index == wholeStarRating && remainderRating > 0.8 {
+                starImageView.image = UIImage(named: "fullStar")
             } else {
                 starImageView.image = nil
             }
