@@ -57,9 +57,26 @@ class ReviewViewController: ReviewModelViewController, UITextViewDelegate {
         textView.returnKeyType = .route
         return textView
     }()
-    struct ReqBody{
-        var productID: String
-    }
+    var score: Int = 0
+    var productId: Int = 0
+    var orderId: String = ""
+    var comment: String = ""
+    private let marketProvider = MarketProvider(httpClient: HTTPClient())
+    var token = KeyChainManager.shared.token
+//    let testToken = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjM3LCJpYXQiOjE2OTkyNTg5ODMsImV4cCI6MTY5OTI2MjU4M30.1ZOurs2eGwA7bXrvCcnwNjlVOMeSlMX4tIR9VpqHGeI"
+    func fetchData() {
+        comment = reviewTextView.text
+       marketProvider.postReview(token: testToken, productID: productId, orderID: orderId, score: score, comment: comment, completion:{ [weak self] result in
+           switch result {
+           case .success(let ordersDetail):
+               
+              return print("成功發送資料")
+           case .failure:
+               LKProgressHUD.showFailure(text: "讀取資料失敗！")
+           }
+       })
+   }
+    
     func setButton(){
         for index in 0..<5{
             let startB: UIButton = {
@@ -68,6 +85,7 @@ class ReviewViewController: ReviewModelViewController, UITextViewDelegate {
                 return button
             }()
             startB.addTarget(self, action: #selector(starButtonActive(_:)), for: .touchUpInside)
+            checkButton.addTarget(self, action: #selector(checkButtonActive), for: .touchUpInside)
             startB.tag = index
             startButton.append(startB)
             addSubToSuperView(superview: startView, subview: startB)
@@ -88,8 +106,13 @@ class ReviewViewController: ReviewModelViewController, UITextViewDelegate {
         }
     }
     
+    @objc func checkButtonActive(){
+        fetchData()
+        navigationController?.popViewController(animated: true)
+    }
+    
     @objc func starButtonActive(_ sender: UIButton){
-        print("\(sender.tag)")
+        
         for index in 0...4{
             if index <= sender.tag{
                 startButton[index].setImage(UIImage(named: "star-2"), for: .normal)
@@ -97,6 +120,8 @@ class ReviewViewController: ReviewModelViewController, UITextViewDelegate {
                 startButton[index].setImage(UIImage(named: "star-3"), for: .normal)
             }
         }
+        score = sender.tag + 1
+        print("\(score)")
         checkButton.isEnabled = true
         checkButton.backgroundColor = .B1
     }

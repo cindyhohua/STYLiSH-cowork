@@ -85,13 +85,14 @@ class MarketProvider {
     }
     
     func postReview(token: String, productID: Int, orderID: String, score: Int, comment: String, completion: @escaping PostReviewResponse){
-        print("\(token)\n\(productID)\n\(score)\n\(comment)")
+        print("token:\n\(token)\n productID \n \(productID)\n orderID \n \(orderID)\n\(score)\n\(comment)")
         httpClient.request(STMarketRequest.feedbackForProduct(token: token, productID: productID, orderID: orderID, score: score, comment: comment), completion: { [weak self] result in
             guard let self = self else { return }
             switch result {
             case .success(let data):
                 return print("發送成功")
             case .failure(let error):
+                print("\(STMarketRequest.feedbackForProduct(token: token, productID: productID, orderID: orderID, score: score, comment: comment))")
                 completion(.failure(error))
             }
         })

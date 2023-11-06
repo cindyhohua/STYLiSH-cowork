@@ -27,6 +27,7 @@ class ProductsOfOrderViewController: UIViewController {
     override func viewWillAppear(_ animated: Bool) {
         fetchData()
         setOrderInfoView()
+        productListTable.reloadData()
     }
     
 
@@ -42,8 +43,8 @@ class ProductsOfOrderViewController: UIViewController {
     let orderInfoView = UIView()
     let orderIDLabel = UILabel()
     let orderTimeLabel = UILabel()
-    
-    var productID: String = ""
+    var orderID: String = ""
+    var productID: Int = 0
     let productListTable =  UITableView()
     let numberOfProducts = 3
    
@@ -51,12 +52,30 @@ class ProductsOfOrderViewController: UIViewController {
     
     private let marketProvider = MarketProvider(httpClient: HTTPClient())
     var token = KeyChainManager.shared.token
-    let testToken = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjM3LCJpYXQiOjE2OTkyNTg5ODMsImV4cCI6MTY5OTI2MjU4M30.1ZOurs2eGwA7bXrvCcnwNjlVOMeSlMX4tIR9VpqHGeI"
+    
     
     private var datas: OrderDetail? = nil  {
         didSet {
-            orderIDLabel.text = "訂單編號：\(datas!.order.orderID)"
-            orderTimeLabel.text = "購買日期：\(datas!.order.orderID)"
+            if let data = datas?.order{
+                let dateString = data.createTime
+                // 创建日期格式化器
+                let dateFormatter = DateFormatter()
+                dateFormatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss.SSSZ"
+
+                // 设置时区（如果字符串中有 Z 表示 Zulu 时间，即 UTC）
+                dateFormatter.timeZone = TimeZone(identifier: "UTC")
+        //            dateFormatter.timeZone = TimeZone.current
+                // 将字符串转换为日期
+                if let date = dateFormatter.date(from: dateString) {
+                    orderTimeLabel.text = "購賣日期：" + "\(date)"
+                    print(date)
+                } else {
+                    orderTimeLabel.text = "購賣日期：" + String(dateString.prefix(10))
+                }
+                orderIDLabel.text = "訂單編號：\(data.orderID)"
+            }
+            
+            
             productListTable.reloadData()
         }
     }
@@ -69,17 +88,21 @@ class ProductsOfOrderViewController: UIViewController {
 //    }
     func fetchData() {
 //        guard let token = testToken else {return print("no token") }
-        print("------------------\(productID)")
-       marketProvider.fetchOrderDetail(token: testToken, productID: productID, completion:{ [weak self] result in
+        print("------------------\(orderID)")
+       marketProvider.fetchOrderDetail(token: testToken, productID: "\(orderID)", completion:{ [weak self] result in
            switch result {
            case .success(let ordersDetail):
                self?.datas = ordersDetail
                print("\(self?.datas)")
-              
+               DispatchQueue.main.async {
+                   self?.productListTable.reloadData()
+               }
            case .failure:
                LKProgressHUD.showFailure(text: "讀取資料失敗！")
            }
        })
+        
+//        orderTimeLabel.text = "購買日期：\(datas?.order.createTime)"
    }
     func setNavigationAndTab(){
         self.tabBarController?.tabBar.isHidden = true
@@ -96,7 +119,7 @@ class ProductsOfOrderViewController: UIViewController {
     func setOrderInfoView(){
         
         orderIDLabel.text = "訂單編號：\(datas?.order.orderID)"
-        orderTimeLabel.text = "購買日期：\(datas?.order.orderID)"
+        orderTimeLabel.text = "購買日期：\(datas?.order.createTime)"
         
         
         addSubToSuperView(superview: view, subview: orderInfoView)
@@ -179,7 +202,7 @@ extension ProductsOfOrderViewController: UITableViewDelegate, UITableViewDataSou
                 cell.productOfSize.removeAll()
                 cell.productOfSize.append(data.size)
                 cell.productOfColors.append(UIColor.hexStringToUIColor(hex: data.color.code))
-                
+               
             }
             
             return cell
@@ -195,8 +218,18 @@ extension ProductsOfOrderViewController: UITableViewDelegate, UITableViewDataSou
     
     func reviewActive(cell: ProductsOfOrderTableViewCell) {
         let reviewVC = ReviewViewController()
-//        reviewVC.productOfColors = cell.productOfColors
-//        reviewVC.productOfSize = cell.productOfSize
+        if let indexPath = productListTable.indexPath(for: cell){
+            let data = datas?.order.list![indexPath.row]
+            reviewVC.productImage.kf.setImage(with: URL(string: (data?.mainImage)!))
+            reviewVC.titleLabel.text = data?.name
+            reviewVC.productOfSize.removeAll()
+            reviewVC.productOfSize.append(data!.size)
+            reviewVC.productOfColors.removeAll()
+            reviewVC.productOfColors.append(UIColor.hexStringToUIColor(hex: (data?.color.code)!))
+            reviewVC.productId = data!.id
+            reviewVC.orderId = (datas?.order.orderID)!
+        }
+        
         
         navigationController?.pushViewController(reviewVC, animated: true)
     }

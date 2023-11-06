@@ -7,7 +7,7 @@
 //
 
 import UIKit
-
+let testToken = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjM3LCJpYXQiOjE2OTkyNjkxMjIsImV4cCI6MTY5OTI3MjcyMn0.2rvCE62Kr4Kb9MEMijbMbS5RrepxAlL8gzmoWuFB4Ks"
 class MyOrderListViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
     
     
@@ -43,7 +43,7 @@ class MyOrderListViewController: UIViewController, UITableViewDelegate, UITableV
     let orderListTable =  UITableView()
     
     var token = KeyChainManager.shared.token
-    let testToken = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjM3LCJpYXQiOjE2OTkyNTg5ODMsImV4cCI6MTY5OTI2MjU4M30.1ZOurs2eGwA7bXrvCcnwNjlVOMeSlMX4tIR9VpqHGeI"
+   
     
     private var datas: [UserOrder] = []  {
         didSet {
@@ -98,7 +98,7 @@ class MyOrderListViewController: UIViewController, UITableViewDelegate, UITableV
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         if let cell = orderListTable.dequeueReusableCell(withIdentifier: "orderCell") as? OrderListTableViewCell {
             print("in cell")
-            let dateString = datas[0].orders[indexPath.row].order.orderID
+            let dateString = datas[0].orders[indexPath.row].order.createTime
             // 创建日期格式化器
             let dateFormatter = DateFormatter()
             dateFormatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss.SSSZ"
@@ -126,7 +126,7 @@ class MyOrderListViewController: UIViewController, UITableViewDelegate, UITableV
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let productsVC = ProductsOfOrderViewController()
-        productsVC.productID = "\(datas[0].orders[indexPath.row].order.orderID)"
+        productsVC.orderID = datas[0].orders[indexPath.row].order.orderID
         navigationController?.pushViewController(productsVC, animated: true)
     }
 }

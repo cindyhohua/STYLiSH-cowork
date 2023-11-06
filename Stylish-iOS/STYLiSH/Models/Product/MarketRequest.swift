@@ -31,7 +31,7 @@ enum STMarketRequest: STRequest {
         case .orderDetail(let token,_):
             return ["Authorization": token]
         case .feedbackForProduct(let token, _, _, _, _):
-            return ["Authorization": token]
+            return ["Authorization": token, "Content-Type": "application/json"]
         case .feedbackByUser(let token):
             return ["Authorization": token]
         }
@@ -48,7 +48,9 @@ enum STMarketRequest: STRequest {
             "score": score,
             "comment": comment
           ] as [String : Any]
+            print("\(try? JSONSerialization.data(withJSONObject: dict, options: .prettyPrinted))")
         return try? JSONSerialization.data(withJSONObject: dict, options: .prettyPrinted)
+//            return dict
         }
     }
 
