@@ -41,21 +41,22 @@ class MyOrderListViewController: UIViewController, UITableViewDelegate, UITableV
     
     private let marketProvider = MarketProvider(httpClient: HTTPClient())
     let orderListTable =  UITableView()
+    
     var token = KeyChainManager.shared.token
-    let testToken = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjI3LCJpYXQiOjE2OTkyMzQ5NjAsImV4cCI6MTY5OTIzODU2MH0.e1fdvNJ46LEEsi9RaMLaebfgqqrrl8PIhYoqQH8q334"
-    var orderIDs: [String] = ["111"]
-    var orderTimes: [String] = ["2023.01.02"]
-    private var datas: [OrderElement] = []  {
+    let testToken = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjM3LCJpYXQiOjE2OTkyNDc2NjksImV4cCI6MTY5OTI1MTI2OX0.C-YiObBATFaGEGedihiXV_VeHNcpMwovyqixUf1qjks"
+    
+    private var datas: [UserOrder] = []  {
         didSet {
             orderListTable.reloadData()
         }
     }
     func fetchData() {
-        guard let token = token else {return print("no token") }
-       marketProvider.fetchUserOrder(token: token, completion: { [weak self] result in
+//        guard let token = token else {return print("no token") }
+       marketProvider.fetchUserOrder(token: testToken, completion: { [weak self] result in
            switch result {
            case .success(let orders):
-               self?.datas = orders.orders
+               self?.datas = orders
+               return
            case .failure:
                LKProgressHUD.showFailure(text: "讀取資料失敗！")
            }
@@ -97,13 +98,24 @@ class MyOrderListViewController: UIViewController, UITableViewDelegate, UITableV
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         if let cell = orderListTable.dequeueReusableCell(withIdentifier: "orderCell") as? OrderListTableViewCell {
             print("in cell")
-            if orderTimes.isEmpty == false{
-                cell.orderIDLabel.text = "訂單編號：" + "\(datas[indexPath.row].order.orderID)"
-                cell.orderTimeLabel.text = "購賣日期：" + "\(datas[indexPath.row].order.createTime)"
-            }else{
-                cell.orderIDLabel.text = "訂單編號："
-                cell.orderTimeLabel.text = "購賣日期："
+            let dateString = datas[indexPath.row].order.createTime
+            // 创建日期格式化器
+            let dateFormatter = DateFormatter()
+            dateFormatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss.SSSZ"
+
+            // 设置时区（如果字符串中有 Z 表示 Zulu 时间，即 UTC）
+            dateFormatter.timeZone = TimeZone(identifier: "UTC")
+//            dateFormatter.timeZone = TimeZone.current
+            // 将字符串转换为日期
+            if let date = dateFormatter.date(from: dateString) {
+                cell.orderTimeLabel.text = "購賣日期：" + "\(date)"
+                print(date)
+            } else {
+                cell.orderTimeLabel.text = "購賣日期：" + String(dateString.prefix(10))
             }
+                cell.orderIDLabel.text = "訂單編號：" + "\(datas[indexPath.row].order.orderID)"
+                
+            
             
             return cell
         } else {
@@ -114,7 +126,7 @@ class MyOrderListViewController: UIViewController, UITableViewDelegate, UITableV
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let productsVC = ProductsOfOrderViewController()
-        productsVC.orderInfo = OrderInfo(orderID: orderIDs[indexPath.row], orderTime: orderTimes[indexPath.row])
+        productsVC.productID = "\(datas[indexPath.row].order.orderID)"
         navigationController?.pushViewController(productsVC, animated: true)
     }
 }

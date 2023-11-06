@@ -8,28 +8,50 @@
 
 import Foundation
 
-// MARK: - UserOrder
+// MARK: - UserOrderElement
 struct UserOrder: Codable {
-    let orders: [OrderElement]
+    let order: UserOrderInfo
 }
 
-// MARK: - OrderElement
-struct OrderElement: Codable {
+// MARK: - Order
+struct UserOrderInfo: Codable {
+    let orderID: String
+    let shipping, payment: String
+    let subtotal, usePoint, freight, total: Int
+    let createTime: String
+    let recipient: Recipient
+}
+
+// MARK: - Recipient
+struct Recipient: Codable {
+    let name, phone, email, address: String
+    let time: String
+}
+
+// MARK: - OrderDetail
+struct OrderDetail: Codable {
     let prime: String
-    let order: OrderOrder
+    let order: UserOrderDetail
 }
 
-// MARK: - OrderOrder
-struct OrderOrder: Codable {
+// MARK: - Order
+struct UserOrderDetail: Codable {
     let orderID: Int
     let shipping, payment: String
     let subtotal, usePoint, freight, total: Int
     let createTime: String
-    let recipent: Recipent
+    let recipent: Recipient
+    let list: [List]
 }
 
-// MARK: - Recipent
-struct Recipent: Codable {
-    let name, phone, email, address: String
-    let time: String
+// MARK: - List
+struct List: Codable {
+    let id: Int
+    let name: String
+    let price: Int
+    let color: Color
+    let size: String
+    let qty: Int
+    let isFeedback: Bool
 }
+

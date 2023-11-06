@@ -10,8 +10,8 @@ import Foundation
 
 typealias PromotionHanlder = (Result<[PromotedProducts], Error>) -> Void
 typealias ProductsResponseWithPaging = (Result<STSuccessParser<[Product]>, Error>) -> Void
-typealias UserOrderResponse = (Result<UserOrder, Error>) -> Void
-
+typealias UserOrderResponse = (Result<[UserOrder], Error>) -> Void
+typealias UserOrderDetailResponse = (Result<[OrderDetail], Error>) -> Void
 class MarketProvider {
 
     let decoder = JSONDecoder()
@@ -27,7 +27,8 @@ class MarketProvider {
         self.httpClient = httpClient
     }
 
-    // MARK: - Public method
+    
+    // MARK: - UserOrder method
     func fetchUserOrder(token: String, completion: @escaping UserOrderResponse){
         httpClient.request(STMarketRequest.userOrder(token: token), completion: { [weak self] result in
             guard let self = self else { return }
@@ -35,7 +36,35 @@ class MarketProvider {
             case .success(let data):
                 do {
                     let order = try self.decoder.decode(
-                        STSuccessParser<UserOrder>.self,
+                        [UserOrder].self,
+                        from: data
+                    )
+                    
+                    DispatchQueue.main.async {
+                        print("qqq")
+                        print("\(order[0].order.orderID)")
+                        completion(.success(order))
+                        
+                    }
+                } catch {
+                    completion(.failure(error))
+                    print("error1")
+                }
+            case .failure(let error):
+                completion(.failure(error))
+                print("error2")
+            }
+        })
+    }
+    
+    func fetchOrderDetail(token: String, productID: String, completion: @escaping UserOrderDetailResponse){
+        httpClient.request(STMarketRequest.orderDetail(token: token, productID: productID), completion: { [weak self] result in
+            guard let self = self else { return }
+            switch result {
+            case .success(let data):
+                do {
+                    let order = try self.decoder.decode(
+                        STSuccessParser<[OrderDetail]>.self,
                         from: data
                     )
                     DispatchQueue.main.async {
@@ -49,6 +78,7 @@ class MarketProvider {
             }
         })
     }
+    // MARK: - Public method
     func fetchHots(completion: @escaping PromotionHanlder) {
         httpClient.requestHots(STMarketRequest.hots, completion: { [weak self] result in
             guard let self = self else { return }

@@ -24,6 +24,9 @@ class ProductsOfOrderViewController: UIViewController {
         
         
     }
+    override func viewWillAppear(_ animated: Bool) {
+        
+    }
     
 
     /*
@@ -39,12 +42,43 @@ class ProductsOfOrderViewController: UIViewController {
     let orderIDLabel = UILabel()
     let orderTimeLabel = UILabel()
     
-    var orderInfo: OrderInfo? = nil
+    var productID: String = ""
     let productListTable =  UITableView()
     let numberOfProducts = 3
    
     var didReview = false
     
+    private let marketProvider = MarketProvider(httpClient: HTTPClient())
+    var token = KeyChainManager.shared.token
+    let testToken = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjM3LCJpYXQiOjE2OTkyNDg1MTcsImV4cCI6MTY5OTI1MjExN30.yqdIAKHjhQe7IqNFLtiFlt8XrHA8W2feidr2YqlYIgY"
+    
+    private var datas: [OrderDetail] = []  {
+        didSet {
+            productListTable.reloadData()
+        }
+    }
+    
+//    var datasList: [UserOrderDetail] = []{
+//        didSet {
+//            productListTable.reloadData()
+//
+//        }
+//    }
+    func fetchData() {
+        guard let token = token else {return print("no token") }
+       marketProvider.fetchOrderDetail(token: token, productID: productID, completion:{ [weak self] result in
+           switch result {
+           case .success(let ordersDetail):
+               self?.datas = ordersDetail
+//               if let dList = self?.datas[0]{
+//                   self?.datasList = dList
+//               }
+              
+           case .failure:
+               LKProgressHUD.showFailure(text: "讀取資料失敗！")
+           }
+       })
+   }
     func setNavigationAndTab(){
         self.tabBarController?.tabBar.isHidden = true
         self.title = "購買記錄"
@@ -58,10 +92,10 @@ class ProductsOfOrderViewController: UIViewController {
     }
     
     func setOrderInfoView(){
-        if orderInfo != nil{
-            orderIDLabel.text = "訂單編號：" + orderInfo!.orderID
-            orderTimeLabel.text = "購買日期：" + orderInfo!.orderTime
-        }
+        
+//        orderIDLabel.text = "訂單編號：\(datas[0])"
+//            orderTimeLabel.text = "購買日期：\(datas[0].createTime)"
+        
         
         addSubToSuperView(superview: view, subview: orderInfoView)
         addSubToSuperView(superview: orderInfoView, subview: orderIDLabel)
@@ -120,17 +154,19 @@ extension ProductsOfOrderViewController: UITableViewDelegate, UITableViewDataSou
     
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        numberOfProducts
+        return datas.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         if let cell = productListTable.dequeueReusableCell(withIdentifier: "productCell") as? ProductsOfOrderTableViewCell {
             cell.delegate = self
-            if didReview {
+            if datas[0].order.list[indexPath.row].isFeedback {
                 cell.checkButtonText = CheckButtonText.init().see
             }else{
                 cell.checkButtonText = CheckButtonText.init().edit
             }
+//            cell.productImage = datasList[indexPath.row].
+//            cell.titleLabel.text = datasList[indexPath.row].name
             
             return cell
         } else {

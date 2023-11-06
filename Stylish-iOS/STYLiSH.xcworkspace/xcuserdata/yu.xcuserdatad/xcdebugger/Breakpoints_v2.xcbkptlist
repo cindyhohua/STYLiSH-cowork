@@ -3,4 +3,102 @@
    uuid = "A2A4D6AB-7373-4BC4-BFCD-4BA33B1F7C4E"
    type = "0"
    version = "2.0">
+   <Breakpoints>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "3165AB53-3B82-48E9-A38F-DD82E8B739D3"
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "STYLiSH/Managers/APIProviders/MarketProvider.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "64"
+            endingLineNumber = "64"
+            landmarkName = "fetchOrderDetail(token:productID:completion:)"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "C604F70D-36CC-45DC-9FC8-4C6F718B523A"
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "STYLiSH/Managers/APIProviders/MarketProvider.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "63"
+            endingLineNumber = "63"
+            landmarkName = "fetchOrderDetail(token:productID:completion:)"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "D7B21BBF-5F61-4455-A61C-9D90709D3DBC"
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "STYLiSH/Managers/APIProviders/MarketProvider.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "69"
+            endingLineNumber = "69"
+            landmarkName = "fetchOrderDetail(token:productID:completion:)"
+            landmarkType = "7">
+            <Locations>
+               <Location
+                  uuid = "D7B21BBF-5F61-4455-A61C-9D90709D3DBC - 744ebff77eecc820"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "closure #1 (Swift.Result&lt;Foundation.Data, STYLiSH.STHTTPClientError&gt;) -&gt; () in STYLiSH.MarketProvider.fetchOrderDetail(token: Swift.String, productID: Swift.String, completion: (Swift.Result&lt;Swift.Array&lt;STYLiSH.OrderDetail&gt;, Swift.Error&gt;) -&gt; ()) -&gt; ()"
+                  moduleName = "STYLiSH"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/yu/Documents/iOS/AppWorks/%E9%A7%90%E9%BB%9E/STYLiSH-cowork/Stylish-iOS/STYLiSH/Managers/APIProviders/MarketProvider.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "70"
+                  endingLineNumber = "70"
+                  offsetFromSymbolStart = "785">
+               </Location>
+               <Location
+                  uuid = "D7B21BBF-5F61-4455-A61C-9D90709D3DBC - 34c6c7302ce58545"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "closure #1 @Swift.MainActor () -&gt; () in closure #1 (Swift.Result&lt;Foundation.Data, STYLiSH.STHTTPClientError&gt;) -&gt; () in STYLiSH.MarketProvider.fetchOrderDetail(token: Swift.String, productID: Swift.String, completion: (Swift.Result&lt;Swift.Array&lt;STYLiSH.OrderDetail&gt;, Swift.Error&gt;) -&gt; ()) -&gt; ()"
+                  moduleName = "STYLiSH"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/yu/Documents/iOS/AppWorks/%E9%A7%90%E9%BB%9E/STYLiSH-cowork/Stylish-iOS/STYLiSH/Managers/APIProviders/MarketProvider.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "71"
+                  endingLineNumber = "71"
+                  offsetFromSymbolStart = "64">
+               </Location>
+            </Locations>
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "ABF6FA78-DF4F-442F-B5A3-5E407137A964"
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "STYLiSH/Managers/APIProviders/MarketProvider.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "77"
+            endingLineNumber = "77"
+            landmarkName = "fetchOrderDetail(token:productID:completion:)"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+   </Breakpoints>
 </Bucket>
