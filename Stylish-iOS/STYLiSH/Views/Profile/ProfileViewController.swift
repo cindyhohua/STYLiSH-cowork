@@ -54,7 +54,7 @@ class ProfileViewController: UIViewController, CouponToCheckoutPage {
             switch result {
             case .success(let user):
                 self?.user = user
-                if user.isDailyEvent == false {
+                if user.isDailyEvent { // == false
                     self?.couponGame()
                 }
             case .failure:

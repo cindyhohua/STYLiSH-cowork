@@ -203,11 +203,18 @@ extension CheckoutViewController: UITableViewDataSource, UITableViewDelegate, Co
         }
     }
     @objc func couponButtonTapped() {
-        // if alreadylogin
-        let couponViewController = CouponInputViewController()
-        couponViewController.delegate = self
-        couponViewController.modalPresentationStyle = .overFullScreen
-        present(couponViewController, animated: true)
+        if KeyChainManager.shared.token == nil {
+            if let authVC = UIStoryboard.auth.instantiateInitialViewController() {
+                authVC.modalPresentationStyle = .overCurrentContext
+                present(authVC, animated: false, completion: nil)
+            }
+        } else {
+            let couponViewController = CouponInputViewController()
+            couponViewController.delegate = self
+            couponViewController.modalPresentationStyle = .overFullScreen
+            present(couponViewController, animated: true)
+        }
+        
     }
     
     func couponToCheckoutPage(coupon: Int) {
@@ -215,6 +222,7 @@ extension CheckoutViewController: UITableViewDataSource, UITableViewDelegate, Co
         if coupon > (orderProvider.order.productPrices + orderProvider.order.freight) {
             point = orderProvider.order.productPrices + orderProvider.order.freight
         }
+        orderProvider.order.usePoint = point
         let indexPath = IndexPath(row: 0, section: 2)
         let cell = tableView.cellForRow(at: indexPath) as? STPaymentInfoTableViewCell
         cell?.couponButton.setTitle("折抵\(point)元", for: .normal)

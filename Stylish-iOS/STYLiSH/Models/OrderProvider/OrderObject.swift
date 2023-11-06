@@ -20,6 +20,7 @@ struct Order: Encodable {
         case payment
         case productPrices = "subtotal"
         case freight
+        case usePoint = "usePoint"
         case totalPrice = "total"
         case reciever = "recipient"
         case list
@@ -30,6 +31,7 @@ struct Order: Encodable {
         try container.encode(deliverTime, forKey: .deliverTime)
         try container.encode(payment, forKey: .payment)
         try container.encode(productPrices, forKey: .productPrices)
+        try container.encode(usePoint, forKey: .usePoint)
         try container.encode(freight, forKey: .freight)
         try container.encode(totalPrice, forKey: .totalPrice)
         try container.encode(reciever, forKey: .reciever)
@@ -52,7 +54,8 @@ struct Order: Encodable {
                 Int(object.price),
                 color: color,
                 size: size,
-                qty: Int(product.amount)
+                qty: Int(product.amount),
+                isFeedback: false
             )
             return orderObject
         }
@@ -62,6 +65,8 @@ struct Order: Encodable {
     var reciever: Reciever = Reciever()
     var deliverTime: String = "08:00-12:00"
     var payment: Payment = .cash
+    
+    var usePoint: Int = 10
 
     var productPrices: Int {
             var price = 0
@@ -76,7 +81,7 @@ struct Order: Encodable {
     }
 
     var totalPrice: Int {
-        return productPrices + freight
+        return productPrices + freight - usePoint
     }
 
     var amount: Int {
@@ -144,4 +149,5 @@ struct OrderListObject: Codable {
     let color: Color
     let size: String
     let qty: Int
+    let isFeedback: Bool
 }

@@ -112,6 +112,8 @@ class UserProvider {
             return completion(.failure(STYLiSHSignInError.noToken))
         }
         let body = CheckoutAPIBody(order: order, prime: prime)
+        print(body.order.usePoint,body.order.list[0].isFeedback)
+        
         let request = STUserRequest.checkout(
             token: token,
             body: try? JSONEncoder().encode(body)

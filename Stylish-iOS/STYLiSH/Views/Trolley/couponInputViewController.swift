@@ -15,10 +15,11 @@ class CouponInputViewController: UIViewController {
     let pointTextField = UITextField()
     let commitButton = UIButton()
     var delegate: CouponToCheckoutPage?
+    private let userProvider = UserProvider(httpClient: HTTPClient())
     private let blue = UIColor(red: CGFloat(99)/250, green: CGFloat(123)/250, blue: CGFloat(127)/250, alpha: 1)
     private let orange = UIColor(red: CGFloat(235)/250, green: CGFloat(181)/250, blue: CGFloat(90)/250, alpha: 1)
     private let lightOrange = UIColor(red: CGFloat(253)/250, green: CGFloat(248)/250, blue: CGFloat(239)/250, alpha: 1)
-    var totalPoint: Int = 50
+    var totalPoint: Int = 3
     var currentValue: Int = 0 {
         didSet {
             if currentValue == totalPoint && currentValue == 0{
@@ -41,7 +42,8 @@ class CouponInputViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        setupLotteryGrid()
+        fetchData()
+        
     }
     
     func setupLotteryGrid() {
@@ -133,5 +135,17 @@ class CouponInputViewController: UIViewController {
     
     @objc func dismissButtonTapped() {
         self.dismiss(animated: true)
+    }
+    
+    private func fetchData() {
+        userProvider.getUserProfile(completion: { [weak self] result in
+            switch result {
+            case .success(let user):
+                self?.totalPoint = user.points
+                self?.setupLotteryGrid()
+            case .failure:
+                LKProgressHUD.showFailure(text: "讀取資料失敗！")
+            }
+        })
     }
 }
