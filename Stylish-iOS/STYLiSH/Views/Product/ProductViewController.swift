@@ -77,7 +77,8 @@ class ProductViewController: UIViewController {
 
     @IBAction func onChangeLayoutType(_ sender: UIBarButtonItem) {
 //        isListLayout = !isListLayout
-        
+        let VC = FindWithPicViewController()
+        navigationController?.pushViewController(VC, animated: true)
     }
 
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {

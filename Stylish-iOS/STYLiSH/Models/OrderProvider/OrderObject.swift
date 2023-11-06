@@ -54,8 +54,7 @@ struct Order: Encodable {
                 Int(object.price),
                 color: color,
                 size: size,
-                qty: Int(product.amount),
-                isFeedback: false
+                qty: Int(product.amount)
             )
             return orderObject
         }
@@ -63,10 +62,10 @@ struct Order: Encodable {
     
     var products: [LSOrder] = []
     var reciever: Reciever = Reciever()
-    var deliverTime: String = "08:00-12:00"
+    var deliverTime: String = "delivery"
     var payment: Payment = .cash
     
-    var usePoint: Int = 10
+    var usePoint: Int = 0
 
     var productPrices: Int {
             var price = 0
@@ -132,7 +131,7 @@ struct Reciever: Codable {
 
 enum Payment: String, Codable {
     case cash
-    case credit
+    case credit = "credit_card"
     
     func title() -> String {
         switch self {
@@ -149,5 +148,4 @@ struct OrderListObject: Codable {
     let color: Color
     let size: String
     let qty: Int
-    let isFeedback: Bool
 }

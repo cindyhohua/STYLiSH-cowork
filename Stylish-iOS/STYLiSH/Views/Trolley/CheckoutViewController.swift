@@ -353,7 +353,7 @@ extension CheckoutViewController: STOrderUserInputCellDelegate {
             email: data.email,
             phoneNumber: data.phoneNumber,
             address: data.address,
-            shipTime: data.shipTime
+            shipTime: "morning"
         )
         orderProvider.order.reciever = newReciever
         updateCheckoutButton()

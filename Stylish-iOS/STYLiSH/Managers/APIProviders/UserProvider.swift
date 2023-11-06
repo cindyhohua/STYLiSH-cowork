@@ -112,7 +112,7 @@ class UserProvider {
             return completion(.failure(STYLiSHSignInError.noToken))
         }
         let body = CheckoutAPIBody(order: order, prime: prime)
-        print(body.order.usePoint,body.order.list[0].isFeedback)
+        print("qq",body.order,"qq",body.order.totalPrice,body.order.payment.rawValue, body.order.deliverTime)
         
         let request = STUserRequest.checkout(
             token: token,
@@ -124,13 +124,16 @@ class UserProvider {
                 do {
                     let reciept = try JSONDecoder().decode(STSuccessParser<Reciept>.self, from: data)
                     DispatchQueue.main.async {
+                        print("qq")
                         completion(.success(reciept.data))
                     }
                 } catch {
                     completion(.failure(error))
+                    print("error1")
                 }
             case .failure(let error):
                 completion(.failure(error))
+                print("error2")
             }
         })
     }

@@ -135,6 +135,7 @@
 		CA7C603E2AF60D9900C00E8D /* SeeAllCommentViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CA7C603D2AF60D9900C00E8D /* SeeAllCommentViewController.swift */; };
 		CA7C60402AF628FC00C00E8D /* CouponGameViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CA7C603F2AF628FC00C00E8D /* CouponGameViewController.swift */; };
 		CABD7F1C2AF7658B00420070 /* couponInputViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CABD7F1B2AF7658B00420070 /* couponInputViewController.swift */; };
+		CABD7F1E2AF88DFA00420070 /* FindWithPicViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CABD7F1D2AF88DFA00420070 /* FindWithPicViewController.swift */; };
 		D306B883B370DFD3ED8ACD74 /* Pods_STYLiSH.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 42C2B4AF3EF2ABFF2BB9F7AB /* Pods_STYLiSH.framework */; };
 /* End PBXBuildFile section */
 
@@ -292,6 +293,7 @@
 		CA7C603D2AF60D9900C00E8D /* SeeAllCommentViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SeeAllCommentViewController.swift; sourceTree = "<group>"; };
 		CA7C603F2AF628FC00C00E8D /* CouponGameViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CouponGameViewController.swift; sourceTree = "<group>"; };
 		CABD7F1B2AF7658B00420070 /* couponInputViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = couponInputViewController.swift; sourceTree = "<group>"; };
+		CABD7F1D2AF88DFA00420070 /* FindWithPicViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FindWithPicViewController.swift; sourceTree = "<group>"; };
 		E921004E251C9FC3CBC174F5 /* Pods-STYLiSH.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-STYLiSH.release.xcconfig"; path = "Target Support Files/Pods-STYLiSH/Pods-STYLiSH.release.xcconfig"; sourceTree = "<group>"; };
 		F551E8F447D7C8DC42B53B98 /* Pods-STYLiSH.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-STYLiSH.debug.xcconfig"; path = "Target Support Files/Pods-STYLiSH/Pods-STYLiSH.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -525,6 +527,7 @@
 			children = (
 				3C7036D0222C4E0A00F6C58B /* ProductPickerController.swift */,
 				3C41B8462216667000112F94 /* ProductViewController.swift */,
+				CABD7F1D2AF88DFA00420070 /* FindWithPicViewController.swift */,
 				3C33863E221BB2B800ED97E4 /* ProductListViewController.swift */,
 				3CCB3BC3222AA8FD00976A1C /* ProductDetailViewController.swift */,
 				CA7C603D2AF60D9900C00E8D /* SeeAllCommentViewController.swift */,
@@ -1056,6 +1059,7 @@
 				3C8F191922E5997B00EECE90 /* LobbyTableViewHeaderView.swift in Sources */,
 				3CE7A517223061A9009FF003 /* UserRequest.swift in Sources */,
 				3C09F52122115AB700C5B3E2 /* UIImage+Extension.swift in Sources */,
+				CABD7F1E2AF88DFA00420070 /* FindWithPicViewController.swift in Sources */,
 				3C6B8FE8222CE53100804EFE /* BasicSelectionCell.swift in Sources */,
 				CA7C603E2AF60D9900C00E8D /* SeeAllCommentViewController.swift in Sources */,
 				3C41B8472216667000112F94 /* ProductViewController.swift in Sources */,

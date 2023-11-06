@@ -21,8 +21,8 @@ enum STUserRequest: STRequest {
             return [STHTTPHeaderField.contentType.rawValue: STHTTPHeaderValue.json.rawValue]
         case .checkout(let token, _):
             return [
-                STHTTPHeaderField.auth.rawValue: "Bearer \(token)",
-                STHTTPHeaderField.contentType.rawValue: STHTTPHeaderValue.json.rawValue
+                STHTTPHeaderField.contentType.rawValue: STHTTPHeaderValue.json.rawValue,
+                STHTTPHeaderField.auth.rawValue: "Bearer \(token)"
             ]
         case .profile(let token):
             return [ STHTTPHeaderField.auth.rawValue: "Bearer \(token)"]
