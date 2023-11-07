@@ -209,7 +209,9 @@ extension ProductsOfOrderViewController: UITableViewDelegate, UITableViewDataSou
             seeVC.productOfColors.append(contentsOf: cell.productOfColors)
             seeVC.productOfSize.append(contentsOf: cell.productOfSize)
             seeVC.orderID = (datas?.order.orderID)!
-            seeVC.productID = (datas?.order.list![indexPath.row].id)!
+            let keyArray = Array(groupedItems.keys)
+            let id = keyArray[indexPath.row]
+            seeVC.productID = (groupedItems[id]![0].id)
             navigationController?.pushViewController(seeVC, animated: true)
            
         }
@@ -235,11 +237,12 @@ extension ProductsOfOrderViewController: UITableViewDelegate, UITableViewDataSou
             if groupedItems.keys.count > 0{
                 let keyArray = Array(groupedItems.keys)
                 let id = keyArray[indexPath.row]
+                cell.productID = id
                 if let value = groupedItems[id]{
                     if value[0].isFeedback{
-                        cell.checkButtonText = CheckButtonText.init().see
+                        cell.checkButtonType = .edit
                     }else{
-                        cell.checkButtonText = CheckButtonText.init().edit
+                        cell.checkButtonType = .see
                     }
                     cell.productImage.kf.setImage(with: URL(string: value[0].mainImage!))
                     cell.titleLabel.text = value[0].name
@@ -267,15 +270,26 @@ extension ProductsOfOrderViewController: UITableViewDelegate, UITableViewDataSou
     func reviewActive(cell: ProductsOfOrderTableViewCell) {
         let reviewVC = ReviewViewController()
         if let indexPath = productListTable.indexPath(for: cell){
-            let data = datas?.order.list![indexPath.row]
-            reviewVC.productImage.kf.setImage(with: URL(string: (data?.mainImage)!))
-            reviewVC.titleLabel.text = data?.name
+//            let data = datas?.order.list![indexPath.row]
+//            reviewVC.productImage.kf.setImage(with: URL(string: (data?.mainImage)!))
+//            reviewVC.titleLabel.text = data?.name
+//            reviewVC.productOfSize.removeAll()
+//            reviewVC.productOfSize.append(data!.size)
+//            reviewVC.productOfColors.removeAll()
+//            reviewVC.productOfColors.append(UIColor.hexStringToUIColor(hex: (data?.color.code)!))
+//            reviewVC.productId = data!.id
+//            reviewVC.orderId = (datas?.order.orderID)!
+           
             reviewVC.productOfSize.removeAll()
-            reviewVC.productOfSize.append(data!.size)
-            reviewVC.productOfColors.removeAll()
-            reviewVC.productOfColors.append(UIColor.hexStringToUIColor(hex: (data?.color.code)!))
-            reviewVC.productId = data!.id
-            reviewVC.orderId = (datas?.order.orderID)!
+            reviewVC.productOfSize.removeAll()
+            reviewVC.productOfColors.append(contentsOf: cell.productOfColors)
+            reviewVC.productOfSize.append(contentsOf: cell.productOfSize)
+//            seeVC.orderID = (datas?.order.orderID)!
+            let keyArray = Array(groupedItems.keys)
+            let id = keyArray[indexPath.row]
+            reviewVC.productId = (groupedItems[id]![0].id)
+            reviewVC.productImage.kf.setImage(with: URL(string: groupedItems[id]![0].mainImage!))
+            reviewVC.titleLabel.text = groupedItems[id]![0].name
         }
         
         

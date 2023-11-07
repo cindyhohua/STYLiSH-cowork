@@ -43,9 +43,11 @@ class ProductsOfOrderTableViewCell: UITableViewCell {
     
     var productOfColors: [UIColor] = []
     var productOfSize: [String] = []
-    var checkButtonText: String = ""
+//    var checkButtonText: String = ""
     var colorView: [UIView] = []
     var sizeLabel: [UIView] = []
+    var productID: Int?
+    var checkButtonType: CheckButtonText = .edit
     var productImage: UIImageView = {
         let image = UIImage(named: "Image_Placeholder")
         let imageView = UIImageView(image: image)
@@ -69,14 +71,21 @@ class ProductsOfOrderTableViewCell: UITableViewCell {
     }()
     
     func setButtonActive(){
-        checkButton.setTitle(checkButtonText, for: .normal)
+        checkButton.setTitle(checkButtonType.title, for: .normal)
         checkButton.addTarget(self, action: #selector(reviewAction), for: .touchUpInside)
     }
     
     @objc func reviewAction(){
-        if checkButtonText == CheckButtonText.init().edit{
+//        if CheckButtonText == CheckButtonText.init().edit{
+//            delegate?.reviewActive(cell: self)
+//        }else{
+//            delegate?.seeReviewActive(cell: self)
+//        }
+        switch checkButtonType {
+       
+        case .edit:
             delegate?.reviewActive(cell: self)
-        }else{
+        case .see:
             delegate?.seeReviewActive(cell: self)
         }
         

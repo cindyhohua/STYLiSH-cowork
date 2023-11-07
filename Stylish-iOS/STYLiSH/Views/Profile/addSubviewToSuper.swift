@@ -19,21 +19,21 @@ struct OrderInfo{
     var orderTime: String
 }
 
-struct CheckButtonText{
-    var edit = "前往評價"
-    var see = "查看評價"
-}
+//struct CheckButtonText{
+//    var edit = "前往評價"
+//    var see = "查看評價"
+//}
 //var state: State
 //state.title
-//
-//enum State {
-//    case a
-//    case b
-//    
-//    var title: String {
-//        switch self {
-//        case .a: return "a"
-//        case .b: return "b"
-//        }
-//    }
-//}
+
+enum CheckButtonText {
+    case edit
+    case see
+    
+    var title: String {
+        switch self {
+        case .edit: return "前往評價"
+        case .see: return "查看評價"
+        }
+    }
+}
