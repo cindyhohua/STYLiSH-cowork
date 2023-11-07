@@ -42,7 +42,7 @@ class ReviewModelViewController: UIViewController {
 
     let titleLabel: UILabel = {
         let label = UILabel()
-        label.text = "我是假的商品"
+        label.text = ""
         label.textColor = .B1
         return label
     }()
@@ -59,10 +59,10 @@ class ReviewModelViewController: UIViewController {
     
     func setColorAndSize(){
         if productOfColors != nil {
-            for _ in 0..<productOfColors.count{
+            for ind in 0..<productOfColors.count{
                 let cView: UIView = {
                     let view = UIView()
-                    view.backgroundColor = .B2
+                    view.backgroundColor = productOfColors[ind]
                     return view
                 }()
                 addSubToSuperView(superview: view, subview: cView)

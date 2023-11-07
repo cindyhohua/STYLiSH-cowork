@@ -25,6 +25,7 @@ class ProductsOfOrderViewController: UIViewController {
         
     }
     override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
         fetchData()
         setOrderInfoView()
         productListTable.reloadData()
@@ -203,8 +204,10 @@ extension ProductsOfOrderViewController: UITableViewDelegate, UITableViewDataSou
     func seeReviewActive(cell: ProductsOfOrderTableViewCell) {
         let seeVC = SeeReviewViewController()
         if let indexPath = productListTable.indexPath(for: cell){
-            seeVC.productOfColors = cell.productOfColors
-            seeVC.productOfSize = cell.productOfSize
+            seeVC.productOfSize.removeAll()
+            seeVC.productOfSize.removeAll()
+            seeVC.productOfColors.append(contentsOf: cell.productOfColors)
+            seeVC.productOfSize.append(contentsOf: cell.productOfSize)
             seeVC.orderID = (datas?.order.orderID)!
             seeVC.productID = (datas?.order.list![indexPath.row].id)!
             navigationController?.pushViewController(seeVC, animated: true)
