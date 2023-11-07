@@ -25,6 +25,7 @@ class ProductsOfOrderViewController: UIViewController {
         
     }
     override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
         fetchData()
         setOrderInfoView()
         productListTable.reloadData()
@@ -88,53 +89,54 @@ class ProductsOfOrderViewController: UIViewController {
 //        }
 //    }
     func fetchData() {
-//        guard let token = testToken else {return print("no token") }
+        //        guard let token = testToken else {return print("no token") }
         print("------------------\(orderID)")
-       marketProvider.fetchOrderDetail(token: testToken, productID: "\(orderID)", completion:{ [weak self] result in
-           switch result {
-           case .success(let ordersDetail):
-               self?.datas = ordersDetail
-               print("\(self?.datas)")
-               
-               self?.groupedItems = [:]
-               self?.processedDataSize = [:]
-               self?.processedDataColor = [:]
-               if let list = self?.datas?.order.list{
-                   for item in list{
-                       
-                       if self?.groupedItems[item.id] == nil {
-                           self?.groupedItems[item.id] = []
-                           }
-
-                       self?.groupedItems[item.id]?.append(item)
-                       
-                       // Process color data
-                       if self?.processedDataColor[item.id] == nil {
-                           self?.processedDataColor[item.id] = []
-                       }
-
-                       self?.processedDataColor[item.id]!.append(item.color.code)
-
-                       // Process size data
-                       if self?.processedDataSize[item.id] == nil {
-                           self?.processedDataSize[item.id] = []
-                       }
-                       if !(self?.processedDataSize[item.id]!.contains(item.size) ?? true) {
-                           self?.processedDataSize[item.id]?.append(item.size)
-                       }
-                   }
-               }
-               print("\(self?.processedDataColor)")
-               print("\(self?.processedDataSize)")
-               
-               DispatchQueue.main.async {
-                   self?.productListTable.reloadData()
-               }
-           case .failure:
-               LKProgressHUD.showFailure(text: "讀取資料失敗！")
-           }
-       })
-        
+        if let testToken = testToken{
+        marketProvider.fetchOrderDetail(token: testToken, productID: "\(orderID)", completion:{ [weak self] result in
+            switch result {
+            case .success(let ordersDetail):
+                self?.datas = ordersDetail
+                print("\(self?.datas)")
+                
+                self?.groupedItems = [:]
+                self?.processedDataSize = [:]
+                self?.processedDataColor = [:]
+                if let list = self?.datas?.order.list{
+                    for item in list{
+                        
+                        if self?.groupedItems[item.id] == nil {
+                            self?.groupedItems[item.id] = []
+                        }
+                        
+                        self?.groupedItems[item.id]?.append(item)
+                        
+                        // Process color data
+                        if self?.processedDataColor[item.id] == nil {
+                            self?.processedDataColor[item.id] = []
+                        }
+                        
+                        self?.processedDataColor[item.id]!.append(item.color.code)
+                        
+                        // Process size data
+                        if self?.processedDataSize[item.id] == nil {
+                            self?.processedDataSize[item.id] = []
+                        }
+                        if !(self?.processedDataSize[item.id]!.contains(item.size) ?? true) {
+                            self?.processedDataSize[item.id]?.append(item.size)
+                        }
+                    }
+                }
+                print("\(self?.processedDataColor)")
+                print("\(self?.processedDataSize)")
+                
+                DispatchQueue.main.async {
+                    self?.productListTable.reloadData()
+                }
+            case .failure:
+                LKProgressHUD.showFailure(text: "讀取資料失敗！")
+            }
+        })
+    }
 //        orderTimeLabel.text = "購買日期：\(datas?.order.createTime)"
    }
     func setNavigationAndTab(){
@@ -202,8 +204,10 @@ extension ProductsOfOrderViewController: UITableViewDelegate, UITableViewDataSou
     func seeReviewActive(cell: ProductsOfOrderTableViewCell) {
         let seeVC = SeeReviewViewController()
         if let indexPath = productListTable.indexPath(for: cell){
-            seeVC.productOfColors = cell.productOfColors
-            seeVC.productOfSize = cell.productOfSize
+            seeVC.productOfSize.removeAll()
+            seeVC.productOfSize.removeAll()
+            seeVC.productOfColors.append(contentsOf: cell.productOfColors)
+            seeVC.productOfSize.append(contentsOf: cell.productOfSize)
             seeVC.orderID = (datas?.order.orderID)!
             seeVC.productID = (datas?.order.list![indexPath.row].id)!
             navigationController?.pushViewController(seeVC, animated: true)

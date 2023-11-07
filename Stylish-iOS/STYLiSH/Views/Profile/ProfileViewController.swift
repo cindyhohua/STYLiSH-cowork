@@ -8,7 +8,11 @@
 
 import UIKit
 
-class ProfileViewController: UIViewController {
+class ProfileViewController: UIViewController, CouponToCheckoutPage {
+    func couponToCheckoutPage(coupon: Int) {
+        fetchData()
+    }
+    
 
     @IBOutlet weak var imageProfile: UIImageView!
     
@@ -22,6 +26,10 @@ class ProfileViewController: UIViewController {
             collectionView.dataSource = self
         }
     }
+    
+    private var memberCoupon: Int = 0
+    
+    private var couponLabel = UILabel()
 
     private let manager = ProfileManager()
     
@@ -34,34 +42,47 @@ class ProfileViewController: UIViewController {
             }
         }
     }
-
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        fetchData()
-    }
+    
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         self.tabBarController?.tabBar.isHidden = false
+        fetchData()
     }
-
+    
     // MARK: - Action
     private func fetchData() {
         userProvider.getUserProfile(completion: { [weak self] result in
             switch result {
             case .success(let user):
                 self?.user = user
+                if user.isDailyEvent { // == false
+                    self?.couponGame()
+                }
             case .failure:
                 LKProgressHUD.showFailure(text: "讀取資料失敗！")
             }
         })
     }
     
+    private func couponGame(){
+        let couponViewController = CouponGameViewController()
+        couponViewController.delegate = self
+        couponViewController.modalPresentationStyle = .overFullScreen
+        present(couponViewController, animated: true)
+    }
+    
     private func updateUser(_ user: User) {
         imageProfile.loadImage(user.picture, placeHolder: .asset(.Icons_36px_Profile_Normal))
-        
         labelName.text = user.name
         labelInfo.text = user.getUserInfo()
         labelInfo.isHidden = false
+        view.addSubview(couponLabel)
+        couponLabel.translatesAutoresizingMaskIntoConstraints = false
+        couponLabel.font = UIFont(name: "Helvetica", size: 15)
+        couponLabel.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -12).isActive = true
+        couponLabel.centerYAnchor.constraint(equalTo: imageProfile.centerYAnchor, constant: -10).isActive = true
+        couponLabel.text = "會員點數：\(user.points)點"
+        couponLabel.textColor = .white
     }
 }
 

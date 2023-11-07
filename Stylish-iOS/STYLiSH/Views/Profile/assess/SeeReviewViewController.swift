@@ -66,15 +66,17 @@ class SeeReviewViewController: ReviewModelViewController {
     var token = KeyChainManager.shared.token
 //    let testToken = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjM3LCJpYXQiOjE2OTkyNTg5ODMsImV4cCI6MTY5OTI2MjU4M30.1ZOurs2eGwA7bXrvCcnwNjlVOMeSlMX4tIR9VpqHGeI"
     func fetchData() {
-        marketProvider.fetchUserFeedBack(token: testToken, productID: productID, orderID: orderID, completion:{ [weak self] result in
-           switch result {
-           case .success(let feedback):
-               self?.datas = [feedback]
-               return
-           case .failure:
-               LKProgressHUD.showFailure(text: "讀取資料失敗！")
-           }
-       })
+        if let testToken = testToken {
+            marketProvider.fetchUserFeedBack(token: testToken, productID: productID, orderID: orderID, completion:{ [weak self] result in
+                switch result {
+                case .success(let feedback):
+                    self?.datas = [feedback]
+                    return
+                case .failure:
+                    LKProgressHUD.showFailure(text: "讀取資料失敗！")
+                }
+            })
+        }
    }
     
     

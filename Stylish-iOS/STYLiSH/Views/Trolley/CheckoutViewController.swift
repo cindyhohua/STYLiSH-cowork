@@ -8,6 +8,10 @@
 
 import UIKit
 
+protocol CouponToCheckoutPage{
+    func couponToCheckoutPage(coupon: Int)
+}
+
 class CheckoutViewController: STBaseViewController {
     
     private struct Segue {
@@ -133,7 +137,7 @@ class CheckoutViewController: STBaseViewController {
     }
 }
 
-extension CheckoutViewController: UITableViewDataSource, UITableViewDelegate {
+extension CheckoutViewController: UITableViewDataSource, UITableViewDelegate, CouponToCheckoutPage {
     
     // MARK: - Section Count
     func numberOfSections(in tableView: UITableView) -> Int {
@@ -179,9 +183,64 @@ extension CheckoutViewController: UITableViewDataSource, UITableViewDelegate {
         case .products:
             return mappingCellWtih(order: orderProvider.order, at: indexPath)
         case .paymentInfo:
-            return mappingCellWtih(payment: "", at: indexPath)
+            let cell = tableView.dequeueReusableCell(withIdentifier: STPaymentInfoTableViewCell.identifier,for: indexPath) as? STPaymentInfoTableViewCell
+            cell?.couponButton.setTitleColor(.white, for: .normal)
+            cell?.couponButton.addTarget(self, action: #selector(couponButtonTapped), for: .touchUpInside)
+            cell?.creditView.stickSubView(tappayVC.view)
+            cell?.delegate = self
+            cell?.layoutCellWith(
+                productPrice: orderProvider.order.productPrices,
+                shipPrice: orderProvider.order.freight,
+                productCount: orderProvider.order.amount,
+                payment: orderProvider.order.payment.title(),
+                isCheckoutEnable: canCheckout()
+            )
+            cell?.checkoutBtn.isEnabled = canCheckout()
+            
+            return cell ?? STPaymentInfoTableViewCell()
         case .reciever:
             return mappingCellWtih(reciever: orderProvider.order.reciever, at: indexPath)
+        }
+    }
+    @objc func couponButtonTapped() {
+        if KeyChainManager.shared.token == nil {
+            if let authVC = UIStoryboard.auth.instantiateInitialViewController() {
+                authVC.modalPresentationStyle = .overCurrentContext
+                present(authVC, animated: false, completion: nil)
+            }
+        } else {
+            let couponViewController = CouponInputViewController()
+            couponViewController.delegate = self
+            couponViewController.modalPresentationStyle = .overFullScreen
+            present(couponViewController, animated: true)
+        }
+        
+    }
+    
+    func couponToCheckoutPage(coupon: Int) {
+        var point = coupon
+        if coupon > (orderProvider.order.productPrices + orderProvider.order.freight) {
+            point = orderProvider.order.productPrices + orderProvider.order.freight
+        }
+        orderProvider.order.usePoint = point
+        let indexPath = IndexPath(row: 0, section: 2)
+        let cell = tableView.cellForRow(at: indexPath) as? STPaymentInfoTableViewCell
+        cell?.couponButton.setTitle("折抵\(point)元", for: .normal)
+        if coupon != 0 {
+            cell?.layoutCellWithCoupon( productPrice: orderProvider.order.productPrices,
+                                        shipPrice: orderProvider.order.freight,
+                                        productCount: orderProvider.order.amount,
+                                        payment: orderProvider.order.payment.title(),
+                                        isCheckoutEnable: canCheckout(),
+                                        coupon: point)
+        } else {
+            cell?.layoutCellWith(
+                productPrice: orderProvider.order.productPrices,
+                shipPrice: orderProvider.order.freight,
+                productCount: orderProvider.order.amount,
+                payment: orderProvider.order.payment.title(),
+                isCheckoutEnable: canCheckout()
+            )
         }
     }
     
@@ -219,27 +278,29 @@ extension CheckoutViewController: UITableViewDataSource, UITableViewDelegate {
         return inputCell
     }
     
-    private func mappingCellWtih(payment: String, at indexPath: IndexPath) -> UITableViewCell {
-        guard
-            let inputCell = tableView.dequeueReusableCell(
-                withIdentifier: STPaymentInfoTableViewCell.identifier,
-                for: indexPath
-            ) as? STPaymentInfoTableViewCell
-        else {
-            return UITableViewCell()
-        }
-        inputCell.creditView.stickSubView(tappayVC.view)
-        inputCell.delegate = self
-        inputCell.layoutCellWith(
-            productPrice: orderProvider.order.productPrices,
-            shipPrice: orderProvider.order.freight,
-            productCount: orderProvider.order.amount,
-            payment: orderProvider.order.payment.title(),
-            isCheckoutEnable: canCheckout()
-        )
-        inputCell.checkoutBtn.isEnabled = canCheckout()
-        return inputCell
-    }
+//    private func mappingCellWtih(payment: String, at indexPath: IndexPath) -> UITableViewCell {
+//        guard
+//            let inputCell = tableView.dequeueReusableCell(
+//                withIdentifier: STPaymentInfoTableViewCell.identifier,
+//                for: indexPath
+//            ) as? STPaymentInfoTableViewCell
+//        else {
+//            return UITableViewCell()
+//        }
+//        inputCell.couponButton.addTarget(self, action: #selector(couponButtonTapped), for: .touchUpInside)
+//        inputCell.creditView.stickSubView(tappayVC.view)
+//        inputCell.delegate = self
+//        inputCell.layoutCellWith(
+//            productPrice: orderProvider.order.productPrices,
+//            shipPrice: orderProvider.order.freight,
+//            productCount: orderProvider.order.amount,
+//            payment: orderProvider.order.payment.title(),
+//            isCheckoutEnable: canCheckout()
+//        )
+//        inputCell.checkoutBtn.isEnabled = canCheckout()
+//        return inputCell
+//    }
+//
     
     func updateCheckoutButton() {
         guard
@@ -292,7 +353,7 @@ extension CheckoutViewController: STOrderUserInputCellDelegate {
             email: data.email,
             phoneNumber: data.phoneNumber,
             address: data.address,
-            shipTime: data.shipTime
+            shipTime: "morning"
         )
         orderProvider.order.reciever = newReciever
         updateCheckoutButton()

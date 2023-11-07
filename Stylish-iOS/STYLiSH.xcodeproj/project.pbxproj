@@ -130,6 +130,12 @@
 		5AE0296B2A6A18AB00532297 /* MockHTTPClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5AE0296A2A6A18AB00532297 /* MockHTTPClient.swift */; };
 		5AE0296E2A6A195400532297 /* SuccessData.json in Resources */ = {isa = PBXBuildFile; fileRef = 5AE0296D2A6A195400532297 /* SuccessData.json */; };
 		5AEC6D2D2A6A251F001184E4 /* SuccessDataWithWrongFormat.json in Resources */ = {isa = PBXBuildFile; fileRef = 5AEC6D2C2A6A251F001184E4 /* SuccessDataWithWrongFormat.json */; };
+		CA7C603A2AF5262F00C00E8D /* ProductDetailCommentTableCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = CA7C60392AF5262E00C00E8D /* ProductDetailCommentTableCell.swift */; };
+		CA7C603C2AF5FB1000C00E8D /* ProductDetailCommentTableHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = CA7C603B2AF5FB1000C00E8D /* ProductDetailCommentTableHeader.swift */; };
+		CA7C603E2AF60D9900C00E8D /* SeeAllCommentViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CA7C603D2AF60D9900C00E8D /* SeeAllCommentViewController.swift */; };
+		CA7C60402AF628FC00C00E8D /* CouponGameViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CA7C603F2AF628FC00C00E8D /* CouponGameViewController.swift */; };
+		CABD7F1C2AF7658B00420070 /* couponInputViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CABD7F1B2AF7658B00420070 /* couponInputViewController.swift */; };
+		CABD7F1E2AF88DFA00420070 /* FindWithPicViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CABD7F1D2AF88DFA00420070 /* FindWithPicViewController.swift */; };
 		9A0F0A212AF732CB00690B44 /* AssessViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A0F0A202AF732CB00690B44 /* AssessViewController.swift */; };
 		9A0F0A232AF7340F00690B44 /* AssessModelViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A0F0A222AF7340F00690B44 /* AssessModelViewController.swift */; };
 		9A34CE712AF5F4DB005F38CB /* OrderListTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A34CE702AF5F4DB005F38CB /* OrderListTableViewCell.swift */; };
@@ -292,6 +298,12 @@
 		5AE0296A2A6A18AB00532297 /* MockHTTPClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockHTTPClient.swift; sourceTree = "<group>"; };
 		5AE0296D2A6A195400532297 /* SuccessData.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = SuccessData.json; sourceTree = "<group>"; };
 		5AEC6D2C2A6A251F001184E4 /* SuccessDataWithWrongFormat.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = SuccessDataWithWrongFormat.json; sourceTree = "<group>"; };
+		CA7C60392AF5262E00C00E8D /* ProductDetailCommentTableCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProductDetailCommentTableCell.swift; sourceTree = "<group>"; };
+		CA7C603B2AF5FB1000C00E8D /* ProductDetailCommentTableHeader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProductDetailCommentTableHeader.swift; sourceTree = "<group>"; };
+		CA7C603D2AF60D9900C00E8D /* SeeAllCommentViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SeeAllCommentViewController.swift; sourceTree = "<group>"; };
+		CA7C603F2AF628FC00C00E8D /* CouponGameViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CouponGameViewController.swift; sourceTree = "<group>"; };
+		CABD7F1B2AF7658B00420070 /* couponInputViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = couponInputViewController.swift; sourceTree = "<group>"; };
+		CABD7F1D2AF88DFA00420070 /* FindWithPicViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FindWithPicViewController.swift; sourceTree = "<group>"; };
 		9A0F0A202AF732CB00690B44 /* AssessViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AssessViewController.swift; sourceTree = "<group>"; };
 		9A0F0A222AF7340F00690B44 /* AssessModelViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AssessModelViewController.swift; sourceTree = "<group>"; };
 		9A34CE702AF5F4DB005F38CB /* OrderListTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OrderListTableViewCell.swift; sourceTree = "<group>"; };
@@ -376,6 +388,7 @@
 				9A0F0A1F2AF7328500690B44 /* assess */,
 				9ABD62232AF5563F00E9F295 /* Order */,
 				3C1ACFE322151F50005583E2 /* ProfileViewController.swift */,
+				CA7C603F2AF628FC00C00E8D /* CouponGameViewController.swift */,
 				3C1ACFE822152D29005583E2 /* ProfileCollectionViewCell.swift */,
 				3C1ACFEA22153114005583E2 /* ProfileCollectionReusableView.swift */,
 				9A97B8862AF616BA00FC539E /* addSubviewToSuper.swift */,
@@ -388,6 +401,7 @@
 			children = (
 				3C5DD7CB2227EFFF0053B67A /* TrolleyViewController.swift */,
 				3C546BE422EABB6D0082C655 /* CheckoutViewController.swift */,
+				CABD7F1B2AF7658B00420070 /* couponInputViewController.swift */,
 				3C75FD0E22F1767D0068FEA5 /* CheckoutResultViewController.swift */,
 				3CE7A5082230464A009FF003 /* Checkout */,
 				3C33691D2227DC63008A5A7A /* TrolleySelectionView */,
@@ -537,8 +551,12 @@
 			children = (
 				3C7036D0222C4E0A00F6C58B /* ProductPickerController.swift */,
 				3C41B8462216667000112F94 /* ProductViewController.swift */,
+				CABD7F1D2AF88DFA00420070 /* FindWithPicViewController.swift */,
 				3C33863E221BB2B800ED97E4 /* ProductListViewController.swift */,
 				3CCB3BC3222AA8FD00976A1C /* ProductDetailViewController.swift */,
+				CA7C603D2AF60D9900C00E8D /* SeeAllCommentViewController.swift */,
+				CA7C60392AF5262E00C00E8D /* ProductDetailCommentTableCell.swift */,
+				CA7C603B2AF5FB1000C00E8D /* ProductDetailCommentTableHeader.swift */,
 				3C347949222E82F500969C30 /* AmountSelectionCell */,
 				3CDC5A68222D85B50071D0D1 /* SizeSelectionCell */,
 				3CDC5A64222D85080071D0D1 /* ColorSelectionCell */,
@@ -1055,13 +1073,15 @@
 				3C831C8A22EAAF7A00112298 /* STPaymentInfoTableViewCell.swift in Sources */,
 				9A0F0A212AF732CB00690B44 /* AssessViewController.swift in Sources */,
 				3C990F6C22E5C78200F2FCEA /* ProductDetailView.swift in Sources */,
+				CA7C60402AF628FC00C00E8D /* CouponGameViewController.swift in Sources */,
+				CA7C603C2AF5FB1000C00E8D /* ProductDetailCommentTableHeader.swift in Sources */,
 				3C546BE722EAC79D0082C655 /* STOrderHeaderView.swift in Sources */,
 				3C5DD7CC2227EFFF0053B67A /* TrolleyViewController.swift in Sources */,
 				3C6020EA222BC00100312958 /* UILabel+Extension.swift in Sources */,
 				3CB80E76222FCBE60095F18C /* STConstant.swift in Sources */,
 				3C1ACFE422151F50005583E2 /* ProfileViewController.swift in Sources */,
 				3C34794C222E82F600969C30 /* AmountSelectionCell.swift in Sources */,
-				9A5E67E12AF9DED30074A072 /* LineViewController.swift in Sources */,
+				CABD7F1C2AF7658B00420070 /* couponInputViewController.swift in Sources */,
 				3C75FD0F22F1767D0068FEA5 /* CheckoutResultViewController.swift in Sources */,
 				9A34CE712AF5F4DB005F38CB /* OrderListTableViewCell.swift in Sources */,
 				3CE7A51C223089C3009FF003 /* OrderProvider.swift in Sources */,
@@ -1101,7 +1121,9 @@
 				9A0F0A232AF7340F00690B44 /* AssessModelViewController.swift in Sources */,
 				3CE7A517223061A9009FF003 /* UserRequest.swift in Sources */,
 				3C09F52122115AB700C5B3E2 /* UIImage+Extension.swift in Sources */,
+				CABD7F1E2AF88DFA00420070 /* FindWithPicViewController.swift in Sources */,
 				3C6B8FE8222CE53100804EFE /* BasicSelectionCell.swift in Sources */,
+				CA7C603E2AF60D9900C00E8D /* SeeAllCommentViewController.swift in Sources */,
 				3C41B8472216667000112F94 /* ProductViewController.swift in Sources */,
 				3CE7A51322305916009FF003 /* UserProvider.swift in Sources */,
 				3CE7A51E22308D34009FF003 /* OrderObject.swift in Sources */,
@@ -1113,6 +1135,7 @@
 				3C6020E6222BB03400312958 /* STBaseViewController.swift in Sources */,
 				3CEBE07E222F979F0064EF82 /* JGProgressHUDWrapper.swift in Sources */,
 				3CCB3BC6222AAC8300976A1C /* LKGalleryView.swift in Sources */,
+				CA7C603A2AF5262F00C00E8D /* ProductDetailCommentTableCell.swift in Sources */,
 				9AA0D3D52AF7732400D43681 /* SeeReviewViewController.swift in Sources */,
 				3C9C0D552215443900595689 /* ProfileManager.swift in Sources */,
 			);

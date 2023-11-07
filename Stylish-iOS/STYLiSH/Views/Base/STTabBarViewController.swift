@@ -98,7 +98,7 @@ extension STTabBarViewController {
 
 // MARK: - UITabBarControllerDelegate
 extension STTabBarViewController: UITabBarControllerDelegate {
-
+    
     func tabBarController(
         _ tabBarController: UITabBarController,
         shouldSelect viewController: UIViewController
@@ -110,14 +110,15 @@ extension STTabBarViewController: UITabBarControllerDelegate {
             return true
         }
         
-//        if KeyChainManager.shared.token == nil {
-//            if let authVC = UIStoryboard.auth.instantiateInitialViewController() {
-//                authVC.modalPresentationStyle = .overCurrentContext
-//                present(authVC, animated: false, completion: nil)
-//            }
-//            return false
-//        } else {
+        if KeyChainManager.shared.token == nil {
+            if let authVC = UIStoryboard.auth.instantiateInitialViewController() {
+                authVC.modalPresentationStyle = .overCurrentContext
+                present(authVC, animated: false, completion: nil)
+            }
+            return false
+        } else {
             return true
-//        }
+            //        }
+        }
     }
 }

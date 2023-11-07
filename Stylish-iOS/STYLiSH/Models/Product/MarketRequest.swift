@@ -24,9 +24,10 @@ enum STMarketRequest: STRequest {
     case orderDetail(token: String, productID: String)
     case feedbackForProduct(token: String, productID: Int, orderID: String, score: Int, comment: String)
     case feedbackByUser(token: String, productID: Int, orderID: String)
+    case productComment(id: Int, paging: Int)
     var headers: [String: String] {
         switch self {
-        case .hots, .women, .men, .accessories: return [:]
+        case .hots, .women, .men, .accessories, .productComment: return [:]
         case .userOrder(let token): return ["Authorization": token]
         case .orderDetail(let token,_):
             return ["Authorization": token]
@@ -40,7 +41,7 @@ enum STMarketRequest: STRequest {
 
     var body: Data? {
         switch self {
-        case .hots, .women, .men, .accessories, .userOrder, .orderDetail, .feedbackByUser: return nil
+        case .hots, .women, .men, .accessories, .userOrder, .orderDetail, .feedbackByUser, .productComment: return nil
         case .feedbackForProduct(_, let productID, let orderID, let score, let comment):
           let  dict = [
             "productID": productID,
@@ -56,7 +57,7 @@ enum STMarketRequest: STRequest {
 
     var method: String {
         switch self {
-        case .hots, .women, .men, .accessories, .userOrder, .orderDetail, .feedbackByUser: return STHTTPMethod.GET.rawValue
+        case .hots, .women, .men, .accessories, .userOrder, .orderDetail, .feedbackByUser, .productComment: return STHTTPMethod.GET.rawValue
         case .feedbackForProduct: return STHTTPMethod.POST.rawValue
         }
     }
@@ -67,6 +68,7 @@ enum STMarketRequest: STRequest {
         case .women(let paging): return "/products/women?paging=\(paging)"
         case .men(let paging): return "/products/men?paging=\(paging)"
         case .accessories(let paging): return "/products/accessories?paging=\(paging)"
+        case .productComment(let id, let paging): return "/feedback/product?product_id=\(id)&paging=\(paging)"
         case .userOrder: return "/user/order"
         case .orderDetail(_,let id): return "/order/\(id)"
         case .feedbackForProduct: return "/feedback"

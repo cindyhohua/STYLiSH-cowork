@@ -91,5 +91,7 @@
 	</array>
 	<key>UIUserInterfaceStyle</key>
 	<string>Light</string>
+	<key>NSCameraUsageDescription</key>
+	<string>我們需要您的相機以拍攝照片</string>
 </dict>
 </plist>

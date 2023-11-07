@@ -130,6 +130,31 @@ class MarketProvider {
     
    
     // MARK: - Public method
+    func fetchProductComment(id: Int, paging: Int, completion: @escaping (Result<ProductComment, Error>) -> Void) {
+        httpClient.request(STMarketRequest.productComment(id: id, paging: paging), completion: { [weak self] result in
+            guard let self = self else { return }
+            switch result {
+            case .success(let data):
+                do {
+                    let products = try self.decoder.decode(
+                        ProductComment.self,
+                        from: data
+                    )
+                    print("qqq")
+                    DispatchQueue.main.async {
+                        completion(.success(products))
+                    }
+                } catch {
+                    print("error1")
+                    completion(.failure(error))
+                }
+            case .failure(let error):
+                print("error2")
+                completion(.failure(error))
+            }
+        })
+    }
+    
     func fetchHots(completion: @escaping PromotionHanlder) {
         httpClient.requestHots(STMarketRequest.hots, completion: { [weak self] result in
             guard let self = self else { return }
