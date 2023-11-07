@@ -9,7 +9,8 @@
 import UIKit
 
 class STTabBarViewController: UITabBarController {
-
+    private let userProvider = UserProvider(httpClient: HTTPClient())
+    var longinResult: Bool = true
     private let tabs: [Tab] = [.lobby, .product, .trolley, .profile]
     
     private var trolleyTabBarItem: UITabBarItem?
@@ -117,8 +118,35 @@ extension STTabBarViewController: UITabBarControllerDelegate {
             }
             return false
         } else {
-            return true
+            
+            fetchData()
             //        }
+            return longinResult
         }
+//        return true
+    }
+    
+//    func returnResult(result: Bool) -> Bool{
+//        return result
+//    }
+    
+    private func fetchData() {
+        userProvider.getUserProfile(completion: { [weak self] result in
+            switch result {
+            case .success(let user):
+//                self?.returnResult(result: true)
+                self?.longinResult = true
+            case .failure:
+                LKProgressHUD.showFailure(text: "請重新登入！")
+//                self?.returnResult(result: false)
+                DispatchQueue.main.async {
+                    if let authVC = UIStoryboard.auth.instantiateInitialViewController() {
+                        authVC.modalPresentationStyle = .overCurrentContext
+                        self?.present(authVC, animated: false, completion: nil)
+                    }
+                }
+                self?.longinResult = false
+            }
+        })
     }
 }

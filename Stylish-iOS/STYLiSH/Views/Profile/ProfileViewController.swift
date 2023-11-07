@@ -35,6 +35,14 @@ class ProfileViewController: UIViewController, CouponToCheckoutPage {
     
     private let userProvider = UserProvider(httpClient: HTTPClient())
     
+    private let logoutButton: UIButton = {
+        let button = UIButton()
+        button.setTitle("登出", for: .normal)
+        button.setTitleColor(.white, for: .normal)
+        button.backgroundColor = .B1
+        return button
+    }()
+    
     private var user: User? {
         didSet {
             if let user = user {
@@ -42,11 +50,40 @@ class ProfileViewController: UIViewController, CouponToCheckoutPage {
             }
         }
     }
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        setupLongout()
+    }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         self.tabBarController?.tabBar.isHidden = false
         fetchData()
+    }
+    // MARK: - 登出按鈕
+    private func setupLongout(){
+        view.addSubview(logoutButton)
+        logoutButton.translatesAutoresizingMaskIntoConstraints = false
+        logoutButton.layer.cornerRadius = 10
+        NSLayoutConstraint.activate([
+            logoutButton.widthAnchor.constraint(equalTo: view.widthAnchor, multiplier: 0.5),
+            logoutButton.heightAnchor.constraint(equalToConstant: 48),
+            logoutButton.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            logoutButton.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -100)
+        ])
+        
+        logoutButton.addTarget(self, action: #selector(logoutActive), for: .touchUpInside)
+    }
+    
+    @objc func logoutActive(){
+        print("我要登出！！！")
+        
+        if let tabBarController = self.tabBarController {
+            // 选择第一个标签
+            tabBarController.selectedIndex = 0
+        }
+        KeyChainManager.shared.token = nil
+        
     }
     
     // MARK: - Action

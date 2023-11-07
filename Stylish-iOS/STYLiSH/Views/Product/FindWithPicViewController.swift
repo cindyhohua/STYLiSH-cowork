@@ -131,6 +131,7 @@ class FindWithPicViewController: UIViewController, UIImagePickerControllerDelega
     
     
     func uploadImageToAPI(imageData: Data) {
+        LKProgressHUD.showSuccess(text: "資料上傳中，請勿離開頁面")
         let url = URL(string: "https://7jiun.shop/api/products/imageSearch")!
         var request = URLRequest(url: url)
         request.httpMethod = "POST"
@@ -158,16 +159,24 @@ class FindWithPicViewController: UIViewController, UIImagePickerControllerDelega
                 do {
                     let products = try JSONDecoder().decode(ProductData.self, from: data)
                     print("解析后的数据: \(products)")
+                    DispatchQueue.main.async {
+                        self.handleParsedData(products)
+                    }
                 } catch {
                     print("解析 JSON 数据时出错: \(error)")
+//                    LKProgressHUD.showFailure(text: "沒有相似的產品")
                 }
                 let responseString = String(data: data, encoding: .utf8)
                 print("响应数据: \(responseString ?? "无法解析响应数据")")
-            }
+                }
         }
         task.resume()
     }
 
-
+    func handleParsedData(_ parsedData: ProductData) {
+        let nextVC = FindWithPicListViewController()
+        nextVC.products = parsedData
+        navigationController?.pushViewController(nextVC, animated: true)
+    }
 
 }

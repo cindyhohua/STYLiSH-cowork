@@ -62,6 +62,8 @@
 		<key>NSAllowsArbitraryLoadsInWebContent</key>
 		<false/>
 	</dict>
+	<key>NSCameraUsageDescription</key>
+	<string>我們需要您的相機以拍攝照片</string>
 	<key>STBaseURL</key>
 	<string>https://7jiun.shop/api</string>
 	<key>STTapPayAppID</key>
@@ -91,7 +93,5 @@
 	</array>
 	<key>UIUserInterfaceStyle</key>
 	<string>Light</string>
-	<key>NSCameraUsageDescription</key>
-	<string>我們需要您的相機以拍攝照片</string>
 </dict>
 </plist>
