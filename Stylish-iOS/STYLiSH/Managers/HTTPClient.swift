@@ -64,7 +64,7 @@ extension STRequest {
 protocol HTTPClientProtocol {
     func request(_ stRequest: STRequest, completion: @escaping (Result<Data, STHTTPClientError>) -> Void)
     func requestHots(_ stRequest: STRequest, completion: @escaping (Result<Data, STHTTPClientError>) -> Void)
-    func requestHots(_ stRequest: STRequest, completion: @escaping (Result<Data, STHTTPClientError>) -> Void)
+   
 }
 
 class HTTPClient: HTTPClientProtocol {

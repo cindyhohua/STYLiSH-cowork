@@ -88,53 +88,54 @@ class ProductsOfOrderViewController: UIViewController {
 //        }
 //    }
     func fetchData() {
-//        guard let token = testToken else {return print("no token") }
+        //        guard let token = testToken else {return print("no token") }
         print("------------------\(orderID)")
-       marketProvider.fetchOrderDetail(token: testToken, productID: "\(orderID)", completion:{ [weak self] result in
-           switch result {
-           case .success(let ordersDetail):
-               self?.datas = ordersDetail
-               print("\(self?.datas)")
-               
-               self?.groupedItems = [:]
-               self?.processedDataSize = [:]
-               self?.processedDataColor = [:]
-               if let list = self?.datas?.order.list{
-                   for item in list{
-                       
-                       if self?.groupedItems[item.id] == nil {
-                           self?.groupedItems[item.id] = []
-                           }
-
-                       self?.groupedItems[item.id]?.append(item)
-                       
-                       // Process color data
-                       if self?.processedDataColor[item.id] == nil {
-                           self?.processedDataColor[item.id] = []
-                       }
-
-                       self?.processedDataColor[item.id]!.append(item.color.code)
-
-                       // Process size data
-                       if self?.processedDataSize[item.id] == nil {
-                           self?.processedDataSize[item.id] = []
-                       }
-                       if !(self?.processedDataSize[item.id]!.contains(item.size) ?? true) {
-                           self?.processedDataSize[item.id]?.append(item.size)
-                       }
-                   }
-               }
-               print("\(self?.processedDataColor)")
-               print("\(self?.processedDataSize)")
-               
-               DispatchQueue.main.async {
-                   self?.productListTable.reloadData()
-               }
-           case .failure:
-               LKProgressHUD.showFailure(text: "讀取資料失敗！")
-           }
-       })
-        
+        if let testToken = testToken{
+        marketProvider.fetchOrderDetail(token: testToken, productID: "\(orderID)", completion:{ [weak self] result in
+            switch result {
+            case .success(let ordersDetail):
+                self?.datas = ordersDetail
+                print("\(self?.datas)")
+                
+                self?.groupedItems = [:]
+                self?.processedDataSize = [:]
+                self?.processedDataColor = [:]
+                if let list = self?.datas?.order.list{
+                    for item in list{
+                        
+                        if self?.groupedItems[item.id] == nil {
+                            self?.groupedItems[item.id] = []
+                        }
+                        
+                        self?.groupedItems[item.id]?.append(item)
+                        
+                        // Process color data
+                        if self?.processedDataColor[item.id] == nil {
+                            self?.processedDataColor[item.id] = []
+                        }
+                        
+                        self?.processedDataColor[item.id]!.append(item.color.code)
+                        
+                        // Process size data
+                        if self?.processedDataSize[item.id] == nil {
+                            self?.processedDataSize[item.id] = []
+                        }
+                        if !(self?.processedDataSize[item.id]!.contains(item.size) ?? true) {
+                            self?.processedDataSize[item.id]?.append(item.size)
+                        }
+                    }
+                }
+                print("\(self?.processedDataColor)")
+                print("\(self?.processedDataSize)")
+                
+                DispatchQueue.main.async {
+                    self?.productListTable.reloadData()
+                }
+            case .failure:
+                LKProgressHUD.showFailure(text: "讀取資料失敗！")
+            }
+        })
+    }
 //        orderTimeLabel.text = "購買日期：\(datas?.order.createTime)"
    }
     func setNavigationAndTab(){

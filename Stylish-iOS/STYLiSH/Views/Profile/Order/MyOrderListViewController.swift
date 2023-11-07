@@ -7,7 +7,7 @@
 //
 
 import UIKit
-let testToken = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjM4LCJpYXQiOjE2OTkzNDE2NjUsImV4cCI6MTY5OTM0NTI2NX0.rcgLT2MlolXedh_jhc4UIHS1mx7VGDDdKAQ8jBwKQaI"
+let testToken = KeyChainManager.shared.token
 class MyOrderListViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
     
     
@@ -51,17 +51,19 @@ class MyOrderListViewController: UIViewController, UITableViewDelegate, UITableV
         }
     }
     func fetchData() {
-//        guard let token = token else {return print("no token") }
-       marketProvider.fetchUserOrder(token: testToken, completion: { [weak self] result in
-           switch result {
-           case .success(let orders):
-               self?.datas = [orders]
-               return
-           case .failure:
-               LKProgressHUD.showFailure(text: "讀取資料失敗！")
-           }
-       })
-   }
+        //        guard let token = token else {return print("no token") }
+        if let testToken = testToken {
+            marketProvider.fetchUserOrder(token: testToken, completion: { [weak self] result in
+                switch result {
+                case .success(let orders):
+                    self?.datas = [orders]
+                    return
+                case .failure:
+                    LKProgressHUD.showFailure(text: "讀取資料失敗！")
+                }
+            })
+        }
+    }
     
     func setNavigationAndTab(){
         self.tabBarController?.tabBar.isHidden = true

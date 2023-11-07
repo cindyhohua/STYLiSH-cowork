@@ -70,11 +70,13 @@ class ReviewViewController: ReviewModelViewController, UITextViewDelegate {
         let semaphore = DispatchSemaphore(value: 2)
         let queue = DispatchQueue(label: "go")
         queue.async { [self] in
-                   semaphore.wait() // count-1 ,wait()一定不能在main thread呼叫
+            semaphore.wait() // count-1 ,wait()一定不能在main thread呼叫
+            if let testToken = testToken{
+            comment = reviewTextView.text
             marketProvider.postReview(token: testToken, productID: productId, orderID: orderId, score: score, comment: comment, completion:{ [weak self] result in
                 switch result {
                 case .success(let back):
-//                    sleep(2) // 模擬真正執行的任務e.g. 下載
+                    //                    sleep(2) // 模擬真正執行的任務e.g. 下載
                     
                     semaphore.signal() // count+1
                     semaphore.wait()
@@ -82,14 +84,14 @@ class ReviewViewController: ReviewModelViewController, UITextViewDelegate {
                     sleep(3)
                     semaphore.signal()
                     afterCommpletion()
-                   return print(back)
+                    return print(back)
                 case .failure:
                     LKProgressHUD.showFailure(text: "讀取資料失敗！")
                 }
             })
-                   
+        }
                }
-        comment = reviewTextView.text
+        
        
        
    }

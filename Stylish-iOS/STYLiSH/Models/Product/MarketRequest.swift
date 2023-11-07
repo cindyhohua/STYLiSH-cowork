@@ -24,6 +24,7 @@ enum STMarketRequest: STRequest {
     case orderDetail(token: String, productID: String)
     case feedbackForProduct(token: String, productID: Int, orderID: String, score: Int, comment: String)
     case feedbackByUser(token: String, productID: Int, orderID: String)
+    case productComment(id: Int, paging: Int)
     var headers: [String: String] {
         switch self {
         case .hots, .women, .men, .accessories, .productComment: return [:]
@@ -40,7 +41,7 @@ enum STMarketRequest: STRequest {
 
     var body: Data? {
         switch self {
-        case .hots, .women, .men, .accessories, .userOrder, .orderDetail, .feedbackByUse, .productComment: return nil
+        case .hots, .women, .men, .accessories, .userOrder, .orderDetail, .feedbackByUser, .productComment: return nil
         case .feedbackForProduct(_, let productID, let orderID, let score, let comment):
           let  dict = [
             "productID": productID,

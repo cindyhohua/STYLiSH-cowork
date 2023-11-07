@@ -45,13 +45,10 @@ class ProfileViewController: UIViewController, CouponToCheckoutPage {
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
+        self.tabBarController?.tabBar.isHidden = false
         fetchData()
     }
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
-        self.tabBarController?.tabBar.isHidden = false
-    }
-
+    
     // MARK: - Action
     private func fetchData() {
         userProvider.getUserProfile(completion: { [weak self] result in
