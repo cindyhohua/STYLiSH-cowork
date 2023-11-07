@@ -33,6 +33,19 @@ class LKProgressHUD {
             showFailure(text: text)
         }
     }
+    
+    static func showSuccessPost(text: String = "success", backPerPage: () -> ()) {
+        if !Thread.isMainThread {
+            DispatchQueue.main.async {
+                showSuccess(text: text)
+            }
+            return
+        }
+        shared.hud.textLabel.text = text
+        shared.hud.indicatorView = JGProgressHUDSuccessIndicatorView()
+        shared.hud.show(in: shared.view)
+        shared.hud.dismiss(afterDelay: 2)
+    }
 
     static func showSuccess(text: String = "success") {
         if !Thread.isMainThread {
@@ -44,7 +57,7 @@ class LKProgressHUD {
         shared.hud.textLabel.text = text
         shared.hud.indicatorView = JGProgressHUDSuccessIndicatorView()
         shared.hud.show(in: shared.view)
-        shared.hud.dismiss(afterDelay: 1.5)
+        shared.hud.dismiss(afterDelay: 2)
     }
 
     static func showFailure(text: String = "Failure") {

@@ -67,11 +67,11 @@ class ReviewViewController: ReviewModelViewController, UITextViewDelegate {
     typealias PostReviewResponse = () -> Void
     let dispatchGroup = DispatchGroup()
     func postData(afterCommpletion: @escaping PostReviewResponse) {
-        let semaphore = DispatchSemaphore(value: 1)
-        let queue = DispatchQueue(label: "go", attributes: .concurrent)
+//        let semaphore = DispatchSemaphore(value: 1)
+//        let queue = DispatchQueue(label: "go", attributes: .concurrent)
         comment = reviewTextView.text
-        queue.async { [self] in
-            semaphore.wait() // count-1 ,wait()一定不能在main thread呼叫
+//        queue.async { [self] in
+//            semaphore.wait() // count-1 ,wait()一定不能在main thread呼叫
             if let testToken = testToken{
             
             marketProvider.postReview(token: testToken, productID: productId, orderID: orderId, score: score, comment: comment, completion:{ [weak self] result in
@@ -79,19 +79,18 @@ class ReviewViewController: ReviewModelViewController, UITextViewDelegate {
                 case .success(let back):
                     //                    sleep(2) // 模擬真正執行的任務e.g. 下載
                     
-                    semaphore.signal() // count+1
-                    semaphore.wait()
-                    LKProgressHUD.showSuccess(text: back)
-                    sleep(3)
-                    semaphore.signal()
-                    afterCommpletion()
-                    return print(back)
+//                    semaphore.signal() // count+1
+                    LKProgressHUD.showSuccessPost(text: back, backPerPage: {
+                        afterCommpletion()
+                    })
+//                    sleep(3)
+                    
                 case .failure:
                     LKProgressHUD.showFailure(text: "讀取資料失敗！")
                 }
             })
         }
-               }
+//               }
         
        
        
