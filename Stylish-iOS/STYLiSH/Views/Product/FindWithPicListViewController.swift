@@ -9,14 +9,15 @@
 import UIKit
 class FindWithPicListViewController: STCompondViewController {
     var products: ProductData?
-    
+    var pdata: [Product] = []
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .white
         print("QQqQQ", products)
         setupTableView()
         setupCollectionView()
-        datas = [[products?.data]]
+        pdata = products!.data
+        datas = [pdata]
     }
     
     
