@@ -47,6 +47,10 @@ class ProfileViewController: UIViewController, CouponToCheckoutPage {
         super.viewWillAppear(animated)
         fetchData()
     }
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        self.tabBarController?.tabBar.isHidden = false
+    }
 
     // MARK: - Action
     private func fetchData() {
@@ -130,7 +134,26 @@ extension ProfileViewController: UICollectionViewDataSource {
 }
 
 extension ProfileViewController: UICollectionViewDelegateFlowLayout {
-
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        
+        if indexPath.section == 0 && indexPath.row == 3{
+            navigationController?.pushViewController(MyOrderListViewController(), animated: true)
+        }
+        if indexPath.section == 1 && indexPath.row == 6{
+            let lineURL = URL(string: "https://liff.line.me/1645278921-kWRPP32q/?accountId=480zjqff") // Line 群组或朋友 ID
+                    
+            if UIApplication.shared.canOpenURL(lineURL!) {
+                UIApplication.shared.open(lineURL!, options: [:], completionHandler: nil)
+            } else {
+                // 如果没有安装 Line，则打开 Safari 并自动打开网址
+//                let safariURL = URL(string: "https://liff.line.me/1645278921-kWRPP32q/?accountId=480zjqff")!
+//                UIApplication.shared.open(safariURL, options: [:], completionHandler: nil)
+                // 若沒安裝 Line 則導到 App Store(id443904275 為 Line App 的 ID)
+                let lineURL = URL(string: "https://liff.line.me/1645278921-kWRPP32q/?accountId=480zjqff")!
+                UIApplication.shared.open(lineURL, options: [:], completionHandler: nil)
+            }
+        }
+    }
     func collectionView(
         _ collectionView: UICollectionView,
         layout collectionViewLayout: UICollectionViewLayout,

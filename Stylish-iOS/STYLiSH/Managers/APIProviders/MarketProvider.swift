@@ -10,7 +10,10 @@ import Foundation
 
 typealias PromotionHanlder = (Result<[PromotedProducts], Error>) -> Void
 typealias ProductsResponseWithPaging = (Result<STSuccessParser<[Product]>, Error>) -> Void
-
+typealias UserOrderResponse = (Result<UserOrder, Error>) -> Void
+typealias UserOrderDetailResponse = (Result<OrderDetail, Error>) -> Void
+typealias PostReviewResponse = (Result<String, Error>) -> Void
+typealias FeedbackBtUserResponse = (Result<UserFeedback, Error>) -> Void
 class MarketProvider {
 
     let decoder = JSONDecoder()
@@ -26,6 +29,106 @@ class MarketProvider {
         self.httpClient = httpClient
     }
 
+    
+    func fetchUserFeedBack(token: String, productID: Int, orderID: String, completion: @escaping FeedbackBtUserResponse){
+       
+        httpClient.request(STMarketRequest.feedbackByUser(token: token, productID: productID, orderID: orderID), completion: { [weak self] result in
+            guard let self = self else { return }
+            switch result {
+            case .success(let data):
+                do {
+                    let order = try self.decoder.decode(
+                        UserFeedback.self,
+                        from: data
+                    )
+                    
+                    DispatchQueue.main.async {
+                        print("qqq")
+//                        print("\(order.order)")
+                        completion(.success(order))
+                        
+                    }
+                } catch {
+                    completion(.failure(error))
+                    print("error1")
+                }
+            case .failure(let error):
+                completion(.failure(error))
+                print("error2")
+            }
+        })
+    }
+    // MARK: - UserOrder method
+    func fetchUserOrder(token: String, completion: @escaping UserOrderResponse){
+        httpClient.request(STMarketRequest.userOrder(token: token), completion: { [weak self] result in
+            guard let self = self else { return }
+            switch result {
+            case .success(let data):
+                do {
+                    let order = try self.decoder.decode(
+                        UserOrder.self,
+                        from: data
+                    )
+                    
+                    DispatchQueue.main.async {
+                        print("qqq")
+//                        print("\(order.order)")
+                        completion(.success(order))
+                        
+                    }
+                } catch {
+                    completion(.failure(error))
+                    print("error1")
+                }
+            case .failure(let error):
+                completion(.failure(error))
+                print("error2")
+            }
+        })
+    }
+    
+    func fetchOrderDetail(token: String, productID: String, completion: @escaping UserOrderDetailResponse){
+        print("\(token)\n\(productID)")
+        httpClient.request(STMarketRequest.orderDetail(token: token, productID: productID), completion: { [weak self] result in
+            guard let self = self else { return }
+            switch result {
+            case .success(let data):
+                do {
+                    let order = try self.decoder.decode(
+                        OrderDetail.self,
+                        from: data
+                    )
+                    DispatchQueue.main.async {
+                        print("qq---------")
+                        print(order.order.orderID)
+                        completion(.success(order))
+                    }
+                } catch {
+                    print("error1")
+                    completion(.failure(error))
+                }
+            case .failure(let error):
+                completion(.failure(error))
+            }
+        })
+    }
+    
+    func postReview(token: String, productID: Int, orderID: String, score: Int, comment: String, completion: @escaping PostReviewResponse){
+        print("token:\n\(token)\n productID \n \(productID)\n orderID \n \(orderID)\n\(score)\n\(comment)")
+        httpClient.request(STMarketRequest.feedbackForProduct(token: token, productID: productID, orderID: orderID, score: score, comment: comment), completion: { [weak self] result in
+            guard let self = self else { return }
+            switch result {
+            case .success(let data):
+                completion(.success("成功發送評論！"))
+                return print("發送成功")
+            case .failure(let error):
+                print("\(STMarketRequest.feedbackForProduct(token: token, productID: productID, orderID: orderID, score: score, comment: comment))")
+                completion(.failure(error))
+            }
+        })
+    }
+    
+   
     // MARK: - Public method
     func fetchProductComment(id: Int, paging: Int, completion: @escaping (Result<ProductComment, Error>) -> Void) {
         httpClient.request(STMarketRequest.productComment(id: id, paging: paging), completion: { [weak self] result in
