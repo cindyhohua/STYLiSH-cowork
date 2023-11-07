@@ -119,6 +119,7 @@ class MarketProvider {
             guard let self = self else { return }
             switch result {
             case .success(let data):
+                completion(.success("成功發送評論！"))
                 return print("發送成功")
             case .failure(let error):
                 print("\(STMarketRequest.feedbackForProduct(token: token, productID: productID, orderID: orderID, score: score, comment: comment))")

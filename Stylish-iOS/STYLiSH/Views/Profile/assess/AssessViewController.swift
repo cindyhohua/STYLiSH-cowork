@@ -64,17 +64,34 @@ class ReviewViewController: ReviewModelViewController, UITextViewDelegate {
     private let marketProvider = MarketProvider(httpClient: HTTPClient())
     var token = KeyChainManager.shared.token
 //    let testToken = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjM3LCJpYXQiOjE2OTkyNTg5ODMsImV4cCI6MTY5OTI2MjU4M30.1ZOurs2eGwA7bXrvCcnwNjlVOMeSlMX4tIR9VpqHGeI"
-    func fetchData() {
+    typealias PostReviewResponse = () -> Void
+    let dispatchGroup = DispatchGroup()
+    func postData(afterCommpletion: @escaping PostReviewResponse) {
+        let semaphore = DispatchSemaphore(value: 2)
+        let queue = DispatchQueue(label: "go")
+        queue.async { [self] in
+                   semaphore.wait() // count-1 ,wait()一定不能在main thread呼叫
+            marketProvider.postReview(token: testToken, productID: productId, orderID: orderId, score: score, comment: comment, completion:{ [weak self] result in
+                switch result {
+                case .success(let back):
+//                    sleep(2) // 模擬真正執行的任務e.g. 下載
+                    
+                    semaphore.signal() // count+1
+                    semaphore.wait()
+                    LKProgressHUD.showSuccess(text: back)
+                    sleep(3)
+                    semaphore.signal()
+                    afterCommpletion()
+                   return print(back)
+                case .failure:
+                    LKProgressHUD.showFailure(text: "讀取資料失敗！")
+                }
+            })
+                   
+               }
         comment = reviewTextView.text
-       marketProvider.postReview(token: testToken, productID: productId, orderID: orderId, score: score, comment: comment, completion:{ [weak self] result in
-           switch result {
-           case .success(let ordersDetail):
-               
-              return print("成功發送資料")
-           case .failure:
-               LKProgressHUD.showFailure(text: "讀取資料失敗！")
-           }
-       })
+       
+       
    }
     
     func setButton(){
@@ -107,8 +124,13 @@ class ReviewViewController: ReviewModelViewController, UITextViewDelegate {
     }
     
     @objc func checkButtonActive(){
-        fetchData()
-        navigationController?.popViewController(animated: true)
+        postData {
+            DispatchQueue.main.async {
+                self.navigationController?.popViewController(animated: true)
+            }
+            
+        }
+        
     }
     
     @objc func starButtonActive(_ sender: UIButton){

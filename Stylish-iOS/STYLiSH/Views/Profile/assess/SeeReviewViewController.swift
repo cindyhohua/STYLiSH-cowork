@@ -19,7 +19,7 @@ class SeeReviewViewController: ReviewModelViewController {
         
     }
     override func viewWillAppear(_ animated: Bool) {
-      numberOfStar = 4
+      fetchData()
     }
 
     /*
@@ -33,7 +33,7 @@ class SeeReviewViewController: ReviewModelViewController {
     */
     let startView = UIView()
     var starImageViews: [UIImageView] = []
-    var numberOfStar = 3
+    var numberOfStar = 0
     let reviewLabel: UILabel = {
         let label = UILabel()
         label.numberOfLines = 0 // 设置为0表示支持多行
@@ -52,16 +52,25 @@ class SeeReviewViewController: ReviewModelViewController {
     
     var productID: Int = 0
     var orderID: String = ""
-    
+    private var datas: [UserFeedback] = []  {
+        didSet {
+            productImage.kf.setImage(with: URL(string: datas[0].list[0].mainImage!))
+            titleLabel.text = datas[0].list[0].name
+            reviewLabel.text = datas[0].feedback
+            numberOfStar = datas[0].score
+            setstarImageViewiew()
+        }
+    }
     private let marketProvider = MarketProvider(httpClient: HTTPClient())
+    
     var token = KeyChainManager.shared.token
 //    let testToken = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjM3LCJpYXQiOjE2OTkyNTg5ODMsImV4cCI6MTY5OTI2MjU4M30.1ZOurs2eGwA7bXrvCcnwNjlVOMeSlMX4tIR9VpqHGeI"
     func fetchData() {
         marketProvider.fetchUserFeedBack(token: testToken, productID: productID, orderID: orderID, completion:{ [weak self] result in
            switch result {
-           case .success(let ordersDetail):
-               
-              return print("成功發送資料")
+           case .success(let feedback):
+               self?.datas = [feedback]
+               return
            case .failure:
                LKProgressHUD.showFailure(text: "讀取資料失敗！")
            }

@@ -96,6 +96,9 @@ class ProductsOfOrderViewController: UIViewController {
                self?.datas = ordersDetail
                print("\(self?.datas)")
                
+               self?.groupedItems = [:]
+               self?.processedDataSize = [:]
+               self?.processedDataColor = [:]
                if let list = self?.datas?.order.list{
                    for item in list{
                        
@@ -198,10 +201,15 @@ class ProductsOfOrderViewController: UIViewController {
 extension ProductsOfOrderViewController: UITableViewDelegate, UITableViewDataSource, ProductsOfOrderTableViewCellDelegate{
     func seeReviewActive(cell: ProductsOfOrderTableViewCell) {
         let seeVC = SeeReviewViewController()
-        seeVC.productOfColors = cell.productOfColors
-        seeVC.productOfSize = cell.productOfSize
-        navigationController?.pushViewController(seeVC, animated: true)
-       
+        if let indexPath = productListTable.indexPath(for: cell){
+            seeVC.productOfColors = cell.productOfColors
+            seeVC.productOfSize = cell.productOfSize
+            seeVC.orderID = (datas?.order.orderID)!
+            seeVC.productID = (datas?.order.list![indexPath.row].id)!
+            navigationController?.pushViewController(seeVC, animated: true)
+           
+        }
+        
     }
     
   
