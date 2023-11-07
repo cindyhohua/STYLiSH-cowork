@@ -10,17 +10,46 @@ import UIKit
 
 class AuthViewController: STBaseViewController {
 
+    @IBOutlet weak var emailTextField: UITextField!
     @IBOutlet weak var contentView: UIView!
-
+    @IBOutlet weak var passwordTextField: UITextField!
+    @IBOutlet weak var signInButton: UIButton!
     private let userProvider = UserProvider(httpClient: HTTPClient())
 
     override func viewDidLoad() {
         super.viewDidLoad()
         contentView.isHidden = true
+        passwordTextField.isSecureTextEntry = true
+        signInButton.addTarget(self, action: #selector(signInTapped), for: .touchUpInside)
+    }
+    
+    @objc func signInTapped() {
+        LKProgressHUD.show()
+        userProvider.signInNativeToSTYLiSH(email: emailTextField.text ?? "", password: passwordTextField.text ?? "", completion: { [weak self] result in
+            LKProgressHUD.dismiss()
+
+            switch result {
+            case .success:
+                DispatchQueue.main.async {
+                    self?.presentingViewController?.dismiss(animated: false, completion: nil)
+                    print("success")
+                }
+                LKProgressHUD.showSuccess(text: "STYLiSH 登入成功")
+            case .failure:
+                DispatchQueue.main.async {
+                    self?.emailTextField.text = ""
+                    self?.passwordTextField.text = ""
+                    print("fail")
+                }
+                LKProgressHUD.showSuccess(text: "STYLiSH 登入失敗!")
+            }
+        })
+        
     }
 
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
+
         UIView.animate(withDuration: 1, animations: { [weak self] in
             self?.contentView.isHidden = false
         })

@@ -41,6 +41,7 @@ extension STRequest {
     
     func makeRequest() -> URLRequest {
         let urlString = Bundle.STValueForString(key: STConstant.urlKey) + endPoint
+        print(urlString)
         let url = URL(string: urlString)!
         var request = URLRequest(url: url)
         request.allHTTPHeaderFields = headers
@@ -63,6 +64,7 @@ extension STRequest {
 protocol HTTPClientProtocol {
     func request(_ stRequest: STRequest, completion: @escaping (Result<Data, STHTTPClientError>) -> Void)
     func requestHots(_ stRequest: STRequest, completion: @escaping (Result<Data, STHTTPClientError>) -> Void)
+   
 }
 
 class HTTPClient: HTTPClientProtocol {
@@ -96,6 +98,7 @@ class HTTPClient: HTTPClientProtocol {
                 }
             }).resume()
     }
+    
     func requestHots(
         _ stRequest: STRequest,
         completion: @escaping (Result<Data, STHTTPClientError>) -> Void
@@ -114,14 +117,14 @@ class HTTPClient: HTTPClientProtocol {
                 
                 let statusCode = httpResponse.statusCode
                 switch statusCode {
-                case 200..<300:
-                    completion(.success(data!))
-                case 400..<500:
-                    completion(.failure(.clientError(data!)))
-                case 500..<600:
-                    completion(.failure(.serverError))
-                default:
-                    completion(.failure(.unexpectedError))
+                    case 200..<300:
+                        completion(.success(data!))
+                    case 400..<500:
+                        completion(.failure(.clientError(data!)))
+                    case 500..<600:
+                        completion(.failure(.serverError))
+                    default:
+                        completion(.failure(.unexpectedError))
                 }
             }).resume()
     }

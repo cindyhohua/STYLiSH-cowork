@@ -51,7 +51,7 @@ enum OrderItem: ProfileItem {
         case .awaitingPayment: return NSLocalizedString("待付款")
         case .awaitingShipment: return NSLocalizedString("待出貨")
         case .shipped: return NSLocalizedString("待簽收")
-        case .awaitingReview: return NSLocalizedString("待評價")
+        case .awaitingReview: return NSLocalizedString("購買記錄")
         case .exchange: return NSLocalizedString("退換貨")
         }
     }
@@ -75,7 +75,7 @@ enum ServiceItem: ProfileItem {
         case .address: return .asset(.Icons_24px_Address)
         case .customService: return .asset(.Icons_24px_CustomerService)
         case .systomReport: return .asset(.Icons_24px_SystemFeedback)
-        case .bindPhone: return .asset(.Icons_24px_RegisterCellphone)
+        case .bindPhone: return .asset(.line)
         case .setting: return .asset(.Icons_24px_Settings)
         }
     }
@@ -88,7 +88,7 @@ enum ServiceItem: ProfileItem {
         case .address: return NSLocalizedString("地址")
         case .customService: return NSLocalizedString("客服訊息")
         case .systomReport: return NSLocalizedString("系統回饋")
-        case .bindPhone: return NSLocalizedString("手機綁定")
+        case .bindPhone: return NSLocalizedString("line好友")
         case .setting: return NSLocalizedString("設定")
         }
     }

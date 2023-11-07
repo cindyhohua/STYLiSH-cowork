@@ -9,7 +9,7 @@
 import UIKit
 
 class ProductDetailViewController: STBaseViewController {
-
+    
     private struct Segue {
         static let picker = "SeguePicker"
     }
@@ -17,6 +17,7 @@ class ProductDetailViewController: STBaseViewController {
     @IBOutlet weak var tableView: UITableView! {
         didSet {
             tableView.dataSource = self
+            tableView.delegate = self
         }
     }
 
@@ -56,15 +57,50 @@ class ProductDetailViewController: STBaseViewController {
     
     override var preferredStatusBarStyle: UIStatusBarStyle { return .lightContent }
 
+    private let marketProvider = MarketProvider(httpClient: HTTPClient())
+    
+    var comments: ProductComment?
     // MARK: - View Life Cycle
     override func viewDidLoad() {
         super.viewDidLoad()
-
-        setupTableView()
-
         guard let product = product else { return }
         galleryView.datas = product.images
+        fetchData(id: product.id, paging: 0)
+        setupTableView()
     }
+    
+    private func fetchData(id: Int, paging: Int) {
+        marketProvider.fetchProductComment(id: id, paging: paging, completion: { [weak self] result in
+            switch result {
+            case .success(let products):
+                print(products.averageScore)
+                self?.comments = products
+                DispatchQueue.main.async {
+                    self?.tableView.reloadData()
+                }
+            case .failure:
+                print("no comment")
+//                LKProgressHUD.showFailure(text: "讀取資料失敗！")
+            }
+        })
+    }
+//
+//    func fetchComment(id: Int, completion: @escaping ProductComment) {
+//        userProvider.getProductComment(id: id, completion: { result in
+//            switch result {
+//            case .success(let data):
+//                do {
+//                    let comment = try JSONDecoder().decode(ProductComment.self, from: data)
+//
+//                    completion(.success(()))
+//                } catch {
+//                    completion(.failure(error))
+//                }
+//            case .failure(let error):
+//                completion(.failure(error))
+//            }
+//        }))
+//    }
 
     private func setupTableView() {
         tableView.lk_registerCellWithNib(
@@ -151,16 +187,94 @@ class ProductDetailViewController: STBaseViewController {
 }
 
 // MARK: - UITableViewDataSource
-extension ProductDetailViewController: UITableViewDataSource {
+extension ProductDetailViewController: UITableViewDataSource, UITableViewDelegate {
+    func maskString(_ input: String) -> String {
+        let length = input.count
+        if length == 2 {
+            let startIndex = input.index(input.startIndex, offsetBy: 1)
+            return String(input[..<startIndex]) + "*"
+        } else if length < 2 {
+            return "*"
+        }
+        
+        let startIndex = input.index(input.startIndex, offsetBy: 1)
+        let endIndex = input.index(input.endIndex, offsetBy: -1)
+        
+        let head = String(input[..<startIndex])
+        let tail = String(input[endIndex...])
+        
+        let middle = String(repeating: "*", count: length - 2)
+        
+        let maskedString = head + middle + tail
+        
+        return maskedString
+    }
 
+    func numberOfSections(in tableView: UITableView) -> Int {
+        return 2
+    }
+    
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         guard product != nil else { return 0 }
-        return datas.count
+        switch section {
+        case 0:
+            return datas.count
+        case 1:
+            if let comments = comments {
+                return comments.feedbacks.count
+            } else {
+                return 0
+            }
+        default:
+            return 0
+        }
     }
 
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         guard let product = product else { return UITableViewCell() }
-        return datas[indexPath.row].cellForIndexPath(indexPath, tableView: tableView, data: product)
+        if indexPath.section == 0 {
+            return datas[indexPath.row].cellForIndexPath(indexPath, tableView: tableView, data: product)
+        } else {
+            if let comments = comments {
+                let cell = CommentCell()
+                cell.isUserInteractionEnabled = false
+                cell.configure(withRating: Double(comments.feedbacks[indexPath.row].score))
+                cell.commentLabel.text = comments.feedbacks[indexPath.row].comment
+                cell.nameLabel.text = maskString(comments.feedbacks[indexPath.row].name)
+                return cell
+            } else {
+                return CommentCell()
+            }
+        }
+    }
+    
+    func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
+        if section == 1 {
+            let headerView = CommentHeader(reuseIdentifier: "commentHeader")
+            if let comments = comments {
+                headerView.configure(withRating: Float(round(10*comments.averageScore)/10))
+                headerView.commentsCounts.text = "（\(comments.feedbackAmounts)則評論）"
+                headerView.starsLabel.text = "\(round(10*comments.averageScore)/10)/5.0"
+                headerView.seeMoreComments.setTitle("查看全部 >", for: .normal)
+                headerView.seeMoreComments.addTarget(self, action: #selector(seeAllComment), for: .touchUpInside)
+            }
+            return headerView
+                
+        }
+        return nil
+    }
+    
+    @objc func seeAllComment() {
+        let nextVC = SeeAllCommentViewController()
+        nextVC.id = product?.id
+        self.navigationController?.pushViewController(nextVC, animated: true)
+    }
+    
+    func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
+        if section == 1 {
+            return 100
+        }
+        return 0
     }
 }
 

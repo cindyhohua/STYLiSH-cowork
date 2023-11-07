@@ -8,27 +8,57 @@
 
 import Foundation
 
+struct FeedbackBody: Encodable {
+    var productID: Int
+    var orderID: Int
+    var score: Int
+    var comment: String?
+}
+
 enum STMarketRequest: STRequest {
     case hots
     case women(paging: Int)
     case men(paging: Int)
     case accessories(paging: Int)
-
+    case userOrder(token: String)
+    case orderDetail(token: String, productID: String)
+    case feedbackForProduct(token: String, productID: Int, orderID: String, score: Int, comment: String)
+    case feedbackByUser(token: String, productID: Int, orderID: String)
+    case productComment(id: Int, paging: Int)
     var headers: [String: String] {
         switch self {
-        case .hots, .women, .men, .accessories: return [:]
+        case .hots, .women, .men, .accessories, .productComment: return [:]
+        case .userOrder(let token): return ["Authorization": token]
+        case .orderDetail(let token,_):
+            return ["Authorization": token]
+        case .feedbackForProduct(let token, _, _, _, _):
+            return ["Authorization": token, "Content-Type": "application/json"]
+        case .feedbackByUser(let token, _, _):
+            return ["Authorization": token]
         }
+    
     }
 
     var body: Data? {
         switch self {
-        case .hots, .women, .men, .accessories: return nil
+        case .hots, .women, .men, .accessories, .userOrder, .orderDetail, .feedbackByUser, .productComment: return nil
+        case .feedbackForProduct(_, let productID, let orderID, let score, let comment):
+          let  dict = [
+            "productID": productID,
+            "orderID": orderID,
+            "score": score,
+            "comment": comment
+          ] as [String : Any]
+            print("\(try? JSONSerialization.data(withJSONObject: dict, options: .prettyPrinted))")
+        return try? JSONSerialization.data(withJSONObject: dict, options: .prettyPrinted)
+//            return dict
         }
     }
 
     var method: String {
         switch self {
-        case .hots, .women, .men, .accessories: return STHTTPMethod.GET.rawValue
+        case .hots, .women, .men, .accessories, .userOrder, .orderDetail, .feedbackByUser, .productComment: return STHTTPMethod.GET.rawValue
+        case .feedbackForProduct: return STHTTPMethod.POST.rawValue
         }
     }
 
@@ -38,6 +68,11 @@ enum STMarketRequest: STRequest {
         case .women(let paging): return "/products/women?paging=\(paging)"
         case .men(let paging): return "/products/men?paging=\(paging)"
         case .accessories(let paging): return "/products/accessories?paging=\(paging)"
+        case .productComment(let id, let paging): return "/feedback/product?product_id=\(id)&paging=\(paging)"
+        case .userOrder: return "/user/order"
+        case .orderDetail(_,let id): return "/order/\(id)"
+        case .feedbackForProduct: return "/feedback"
+        case .feedbackByUser(_, let productID, let orderID): return "/feedback?product_id=\(productID)&order_id=\(orderID)"
         }
     }
 }

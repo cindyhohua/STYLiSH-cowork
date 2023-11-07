@@ -98,7 +98,7 @@ extension STTabBarViewController {
 
 // MARK: - UITabBarControllerDelegate
 extension STTabBarViewController: UITabBarControllerDelegate {
-
+    
     func tabBarController(
         _ tabBarController: UITabBarController,
         shouldSelect viewController: UIViewController
@@ -118,6 +118,7 @@ extension STTabBarViewController: UITabBarControllerDelegate {
             return false
         } else {
             return true
+            //        }
         }
     }
 }

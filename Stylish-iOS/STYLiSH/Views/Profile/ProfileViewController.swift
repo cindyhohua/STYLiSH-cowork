@@ -8,7 +8,11 @@
 
 import UIKit
 
-class ProfileViewController: UIViewController {
+class ProfileViewController: UIViewController, CouponToCheckoutPage {
+    func couponToCheckoutPage(coupon: Int) {
+        fetchData()
+    }
+    
 
     @IBOutlet weak var imageProfile: UIImageView!
     
@@ -22,6 +26,10 @@ class ProfileViewController: UIViewController {
             collectionView.dataSource = self
         }
     }
+    
+    private var memberCoupon: Int = 0
+    
+    private var couponLabel = UILabel()
 
     private let manager = ProfileManager()
     
@@ -34,30 +42,47 @@ class ProfileViewController: UIViewController {
             }
         }
     }
-
-    override func viewDidLoad() {
-        super.viewDidLoad()
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        self.tabBarController?.tabBar.isHidden = false
         fetchData()
     }
-
+    
     // MARK: - Action
     private func fetchData() {
         userProvider.getUserProfile(completion: { [weak self] result in
             switch result {
             case .success(let user):
                 self?.user = user
+                if user.isDailyEvent { // == false
+                    self?.couponGame()
+                }
             case .failure:
                 LKProgressHUD.showFailure(text: "讀取資料失敗！")
             }
         })
     }
     
+    private func couponGame(){
+        let couponViewController = CouponGameViewController()
+        couponViewController.delegate = self
+        couponViewController.modalPresentationStyle = .overFullScreen
+        present(couponViewController, animated: true)
+    }
+    
     private func updateUser(_ user: User) {
         imageProfile.loadImage(user.picture, placeHolder: .asset(.Icons_36px_Profile_Normal))
-        
         labelName.text = user.name
         labelInfo.text = user.getUserInfo()
         labelInfo.isHidden = false
+        view.addSubview(couponLabel)
+        couponLabel.translatesAutoresizingMaskIntoConstraints = false
+        couponLabel.font = UIFont(name: "Helvetica", size: 15)
+        couponLabel.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -12).isActive = true
+        couponLabel.centerYAnchor.constraint(equalTo: imageProfile.centerYAnchor, constant: -10).isActive = true
+        couponLabel.text = "會員點數：\(user.points)點"
+        couponLabel.textColor = .white
     }
 }
 
@@ -106,7 +131,26 @@ extension ProfileViewController: UICollectionViewDataSource {
 }
 
 extension ProfileViewController: UICollectionViewDelegateFlowLayout {
-
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        
+        if indexPath.section == 0 && indexPath.row == 3{
+            navigationController?.pushViewController(MyOrderListViewController(), animated: true)
+        }
+        if indexPath.section == 1 && indexPath.row == 6{
+            let lineURL = URL(string: "https://liff.line.me/1645278921-kWRPP32q/?accountId=480zjqff") // Line 群组或朋友 ID
+                    
+            if UIApplication.shared.canOpenURL(lineURL!) {
+                UIApplication.shared.open(lineURL!, options: [:], completionHandler: nil)
+            } else {
+                // 如果没有安装 Line，则打开 Safari 并自动打开网址
+//                let safariURL = URL(string: "https://liff.line.me/1645278921-kWRPP32q/?accountId=480zjqff")!
+//                UIApplication.shared.open(safariURL, options: [:], completionHandler: nil)
+                // 若沒安裝 Line 則導到 App Store(id443904275 為 Line App 的 ID)
+                let lineURL = URL(string: "https://liff.line.me/1645278921-kWRPP32q/?accountId=480zjqff")!
+                UIApplication.shared.open(lineURL, options: [:], completionHandler: nil)
+            }
+        }
+    }
     func collectionView(
         _ collectionView: UICollectionView,
         layout collectionViewLayout: UICollectionViewLayout,

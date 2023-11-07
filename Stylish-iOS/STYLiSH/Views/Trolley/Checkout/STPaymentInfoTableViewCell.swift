@@ -61,7 +61,11 @@ class STPaymentInfoTableViewCell: UITableViewCell {
         }
     }
     
+    @IBOutlet weak var memberPointButton: UIButton!
+    
     @IBOutlet weak var checkoutBtn: UIButton!
+    
+    @IBOutlet weak var couponButton: UIButton!
     
     private lazy var paymentMethod: [String] = self.delegate?.textsForPickerView(self) ?? []
     
@@ -69,7 +73,6 @@ class STPaymentInfoTableViewCell: UITableViewCell {
     
     override func awakeFromNib() {
         super.awakeFromNib()
-        
     }
     
     func layoutCellWith(
@@ -82,6 +85,24 @@ class STPaymentInfoTableViewCell: UITableViewCell {
         productPriceLabel.text = "NT$ \(productPrice)"
         shipPriceLabel.text = "NT$ \(shipPrice)"
         totalPriceLabel.text = "NT$ \(shipPrice + productPrice)"
+        totalPriceLabel.textColor = .white
+        productAmountLabel.text = "總計 (\(productCount)樣商品)"
+        paymentTextField.text = payment
+        updateCheckouttButton(isEnable: isCheckoutEnable)
+    }
+    
+    func layoutCellWithCoupon(
+        productPrice: Int,
+        shipPrice: Int,
+        productCount: Int,
+        payment: String,
+        isCheckoutEnable: Bool,
+        coupon: Int
+    ) {
+        productPriceLabel.text = "NT$ \(productPrice)"
+        shipPriceLabel.text = "NT$ \(shipPrice)"
+        totalPriceLabel.text = "NT$ \(shipPrice + productPrice - coupon)"
+        totalPriceLabel.textColor = .green
         productAmountLabel.text = "總計 (\(productCount)樣商品)"
         paymentTextField.text = payment
         updateCheckouttButton(isEnable: isCheckoutEnable)
