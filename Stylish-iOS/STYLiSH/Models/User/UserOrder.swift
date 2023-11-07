@@ -21,9 +21,12 @@ struct OrderDetail: Codable {
 struct OrderData: Codable {
     let order: UserOrderInfo
 }
-//struct OrderData2: Codable {
-//    let order: UserOrderInfo
-//}
+
+struct UserFeedback: Codable {
+    let list: [List]
+    let score: Int
+    let feedback, feedbackCreateTime: String
+}
 
 // MARK: - Order
 struct UserOrderInfo: Codable {
@@ -49,16 +52,18 @@ struct Recipient: Codable {
 // MARK: - List
 struct List: Codable {
     let id: Int
-    let mainImage: String
+    let mainImage: String?
     let name: String
+    let price: Int?
     let color: Color
     let size: String
     let qty: Int
     let isFeedback: Bool
     enum CodingKeys: String, CodingKey {
-            case id
-            case mainImage = "main_image"
-            case name, color, size, qty, isFeedback
-        }
+        case id
+        case mainImage = "main_image"
+        case price
+        case name, color, size, qty, isFeedback
+    }
 }
 

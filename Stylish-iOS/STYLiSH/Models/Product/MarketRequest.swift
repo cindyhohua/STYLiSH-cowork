@@ -23,7 +23,7 @@ enum STMarketRequest: STRequest {
     case userOrder(token: String)
     case orderDetail(token: String, productID: String)
     case feedbackForProduct(token: String, productID: Int, orderID: String, score: Int, comment: String)
-    case feedbackByUser(token: String)
+    case feedbackByUser(token: String, productID: Int, orderID: String)
     var headers: [String: String] {
         switch self {
         case .hots, .women, .men, .accessories: return [:]
@@ -32,7 +32,7 @@ enum STMarketRequest: STRequest {
             return ["Authorization": token]
         case .feedbackForProduct(let token, _, _, _, _):
             return ["Authorization": token, "Content-Type": "application/json"]
-        case .feedbackByUser(let token):
+        case .feedbackByUser(let token, _, _):
             return ["Authorization": token]
         }
     
@@ -70,7 +70,7 @@ enum STMarketRequest: STRequest {
         case .userOrder: return "/user/order"
         case .orderDetail(_,let id): return "/order/\(id)"
         case .feedbackForProduct: return "/feedback"
-        case .feedbackByUser: return "/feedback/user"
+        case .feedbackByUser(_, let productID, let orderID): return "/feedback?product_id=\(productID)&order_id=\(orderID)"
         }
     }
 }

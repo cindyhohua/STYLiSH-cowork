@@ -52,8 +52,9 @@ class ProductsOfOrderViewController: UIViewController {
     
     private let marketProvider = MarketProvider(httpClient: HTTPClient())
     var token = KeyChainManager.shared.token
-    
-    
+    var processedDataColor: [Int: [String]] = [:]
+    var processedDataSize: [Int: [String]] = [:]
+    var groupedItems: [Int: [List]] = [:]
     private var datas: OrderDetail? = nil  {
         didSet {
             if let data = datas?.order{
@@ -94,6 +95,35 @@ class ProductsOfOrderViewController: UIViewController {
            case .success(let ordersDetail):
                self?.datas = ordersDetail
                print("\(self?.datas)")
+               
+               if let list = self?.datas?.order.list{
+                   for item in list{
+                       
+                       if self?.groupedItems[item.id] == nil {
+                           self?.groupedItems[item.id] = []
+                           }
+
+                       self?.groupedItems[item.id]?.append(item)
+                       
+                       // Process color data
+                       if self?.processedDataColor[item.id] == nil {
+                           self?.processedDataColor[item.id] = []
+                       }
+
+                       self?.processedDataColor[item.id]!.append(item.color.code)
+
+                       // Process size data
+                       if self?.processedDataSize[item.id] == nil {
+                           self?.processedDataSize[item.id] = []
+                       }
+                       if !(self?.processedDataSize[item.id]!.contains(item.size) ?? true) {
+                           self?.processedDataSize[item.id]?.append(item.size)
+                       }
+                   }
+               }
+               print("\(self?.processedDataColor)")
+               print("\(self?.processedDataSize)")
+               
                DispatchQueue.main.async {
                    self?.productListTable.reloadData()
                }
@@ -180,7 +210,7 @@ extension ProductsOfOrderViewController: UITableViewDelegate, UITableViewDataSou
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         if let data = datas{
-            return (datas?.order.list!.count)!
+            return (groupedItems.keys.count)
         }else{
             return 0
         }
@@ -190,19 +220,25 @@ extension ProductsOfOrderViewController: UITableViewDelegate, UITableViewDataSou
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         if let cell = productListTable.dequeueReusableCell(withIdentifier: "productCell") as? ProductsOfOrderTableViewCell {
             cell.delegate = self
-            if let data = datas?.order.list![indexPath.row]{
-                if data.isFeedback{
-                    cell.checkButtonText = CheckButtonText.init().see
-                }else{
-                    cell.checkButtonText = CheckButtonText.init().edit
+            if groupedItems.keys.count > 0{
+                let keyArray = Array(groupedItems.keys)
+                let id = keyArray[indexPath.row]
+                if let value = groupedItems[id]{
+                    if value[0].isFeedback{
+                        cell.checkButtonText = CheckButtonText.init().see
+                    }else{
+                        cell.checkButtonText = CheckButtonText.init().edit
+                    }
+                    cell.productImage.kf.setImage(with: URL(string: value[0].mainImage!))
+                    cell.titleLabel.text = value[0].name
                 }
-                cell.productImage.kf.setImage(with: URL(string: data.mainImage))
-                cell.titleLabel.text = data.name
                 cell.productOfColors.removeAll()
                 cell.productOfSize.removeAll()
-                cell.productOfSize.append(data.size)
-                cell.productOfColors.append(UIColor.hexStringToUIColor(hex: data.color.code))
-               
+                cell.productOfSize = processedDataSize[id]!
+                for colorCode in processedDataColor[id]!{
+                    cell.productOfColors.append(UIColor.hexStringToUIColor(hex: colorCode))
+                }
+                
             }
             
             return cell

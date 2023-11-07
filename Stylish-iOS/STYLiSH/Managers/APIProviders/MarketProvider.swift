@@ -13,6 +13,7 @@ typealias ProductsResponseWithPaging = (Result<STSuccessParser<[Product]>, Error
 typealias UserOrderResponse = (Result<UserOrder, Error>) -> Void
 typealias UserOrderDetailResponse = (Result<OrderDetail, Error>) -> Void
 typealias PostReviewResponse = (Result<String, Error>) -> Void
+typealias FeedbackBtUserResponse = (Result<UserFeedback, Error>) -> Void
 class MarketProvider {
 
     let decoder = JSONDecoder()
@@ -29,6 +30,34 @@ class MarketProvider {
     }
 
     
+    func fetchUserFeedBack(token: String, productID: Int, orderID: String, completion: @escaping FeedbackBtUserResponse){
+       
+        httpClient.request(STMarketRequest.feedbackByUser(token: token, productID: productID, orderID: orderID), completion: { [weak self] result in
+            guard let self = self else { return }
+            switch result {
+            case .success(let data):
+                do {
+                    let order = try self.decoder.decode(
+                        UserFeedback.self,
+                        from: data
+                    )
+                    
+                    DispatchQueue.main.async {
+                        print("qqq")
+//                        print("\(order.order)")
+                        completion(.success(order))
+                        
+                    }
+                } catch {
+                    completion(.failure(error))
+                    print("error1")
+                }
+            case .failure(let error):
+                completion(.failure(error))
+                print("error2")
+            }
+        })
+    }
     // MARK: - UserOrder method
     func fetchUserOrder(token: String, completion: @escaping UserOrderResponse){
         httpClient.request(STMarketRequest.userOrder(token: token), completion: { [weak self] result in
@@ -97,6 +126,8 @@ class MarketProvider {
             }
         })
     }
+    
+   
     // MARK: - Public method
     func fetchHots(completion: @escaping PromotionHanlder) {
         httpClient.requestHots(STMarketRequest.hots, completion: { [weak self] result in

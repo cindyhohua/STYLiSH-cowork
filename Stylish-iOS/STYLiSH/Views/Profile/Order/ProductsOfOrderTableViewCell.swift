@@ -41,8 +41,8 @@ class ProductsOfOrderTableViewCell: UITableViewCell {
     
     var delegate: ProductsOfOrderTableViewCellDelegate?
     
-    var productOfColors: [UIColor] = [.B2!]
-    var productOfSize: [String] = ["m", "l"]
+    var productOfColors: [UIColor] = []
+    var productOfSize: [String] = []
     var checkButtonText: String = ""
     var colorView: [UIView] = []
     var sizeLabel: [UIView] = []
@@ -86,10 +86,10 @@ class ProductsOfOrderTableViewCell: UITableViewCell {
         colorView.removeAll()
         sizeLabel.removeAll()
         if productOfColors != nil {
-            for _ in 0..<productOfColors.count{
+            for ind in 0..<productOfColors.count{
                 let cView: UIView = {
                     let view = UIView()
-                    view.backgroundColor = .B2
+                    view.backgroundColor = productOfColors[ind]
                     return view
                 }()
                 addSubToSuperView(superview: contentView, subview: cView)

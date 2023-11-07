@@ -7,7 +7,7 @@
 //
 
 import UIKit
-let testToken = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjM3LCJpYXQiOjE2OTkyNjkxMjIsImV4cCI6MTY5OTI3MjcyMn0.2rvCE62Kr4Kb9MEMijbMbS5RrepxAlL8gzmoWuFB4Ks"
+let testToken = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjM4LCJpYXQiOjE2OTkzMjQ4MzYsImV4cCI6MTY5OTMyODQzNn0.cSe3V0maIOclqEmdd3uzMQ3giuQApp2ghCRBP3yiaDw"
 class MyOrderListViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
     
     
@@ -91,8 +91,12 @@ class MyOrderListViewController: UIViewController, UITableViewDelegate, UITableV
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        let numberOfOrder = datas.count
-        return numberOfOrder
+        if datas.count > 0{
+            return datas[0].orders.count
+        }else{
+            return 0
+        }
+        
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
