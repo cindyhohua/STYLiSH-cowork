@@ -43,6 +43,7 @@ class ProductsOfOrderTableViewCell: UITableViewCell {
     
     var productOfColors: [UIColor] = []
     var productOfSize: [String] = []
+    var sizeLabelText = UILabel()
 //    var checkButtonText: String = ""
     var colorView: [UIView] = []
     var sizeLabel: [UIView] = []
@@ -82,7 +83,7 @@ class ProductsOfOrderTableViewCell: UITableViewCell {
 //            delegate?.seeReviewActive(cell: self)
 //        }
         switch checkButtonType {
-       
+
         case .edit:
             delegate?.reviewActive(cell: self)
         case .see:
@@ -127,7 +128,7 @@ class ProductsOfOrderTableViewCell: UITableViewCell {
         addSubToSuperView(superview: contentView, subview: checkButton)
         addSubToSuperView(superview: contentView, subview: productImage)
         addSubToSuperView(superview: contentView, subview: titleLabel)
-        
+        addSubToSuperView(superview: contentView, subview: sizeLabelText)
 
         setColorAndSize()
         productImage.setContentCompressionResistancePriority(.required, for: .vertical)
@@ -186,6 +187,11 @@ class ProductsOfOrderTableViewCell: UITableViewCell {
                 sizeLabel[indexPath].topAnchor.constraint(equalTo: colorView[0].bottomAnchor, constant: 8)
             ])
         }
+        
+        sizeLabelText.text = "qqq"
+        sizeLabelText.translatesAutoresizingMaskIntoConstraints = false
+        sizeLabelText.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: 5).isActive = true
+        sizeLabelText.leadingAnchor.constraint(equalTo: productImage.trailingAnchor, constant: 8).isActive = true
             
     }
     
