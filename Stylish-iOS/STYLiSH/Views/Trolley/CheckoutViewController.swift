@@ -220,7 +220,7 @@ extension CheckoutViewController: UITableViewDataSource, UITableViewDelegate, Co
     func couponToCheckoutPage(coupon: Int) {
         var point = coupon
         if coupon > (orderProvider.order.productPrices + orderProvider.order.freight) {
-            point = orderProvider.order.productPrices + orderProvider.order.freight
+            point = orderProvider.order.productPrices + orderProvider.order.freight - 1
         }
         orderProvider.order.usePoint = point
         let indexPath = IndexPath(row: 0, section: 2)

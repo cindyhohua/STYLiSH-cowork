@@ -69,10 +69,10 @@ class ReviewViewController: ReviewModelViewController, UITextViewDelegate {
     func postData(afterCommpletion: @escaping PostReviewResponse) {
         let semaphore = DispatchSemaphore(value: 2)
         let queue = DispatchQueue(label: "go")
+        comment = reviewTextView.text
         queue.async { [self] in
             semaphore.wait() // count-1 ,wait()一定不能在main thread呼叫
             if let testToken = testToken{
-            comment = reviewTextView.text
             marketProvider.postReview(token: testToken, productID: productId, orderID: orderId, score: score, comment: comment, completion:{ [weak self] result in
                 switch result {
                 case .success(let back):

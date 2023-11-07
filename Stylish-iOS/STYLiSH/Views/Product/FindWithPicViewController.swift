@@ -7,6 +7,7 @@
 //
 
 import UIKit
+
 class FindWithPicViewController: UIViewController, UIImagePickerControllerDelegate & UINavigationControllerDelegate {
 
     let imagePicker = UIImagePickerController()
@@ -80,28 +81,14 @@ class FindWithPicViewController: UIViewController, UIImagePickerControllerDelega
     
     @objc func search() {
         if let selectedImage = selectedImage {
-            if let imageData = selectedImage.jpegData(compressionQuality: 1.0) {
-                let fileSize = Double(imageData.count) / (1024.0 * 1024.0)
-                print("图像文件大小：\(fileSize) MB")
+            var imageData: Data = selectedImage.jpegData(compressionQuality: 1.0)!
+            var xVar = 0.0
+            while Double(imageData.count) / (1024.0 * 1024.0) > 5 {
+                imageData = selectedImage.jpegData(compressionQuality: (1.0 - xVar))!
+                xVar += 0.1
             }
+            uploadImageToAPI(imageData: imageData)
         }
-//                let fileSize = Double(imageData.count) / (1024.0 * 1024.0)
-//                if fileSize > 5 {
-//                    if let imageData = selectedImage.jpegData(compressionQuality: 0.9) {
-//                        let fileSize = Double(imageData.count) / (1024.0 * 1024.0)
-//                        print("图像文件大小：\(fileSize) MB")
-//                        uploadImage(imageData: imageData)
-//                    }
-//                } else {
-//                    print("图像文件大小：\(fileSize) MB")
-//                    uploadImage(imageData: imageData)
-//                }
-//            } else {
-//                print("??")
-//            }
-//        } else {
-//            print("???")
-//        }
     }
 
     func imagePickerControllerDidCancel(_ picker: UIImagePickerController) {
@@ -142,7 +129,45 @@ class FindWithPicViewController: UIViewController, UIImagePickerControllerDelega
         }
     }
     
-    func uploadImage(imageData: Data) {
+    
+    func uploadImageToAPI(imageData: Data) {
+        let url = URL(string: "https://7jiun.shop/api/products/imageSearch")!
+        var request = URLRequest(url: url)
+        request.httpMethod = "POST"
+        
+        let boundary = "Boundary-\(UUID().uuidString)"
+        let contentType = "multipart/form-data; boundary=\(boundary)"
+        request.setValue("application/json", forHTTPHeaderField: "accept")
+        request.setValue(contentType, forHTTPHeaderField: "Content-Type")
+        
+        let body = NSMutableData()
+        body.append("--\(boundary)\r\n".data(using: .utf8)!)
+        body.append("Content-Disposition: form-data; name=\"image\"; filename=\"uploaded_image.jpg\"\r\n".data(using: .utf8)!)
+        body.append("Content-Type: image/jpeg\r\n\r\n".data(using: .utf8)!)
+        body.append(imageData)
+        body.append("\r\n".data(using: .utf8)!)
+        body.append("--\(boundary)--\r\n".data(using: .utf8)!)
+        
+        request.httpBody = body as Data
+        
+        // 7. 创建 URLSession 任务并发送请求
+        let task = URLSession.shared.dataTask(with: request) { (data, response, error) in
+            if let error = error {
+                print("请求错误: \(error)")
+            } else if let data = data {
+                do {
+                    let products = try JSONDecoder().decode(ProductData.self, from: data)
+                    print("解析后的数据: \(products)")
+                } catch {
+                    print("解析 JSON 数据时出错: \(error)")
+                }
+                let responseString = String(data: data, encoding: .utf8)
+                print("响应数据: \(responseString ?? "无法解析响应数据")")
+            }
+        }
+        task.resume()
     }
+
+
 
 }

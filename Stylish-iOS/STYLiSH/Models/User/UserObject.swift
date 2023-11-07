@@ -12,7 +12,7 @@ struct ProductComment: Codable {
     let averageScore: Double
     let feedbackAmounts: Int
     let feedbacks: [Feedback]
-    let nextPaging: Int
+    let nextPaging: Int?
 
     enum CodingKeys: String, CodingKey {
         case averageScore, feedbackAmounts, feedbacks
@@ -23,10 +23,14 @@ struct ProductComment: Codable {
 // MARK: - Feedback
 struct Feedback: Codable {
     let name: String
-    let color: Color
-    let size: String
+    let variants: [Variants]
     let score: Int
     let comment, feedbackCreateTime: String
+}
+
+struct Variants: Codable {
+    let color: Color
+    let size: String
 }
 
 struct DailyEvent: Codable {

@@ -13,6 +13,10 @@ struct PromotedProducts: Codable {
     let products: [Product]
 }
 
+struct ProductData: Codable {
+    let data: [Product]
+}
+
 struct Product: Codable {
     let id: Int
     let title: String

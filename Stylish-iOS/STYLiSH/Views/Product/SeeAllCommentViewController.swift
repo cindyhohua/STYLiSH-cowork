@@ -102,7 +102,11 @@ extension SeeAllCommentViewController: UITableViewDataSource, UITableViewDelegat
             cell?.configure(withRating: Double(feedbacks[indexPath.row].score))
             cell?.commentLabel.text = feedbacks[indexPath.row].comment
             cell?.timeLabel.text = String(feedbacks[indexPath.row].feedbackCreateTime.prefix(10))
-            cell?.contextLabel.text = "規格：" + feedbacks[indexPath.row].color.name + feedbacks[indexPath.row].size
+            var variant: String = ""
+            for index in 0..<feedbacks[indexPath.row].variants.count {
+                variant += feedbacks[indexPath.row].variants[index].color.name + feedbacks[indexPath.row].variants[index].size + " "
+            }
+            cell?.contextLabel.text = "規格：" + variant
         }
         return cell ?? SeeAllCommentCell()
     }
