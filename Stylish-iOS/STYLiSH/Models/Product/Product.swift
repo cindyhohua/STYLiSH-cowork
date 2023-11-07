@@ -28,7 +28,7 @@ struct Product: Codable {
     let variants: [Variant]
     let mainImage: String
     let images: [String]
-//    let averageScore: Int?
+    let averageScore: Double?
     let feedbackAmounts: Int?
 
     var size: String {
@@ -56,7 +56,7 @@ struct Product: Codable {
         case variants
         case mainImage = "main_image"
         case images
-//        case averageScore
+        case averageScore
         case feedbackAmounts
     }
 }

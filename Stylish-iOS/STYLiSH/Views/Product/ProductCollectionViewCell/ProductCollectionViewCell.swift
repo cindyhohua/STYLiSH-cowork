@@ -27,7 +27,7 @@ class ProductCollectionViewCell: UICollectionViewCell {
         // Initialization code
     }
 
-    func layoutCell(image: String, title: String, price: Int, starNumber: Float, commentAmount: Int) {
+    func layoutCell(image: String, title: String, price: Int, starNumber: Float?, commentAmount: Int) {
         productImg.loadImage(image, placeHolder: .asset(.Image_Placeholder))
         productTitleLbl.text = title
         productPriceLbl.text = "NT$ \(price)"
@@ -62,7 +62,7 @@ class ProductCollectionViewCell: UICollectionViewCell {
             
             previousStarImageView = starImageView
         }
-        configure(withRating: starNumber)
+        configure(withRating: starNumber ?? 0)
         
         contentView.addSubview(starLabelScore)
         starLabelScore.textColor = .B4
@@ -70,7 +70,7 @@ class ProductCollectionViewCell: UICollectionViewCell {
         starLabelScore.leadingAnchor.constraint(equalTo: starImageViews[4].trailingAnchor, constant: 5).isActive = true
         starLabelScore.centerYAnchor.constraint(equalTo: starImageViews[4].centerYAnchor).isActive = true
         starLabelScore.font = UIFont(name: "Helvetica", size: 16)
-        starLabelScore.text = "\(starNumber) (\(commentAmount))"
+        starLabelScore.text = "\(starNumber ?? 0) (\(commentAmount))"
         
 //        contentView.addSubview(starLabelAmount)
 //        starLabelAmount.text = "(\(starNumber))"

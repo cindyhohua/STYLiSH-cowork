@@ -151,8 +151,8 @@ class ProductListViewController: STCompondViewController {
             image: product.mainImage,
             title: product.title,
             price: product.price,
-            starNumber: 4.3,
-            commentAmount: 20
+            starNumber: Float(round(10*(product.averageScore ?? 0))/10),
+            commentAmount: product.feedbackAmounts ?? 0
         )
         return productCell
     }
