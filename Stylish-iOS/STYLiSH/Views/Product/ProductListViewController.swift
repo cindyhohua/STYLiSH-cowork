@@ -150,7 +150,9 @@ class ProductListViewController: STCompondViewController {
         productCell.layoutCell(
             image: product.mainImage,
             title: product.title,
-            price: product.price
+            price: product.price,
+            starNumber: 4.3,
+            commentAmount: 20
         )
         return productCell
     }

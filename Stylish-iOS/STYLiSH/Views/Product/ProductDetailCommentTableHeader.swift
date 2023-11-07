@@ -90,17 +90,15 @@ class CommentHeader: UITableViewHeaderFooterView {
         for (index, starImageView) in starImageViews.enumerated() {
             let wholeStarRating = Int(rating)
             let remainderRating = rating - Float(wholeStarRating)
-            
-            
-//            let wholeStarRating = Int(rating)
-//            let remainderRating = rating - Float(wholeStarRating)
 
             if index < wholeStarRating {
                 starImageView.image = UIImage(named: "fullStar")
             } else if index == wholeStarRating && remainderRating >= 0.3 && remainderRating < 0.8 {
-                starImageView.image = UIImage(named: "halfStar")
+                starImageView.image = UIImage(named: "halfStar 2")
             } else if index == wholeStarRating && remainderRating > 0.8 {
                 starImageView.image = UIImage(named: "fullStar")
+            } else if index <= 4 {
+                starImageView.image = UIImage(named: "emptyStar 2")
             } else {
                 starImageView.image = nil
             }

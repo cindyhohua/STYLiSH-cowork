@@ -86,7 +86,7 @@ class CommentCell: UITableViewCell {
             if index < wholeStarRating {
                 starImageView.image = UIImage(named: "fullStar")
             } else if index == wholeStarRating && remainderRating >= 0.3 && remainderRating < 0.8 {
-                starImageView.image = UIImage(named: "halfStar")
+                starImageView.image = UIImage(named: "halfStar 2")
             } else {
                 starImageView.image = nil
             }

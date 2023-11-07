@@ -141,7 +141,7 @@ extension SeeAllCommentViewController: UITableViewDataSource, UITableViewDelegat
                 self?.tableView.endFooterRefreshing()
             case .failure(let error):
                 self?.tableView.endWithNoMoreData()
-                LKProgressHUD.showFailure(text: error.localizedDescription)
+                LKProgressHUD.showSuccess(text: "已加載完所有評論")
             }
         })
     }
