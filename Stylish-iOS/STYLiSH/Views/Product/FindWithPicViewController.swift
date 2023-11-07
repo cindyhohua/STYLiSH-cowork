@@ -13,6 +13,7 @@ class FindWithPicViewController: UIViewController, UIImagePickerControllerDelega
     let selectedImageView = UIImageView()
     let searchButton = UIButton()
     var selectedImage: UIImage?
+    let selectPhotoButton = UIButton(type: .system)
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -22,8 +23,8 @@ class FindWithPicViewController: UIViewController, UIImagePickerControllerDelega
     }
     
     func setLayout() {
-        let selectPhotoButton = UIButton(type: .system)
-        selectPhotoButton.setTitle("選擇照片", for: .normal)
+        selectPhotoButton.setTitle("點此選擇照片", for: .normal)
+        selectPhotoButton.setTitleColor(.B1, for: .normal)
         selectPhotoButton.addTarget(self, action: #selector(selectPhotoButtonTapped), for: .touchUpInside)
         selectPhotoButton.translatesAutoresizingMaskIntoConstraints = false
 
@@ -31,7 +32,7 @@ class FindWithPicViewController: UIViewController, UIImagePickerControllerDelega
 
         view.addSubview(selectPhotoButton)
         selectPhotoButton.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
-        selectPhotoButton.topAnchor.constraint(equalTo: view.topAnchor,constant: 100).isActive = true
+        selectPhotoButton.topAnchor.constraint(equalTo: view.topAnchor,constant: 160).isActive = true
         
         view.addSubview(selectedImageView)
         selectedImageView.translatesAutoresizingMaskIntoConstraints = false
@@ -42,17 +43,18 @@ class FindWithPicViewController: UIViewController, UIImagePickerControllerDelega
 //        selectedImageView.heightAnchor.constraint(equalToConstant: 100).isActive = true
     }
 
-    @objc func selectPhotoButtonTapped() {
-        imagePicker.delegate = self
-        imagePicker.sourceType = .photoLibrary
-        present(imagePicker, animated: true, completion: nil)
-    }
+//    @objc func selectPhotoButtonTapped() {
+//        imagePicker.delegate = self
+//        imagePicker.sourceType = .photoLibrary
+//        present(imagePicker, animated: true, completion: nil)
+//    }
 
     func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
         if let selectedImage = info[.originalImage] as? UIImage {
-            print("qqq")
+            selectPhotoButton.setTitle("重新選擇照片", for: .normal)
             self.selectedImage = selectedImage
             selectedImageView.image = selectedImage
+            selectedImageView.clipsToBounds = true
             selectedImageView.contentMode = .scaleAspectFit
             selectedImageView.layer.cornerRadius = 5
             addSearchButton()
@@ -69,7 +71,7 @@ class FindWithPicViewController: UIViewController, UIImagePickerControllerDelega
         searchButton.layer.cornerRadius = 5
         searchButton.translatesAutoresizingMaskIntoConstraints = false
         searchButton.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
-        searchButton.topAnchor.constraint(equalTo: selectedImageView.bottomAnchor).isActive = true
+        searchButton.topAnchor.constraint(equalTo: selectedImageView.bottomAnchor, constant: 10).isActive = true
         searchButton.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16).isActive = true
         searchButton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16).isActive = true
         searchButton.heightAnchor.constraint(equalToConstant: 40).isActive = true
@@ -78,15 +80,69 @@ class FindWithPicViewController: UIViewController, UIImagePickerControllerDelega
     
     @objc func search() {
         if let selectedImage = selectedImage {
-            print(selectedImage.size)
+            if let imageData = selectedImage.jpegData(compressionQuality: 1.0) {
+                let fileSize = Double(imageData.count) / (1024.0 * 1024.0)
+                print("图像文件大小：\(fileSize) MB")
+            }
         }
+//                let fileSize = Double(imageData.count) / (1024.0 * 1024.0)
+//                if fileSize > 5 {
+//                    if let imageData = selectedImage.jpegData(compressionQuality: 0.9) {
+//                        let fileSize = Double(imageData.count) / (1024.0 * 1024.0)
+//                        print("图像文件大小：\(fileSize) MB")
+//                        uploadImage(imageData: imageData)
+//                    }
+//                } else {
+//                    print("图像文件大小：\(fileSize) MB")
+//                    uploadImage(imageData: imageData)
+//                }
+//            } else {
+//                print("??")
+//            }
+//        } else {
+//            print("???")
+//        }
     }
 
     func imagePickerControllerDidCancel(_ picker: UIImagePickerController) {
         dismiss(animated: true, completion: nil)
     }
+    
+    @objc func selectPhotoButtonTapped() {
+        imagePicker.delegate = self
+        imagePicker.sourceType = .photoLibrary
+        let alertController = UIAlertController(title: nil, message: nil, preferredStyle: .actionSheet)
 
-    // 實現上傳照片的邏輯，可以使用 URLSession 或其他方式
-    // 記得實現 API POST 請求
+        alertController.addAction(UIAlertAction(title: "從相簿中選擇", style: .default) { _ in
+            self.showImagePicker(sourceType: .photoLibrary)
+        })
+
+        alertController.addAction(UIAlertAction(title: "拍照", style: .default) { _ in
+            self.showImagePicker(sourceType: .camera)
+        })
+
+        alertController.addAction(UIAlertAction(title: "取消", style: .cancel))
+
+        present(alertController, animated: true)
+    }
+        
+    func showImagePicker(sourceType: UIImagePickerController.SourceType) {
+        if sourceType == .photoLibrary {
+            imagePicker.sourceType = sourceType
+            present(imagePicker, animated: true, completion: nil)
+        } else if sourceType == .camera {
+            if UIImagePickerController.isSourceTypeAvailable(.camera) {
+                imagePicker.sourceType = sourceType
+                present(imagePicker, animated: true, completion: nil)
+            } else {
+                print("設備不支援相機")
+            }
+        } else {
+            print("相機不可用或其他情况")
+        }
+    }
+    
+    func uploadImage(imageData: Data) {
+    }
+
 }
-
