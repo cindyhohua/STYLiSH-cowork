@@ -17,7 +17,7 @@ struct STOrderProductCellModel {
     let pieces: String?
     
     init(order: LSOrder) {
-        imageUrl = order.product?.images?[0]
+        imageUrl = order.product?.mainImage
         title = order.product?.title
         color = order.selectedColor?.code
         size = order.seletedSize

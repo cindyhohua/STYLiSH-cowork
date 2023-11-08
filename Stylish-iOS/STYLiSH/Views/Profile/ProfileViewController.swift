@@ -8,12 +8,12 @@
 
 import UIKit
 
-class ProfileViewController: UIViewController, CouponToCheckoutPage {
+class ProfileViewController: UIViewController, CouponToCheckoutPage, UIScrollViewDelegate {
     func couponToCheckoutPage(coupon: Int) {
         fetchData()
     }
     
-
+    
     @IBOutlet weak var imageProfile: UIImageView!
     
     @IBOutlet weak var labelName: UILabel!
@@ -30,10 +30,63 @@ class ProfileViewController: UIViewController, CouponToCheckoutPage {
     private var memberCoupon: Int = 0
     
     private var couponLabel = UILabel()
-
+    
     private let manager = ProfileManager()
     
     private let userProvider = UserProvider(httpClient: HTTPClient())
+    
+//    var scrollView: UIScrollView!
+//    var imageViews: [UIImageView] = []
+//    var currentIndex = 0
+//    var timer: Timer?
+//    func setScrollView() {
+//        let images = [UIImage(named: "star-1"), UIImage(named: "star-2"), UIImage(named: "star-3")]
+//
+//        // 创建 UIScrollView
+//        scrollView = UIScrollView()
+//        scrollView.isPagingEnabled = true
+//        scrollView.showsHorizontalScrollIndicator = false
+//        scrollView.delegate = self
+//        scrollView.translatesAutoresizingMaskIntoConstraints = false
+        
+//        view.addSubview(scrollView)
+//
+//        // 配置 UIScrollView
+//        scrollView.leadingAnchor.constraint(equalTo: view.leadingAnchor).isActive = true
+//        scrollView.trailingAnchor.constraint(equalTo: view.trailingAnchor).isActive = true
+//        scrollView.heightAnchor.constraint(equalToConstant: 80)
+//        scrollView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor).isActive = true
+//
+//        for (index, image) in images.enumerated() {
+//            let imageView = UIImageView(image: image)
+//            imageView.translatesAutoresizingMaskIntoConstraints = false
+//            scrollView.addSubview(imageView)
+//            imageViews.append(imageView)
+//
+//            // 设置约束以水平排列图片
+//            imageView.leadingAnchor.constraint(equalTo: scrollView.leadingAnchor, constant: CGFloat(index) * view.frame.width).isActive = true
+//            imageView.topAnchor.constraint(equalTo: scrollView.topAnchor).isActive = true
+//            imageView.widthAnchor.constraint(equalTo: view.widthAnchor).isActive = true
+//            imageView.heightAnchor.constraint(equalTo: view.heightAnchor).isActive = true
+//        }
+//
+//        // 设置 UIScrollView 的 contentSize
+//        scrollView.contentSize = CGSize(width: CGFloat(images.count) * view.frame.width, height: view.frame.height)
+//
+//        // 启动定时器，每3秒滚动到下一张广告
+//        timer = Timer.scheduledTimer(timeInterval: 3.0, target: self, selector: #selector(scrollToNextAd), userInfo: nil, repeats: true)
+//    }
+//
+//    @objc func scrollToNextAd() {
+//        let nextPage = (currentIndex + 1) % imageViews.count
+//        scrollView.setContentOffset(CGPoint(x: CGFloat(nextPage) * view.frame.width, y: 0), animated: true)
+//    }
+//
+//    func scrollViewDidScroll(_ scrollView: UIScrollView) {
+//        let contentOffsetX = scrollView.contentOffset.x
+//        currentIndex = Int(contentOffsetX / view.frame.width)
+//    }
+    
     
     private let logoutButton: UIButton = {
         let button = UIButton()
@@ -53,6 +106,7 @@ class ProfileViewController: UIViewController, CouponToCheckoutPage {
     override func viewDidLoad() {
         super.viewDidLoad()
         setupLongout()
+//        setScrollView()
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -124,15 +178,15 @@ class ProfileViewController: UIViewController, CouponToCheckoutPage {
 }
 
 extension ProfileViewController: UICollectionViewDataSource {
-
+    
     func numberOfSections(in collectionView: UICollectionView) -> Int {
         return manager.groups.count
     }
-
+    
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return manager.groups[section].items.count
     }
-
+    
     func collectionView(
         _ collectionView: UICollectionView,
         cellForItemAt indexPath: IndexPath
@@ -146,7 +200,7 @@ extension ProfileViewController: UICollectionViewDataSource {
         profileCell.layoutCell(image: item.image, text: item.title)
         return profileCell
     }
-
+    
     func collectionView(
         _ collectionView: UICollectionView,
         viewForSupplementaryElementOfKind kind: String,
@@ -175,13 +229,13 @@ extension ProfileViewController: UICollectionViewDelegateFlowLayout {
         }
         if indexPath.section == 1 && indexPath.row == 6{
             let lineURL = URL(string: "https://liff.line.me/1645278921-kWRPP32q/?accountId=480zjqff") // Line 群组或朋友 ID
-                    
+            
             if UIApplication.shared.canOpenURL(lineURL!) {
                 UIApplication.shared.open(lineURL!, options: [:], completionHandler: nil)
             } else {
                 // 如果没有安装 Line，则打开 Safari 并自动打开网址
-//                let safariURL = URL(string: "https://liff.line.me/1645278921-kWRPP32q/?accountId=480zjqff")!
-//                UIApplication.shared.open(safariURL, options: [:], completionHandler: nil)
+                //                let safariURL = URL(string: "https://liff.line.me/1645278921-kWRPP32q/?accountId=480zjqff")!
+                //                UIApplication.shared.open(safariURL, options: [:], completionHandler: nil)
                 // 若沒安裝 Line 則導到 App Store(id443904275 為 Line App 的 ID)
                 let lineURL = URL(string: "https://liff.line.me/1645278921-kWRPP32q/?accountId=480zjqff")!
                 UIApplication.shared.open(lineURL, options: [:], completionHandler: nil)
@@ -200,7 +254,7 @@ extension ProfileViewController: UICollectionViewDelegateFlowLayout {
         }
         return CGSize.zero
     }
-
+    
     func collectionView(
         _ collectionView: UICollectionView,
         layout collectionViewLayout: UICollectionViewLayout,
@@ -208,7 +262,7 @@ extension ProfileViewController: UICollectionViewDelegateFlowLayout {
     ) -> UIEdgeInsets {
         return UIEdgeInsets(top: 24.0, left: 0, bottom: 0, right: 0)
     }
-
+    
     func collectionView(
         _ collectionView: UICollectionView,
         layout collectionViewLayout: UICollectionViewLayout,
@@ -216,7 +270,7 @@ extension ProfileViewController: UICollectionViewDelegateFlowLayout {
     ) -> CGFloat {
         return 24.0
     }
-
+    
     func collectionView(
         _ collectionView: UICollectionView,
         layout collectionViewLayout: UICollectionViewLayout,
@@ -224,7 +278,7 @@ extension ProfileViewController: UICollectionViewDelegateFlowLayout {
     ) -> CGFloat {
         return 0
     }
-
+    
     func collectionView(
         _ collectionView: UICollectionView,
         layout collectionViewLayout: UICollectionViewLayout,

@@ -20,7 +20,11 @@ class FindWithPicViewController: UIViewController, UIImagePickerControllerDelega
         super.viewDidLoad()
         view.backgroundColor = .white
         setLayout()
+        navigationItem.backBarButtonItem = UIBarButtonItem(title: "", style: .plain, target: self, action: #selector(customBackAction))
 //        addSearchButton()
+    }
+    @objc func customBackAction() {
+        navigationController?.popViewController(animated: true)
     }
     
     func setLayout() {

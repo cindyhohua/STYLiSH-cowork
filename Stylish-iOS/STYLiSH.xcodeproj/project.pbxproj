@@ -144,6 +144,7 @@
 		CA7C603E2AF60D9900C00E8D /* SeeAllCommentViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CA7C603D2AF60D9900C00E8D /* SeeAllCommentViewController.swift */; };
 		CA7C60402AF628FC00C00E8D /* CouponGameViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CA7C603F2AF628FC00C00E8D /* CouponGameViewController.swift */; };
 		CA924C362AFA4C0B007D6E09 /* FindWithPicListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CA924C352AFA4C0B007D6E09 /* FindWithPicListViewController.swift */; };
+		CA924C382AFB3036007D6E09 /* ScrollUIView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CA924C372AFB3035007D6E09 /* ScrollUIView.swift */; };
 		CABD7F1C2AF7658B00420070 /* couponInputViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CABD7F1B2AF7658B00420070 /* couponInputViewController.swift */; };
 		CABD7F1E2AF88DFA00420070 /* FindWithPicViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CABD7F1D2AF88DFA00420070 /* FindWithPicViewController.swift */; };
 		D306B883B370DFD3ED8ACD74 /* Pods_STYLiSH.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 42C2B4AF3EF2ABFF2BB9F7AB /* Pods_STYLiSH.framework */; };
@@ -313,6 +314,7 @@
 		CA7C603D2AF60D9900C00E8D /* SeeAllCommentViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SeeAllCommentViewController.swift; sourceTree = "<group>"; };
 		CA7C603F2AF628FC00C00E8D /* CouponGameViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CouponGameViewController.swift; sourceTree = "<group>"; };
 		CA924C352AFA4C0B007D6E09 /* FindWithPicListViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FindWithPicListViewController.swift; sourceTree = "<group>"; };
+		CA924C372AFB3035007D6E09 /* ScrollUIView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScrollUIView.swift; sourceTree = "<group>"; };
 		CABD7F1B2AF7658B00420070 /* couponInputViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = couponInputViewController.swift; sourceTree = "<group>"; };
 		CABD7F1D2AF88DFA00420070 /* FindWithPicViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FindWithPicViewController.swift; sourceTree = "<group>"; };
 		E921004E251C9FC3CBC174F5 /* Pods-STYLiSH.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-STYLiSH.release.xcconfig"; path = "Target Support Files/Pods-STYLiSH/Pods-STYLiSH.release.xcconfig"; sourceTree = "<group>"; };
@@ -821,6 +823,7 @@
 			isa = PBXGroup;
 			children = (
 				9A5E67E02AF9DED30074A072 /* LineViewController.swift */,
+				CA924C372AFB3035007D6E09 /* ScrollUIView.swift */,
 			);
 			path = Line;
 			sourceTree = "<group>";
@@ -1053,6 +1056,7 @@
 				3CE7A507223042CE009FF003 /* STBaseTextField.swift in Sources */,
 				3CB80E78222FCCC20095F18C /* Bundle+Extension.swift in Sources */,
 				3CE7A519223064C7009FF003 /* UserObject.swift in Sources */,
+				CA924C382AFB3036007D6E09 /* ScrollUIView.swift in Sources */,
 				3CB801272229AFF10029A552 /* UICollectionView+Extension.swift in Sources */,
 				3C8F191B22E5BA9F00EECE90 /* LobbyView.swift in Sources */,
 				3C6FABF522FD39EB00226316 /* STOrderProductCellModel.swift in Sources */,
