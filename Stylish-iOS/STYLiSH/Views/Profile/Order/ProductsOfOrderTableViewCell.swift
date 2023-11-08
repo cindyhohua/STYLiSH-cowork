@@ -41,14 +41,14 @@ class ProductsOfOrderTableViewCell: UITableViewCell {
     
     var delegate: ProductsOfOrderTableViewCellDelegate?
     
-    var productOfColors: [UIColor] = []
-    var productOfSize: [String] = []
+//    var productOfColors: [UIColor] = []
+//    var productOfSize: [String] = []
     var sizeLabelText = UILabel()
 //    var checkButtonText: String = ""
-    var colorView: [UIView] = []
-    var sizeLabel: [UIView] = []
+//    var colorView: [UIView] = []
+//    var sizeLabel: [UIView] = []
     var productID: Int?
-    var checkButtonType: CheckButtonText = .edit
+    var checkButtonType: CheckButtonText?
     var productImage: UIImageView = {
         let image = UIImage(named: "Image_Placeholder")
         let imageView = UIImageView(image: image)
@@ -57,7 +57,7 @@ class ProductsOfOrderTableViewCell: UITableViewCell {
 
     let titleLabel: UILabel = {
         let label = UILabel()
-        label.text = "我是假的商品"
+        label.text = ""
         label.textColor = .B1
         return label
     }()
@@ -72,7 +72,7 @@ class ProductsOfOrderTableViewCell: UITableViewCell {
     }()
     
     func setButtonActive(){
-        checkButton.setTitle(checkButtonType.title, for: .normal)
+        checkButton.setTitle(checkButtonType?.title, for: .normal)
         checkButton.addTarget(self, action: #selector(reviewAction), for: .touchUpInside)
     }
     
@@ -88,37 +88,42 @@ class ProductsOfOrderTableViewCell: UITableViewCell {
             delegate?.reviewActive(cell: self)
         case .see:
             delegate?.seeReviewActive(cell: self)
+        case .none:
+            return
         }
         
     }
     
     func setColorAndSize(){
-        colorView.removeAll()
-        sizeLabel.removeAll()
-        if productOfColors != nil {
-            for ind in 0..<productOfColors.count{
-                let cView: UIView = {
-                    let view = UIView()
-                    view.backgroundColor = productOfColors[ind]
-                    return view
-                }()
-                addSubToSuperView(superview: contentView, subview: cView)
-                colorView.append(cView)
-            }
-        }
+//        colorView.removeAll()
+//        sizeLabel.removeAll()
+//        if productOfColors != nil {
+//            for ind in 0..<productOfColors.count{
+//                let cView: UIView = {
+//                    let view = UIView()
+//                    view.backgroundColor = productOfColors[ind]
+//                    return view
+//                }()
+//                addSubToSuperView(superview: contentView, subview: cView)
+//                colorView.append(cView)
+//            }
+//        }
         
-        if productOfSize != nil {
-            for index in 0..<productOfSize.count{
-                let sLabel: UILabel = {
-                    let label = UILabel()
-                    label.text = productOfSize[index]
-                    label.textColor = .B1
-                    return label
-                }()
-                addSubToSuperView(superview: contentView, subview: sLabel)
-                sizeLabel.append(sLabel)
-            }
-        }
+//        if productOfSize != nil {
+//            for index in 0..<productOfSize.count{
+//                let sLabel: UILabel = {
+//                    let label = UILabel()
+//                    label.text = productOfSize[index]
+//                    label.textColor = .B1
+//                    label.textAlignment = .left
+//                    label.numberOfLines = 1
+//                    label.lineBreakMode = .byTruncatingTail
+//                    return label
+//                }()
+//                addSubToSuperView(superview: contentView, subview: sLabel)
+//                sizeLabel.append(sLabel)
+//            }
+//        }
         
         
         
@@ -133,7 +138,9 @@ class ProductsOfOrderTableViewCell: UITableViewCell {
         setColorAndSize()
         productImage.setContentCompressionResistancePriority(.required, for: .vertical)
         productImage.setContentHuggingPriority(.required, for: .vertical)
-        
+//        sizeLabelText.text = "qqq"
+        sizeLabelText.translatesAutoresizingMaskIntoConstraints = false
+        sizeLabelText.textColor = .B4
         NSLayoutConstraint.activate([
             checkButton.widthAnchor.constraint(equalToConstant: 90),
             checkButton.heightAnchor.constraint(equalToConstant: 30),
@@ -147,52 +154,52 @@ class ProductsOfOrderTableViewCell: UITableViewCell {
             productImage.heightAnchor.constraint(equalToConstant: 110),
             
             titleLabel.leadingAnchor.constraint(equalTo: productImage.trailingAnchor, constant: 20),
-            titleLabel.topAnchor.constraint(equalTo: topAnchor, constant: 16),
+            titleLabel.topAnchor.constraint(equalTo: topAnchor, constant: 20),
             
             
+            sizeLabelText.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: 8),
+            sizeLabelText.leadingAnchor.constraint(equalTo: titleLabel.leadingAnchor , constant: 0),
+            sizeLabelText.trailingAnchor.constraint(equalTo: checkButton.leadingAnchor, constant: 0)
+                
             
             
         ])
         
-        for indexPath in 0..<colorView.count{
-            let base = 20
-            var leadin: Int = 0
-            if indexPath > 0{
-                let spacingValue = (indexPath + 1 * 22)
-                let offsetValue = ((indexPath) * 8)
-                leadin = base + spacingValue + offsetValue
-            }else{
-                leadin = base
-            }
-            NSLayoutConstraint.activate([
-                colorView[indexPath].widthAnchor.constraint(equalToConstant: 22),
-                colorView[indexPath].heightAnchor.constraint(equalToConstant: 22),
-                colorView[indexPath].leadingAnchor.constraint(equalTo: productImage.trailingAnchor, constant: CGFloat(leadin)),
-                colorView[indexPath].topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: 8)
-            ])
-        }
+//        for indexPath in 0..<colorView.count{
+//            let base = 20
+//            var leadin: Int = 0
+//            if indexPath > 0{
+//                let spacingValue = (indexPath + 1 * 22)
+//                let offsetValue = ((indexPath) * 8)
+//                leadin = base + spacingValue + offsetValue
+//            }else{
+//                leadin = base
+//            }
+//            NSLayoutConstraint.activate([
+//                colorView[indexPath].widthAnchor.constraint(equalToConstant: 22),
+//                colorView[indexPath].heightAnchor.constraint(equalToConstant: 22),
+//                colorView[indexPath].leadingAnchor.constraint(equalTo: productImage.trailingAnchor, constant: CGFloat(leadin)),
+//                colorView[indexPath].topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: 8)
+//            ])
+//        }
+//
+//        for indexPath in 0..<sizeLabel.count{
+//            let base = 20
+//            var leadin: Int = 0
+//            if indexPath > 0{
+//                let spacingValue = (indexPath + 1 * 22)
+//                let offsetValue = ((indexPath) * 8)
+//                leadin = base + spacingValue + offsetValue
+//            }else{
+//                leadin = base
+//            }
+//            NSLayoutConstraint.activate([
+//                sizeLabel[indexPath].leadingAnchor.constraint(equalTo: productImage.trailingAnchor, constant: CGFloat(leadin)),
+//                sizeLabel[indexPath].topAnchor.constraint(equalTo: colorView[0].bottomAnchor, constant: 8)
+//            ])
+//        }
         
-        for indexPath in 0..<sizeLabel.count{
-            let base = 20
-            var leadin: Int = 0
-            if indexPath > 0{
-                let spacingValue = (indexPath + 1 * 22)
-                let offsetValue = ((indexPath) * 8)
-                leadin = base + spacingValue + offsetValue
-            }else{
-                leadin = base
-            }
-            NSLayoutConstraint.activate([
-                sizeLabel[indexPath].leadingAnchor.constraint(equalTo: productImage.trailingAnchor, constant: CGFloat(leadin)),
-                sizeLabel[indexPath].topAnchor.constraint(equalTo: colorView[0].bottomAnchor, constant: 8)
-            ])
-        }
         
-        sizeLabelText.text = "qqq"
-        sizeLabelText.translatesAutoresizingMaskIntoConstraints = false
-        sizeLabelText.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: 5).isActive = true
-        sizeLabelText.leadingAnchor.constraint(equalTo: productImage.trailingAnchor, constant: 8).isActive = true
-            
     }
     
     func addTO(sub: UIView){

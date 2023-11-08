@@ -13,7 +13,7 @@ protocol CindyDelegate{
 }
 
 class ReviewViewController: ReviewModelViewController, UITextViewDelegate {
-    var delegate: CindyDelegate?
+//    var delegate: CindyDelegate?
     override func viewDidLoad() {
         super.viewDidLoad()
 
@@ -135,7 +135,7 @@ class ReviewViewController: ReviewModelViewController, UITextViewDelegate {
     
     @objc func checkButtonActive(){
         postData()
-        delegate?.refresh()
+//        delegate?.refresh()
     }
     
     @objc func starButtonActive(_ sender: UIButton){

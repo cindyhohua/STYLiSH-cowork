@@ -6,7 +6,7 @@
 //  Copyright © 2019 AppWorks School. All rights reserved.
 //
 
-import Foundation
+import Foundation//4242424242424242
 
 struct STOrderProductCellModel {
     let imageUrl: String?
@@ -17,7 +17,7 @@ struct STOrderProductCellModel {
     let pieces: String?
     
     init(order: LSOrder) {
-        imageUrl = order.product?.images?[0]
+        imageUrl = order.product?.mainImage
         title = order.product?.title
         color = order.selectedColor?.code
         size = order.seletedSize

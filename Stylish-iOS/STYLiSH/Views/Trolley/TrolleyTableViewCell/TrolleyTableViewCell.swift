@@ -43,7 +43,7 @@ class TrolleyTableViewCell: UITableViewCell {
             let title = product.title,
             let size = order.seletedSize,
             let color = order.selectedColor?.toColor(),
-            let image = product.images?[0],
+            let image = product.mainImage,
             let variants = product.variants as? Set<LSVariant>
         else {
             return
