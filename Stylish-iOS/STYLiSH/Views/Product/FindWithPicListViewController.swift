@@ -13,14 +13,24 @@ class FindWithPicListViewController: STCompondViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .white
-        print("QQqQQ", products)
+        
+//        navigationController?.navigationBar.backgroundColor = UIColor.white
+        tabBarController?.tabBar.backgroundColor = UIColor.white
+//        print("QQqQQ", products?.data.count)
         setupTableView()
         setupCollectionView()
-        pdata = products!.data
-        datas = [pdata]
+        collectionView.mj_header?.removeFromSuperview()
+        collectionView.mj_header = nil
+        collectionView.mj_footer?.removeFromSuperview()
+        collectionView.mj_footer = nil
+
+//        collectionView.dg_setPullToRefreshBackgroundColor(UIColor.clear)
+        if let products = products {
+            pdata = products.data
+            datas = [pdata]
+        }
     }
-    
-    
+
     private func setupTableView() {
         tableView.separatorStyle = .none
         tableView.backgroundColor = .white
@@ -32,6 +42,7 @@ class FindWithPicListViewController: STCompondViewController {
 
     private func setupCollectionView() {
         collectionView.backgroundColor = .white
+        
         collectionView.lk_registerCellWithNib(
             identifier: String(describing: ProductCollectionViewCell.self),
             bundle: nil

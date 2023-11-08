@@ -111,6 +111,8 @@ extension STTabBarViewController: UITabBarControllerDelegate {
             return true
         }
         
+        
+        
         if KeyChainManager.shared.token == nil {
             if let authVC = UIStoryboard.auth.instantiateInitialViewController() {
                 authVC.modalPresentationStyle = .overCurrentContext
@@ -118,9 +120,21 @@ extension STTabBarViewController: UITabBarControllerDelegate {
             }
             return false
         } else {
-            
-            fetchData()
-            //        }
+            userProvider.getUserProfile(completion: { [weak self] result in
+                switch result {
+                case .success(let user):
+                    self?.longinResult = true
+                case .failure:
+                    LKProgressHUD.showFailure(text: "請重新登入！")
+                    DispatchQueue.main.async {
+                        if let authVC = UIStoryboard.auth.instantiateInitialViewController() {
+                            authVC.modalPresentationStyle = .overCurrentContext
+                            self?.present(authVC, animated: false, completion: nil)
+                        }
+                    }
+                    self?.longinResult = false
+                }
+            })
             return longinResult
         }
 //        return true
@@ -131,22 +145,6 @@ extension STTabBarViewController: UITabBarControllerDelegate {
 //    }
     
     private func fetchData() {
-        userProvider.getUserProfile(completion: { [weak self] result in
-            switch result {
-            case .success(let user):
-//                self?.returnResult(result: true)
-                self?.longinResult = true
-            case .failure:
-                LKProgressHUD.showFailure(text: "請重新登入！")
-//                self?.returnResult(result: false)
-                DispatchQueue.main.async {
-                    if let authVC = UIStoryboard.auth.instantiateInitialViewController() {
-                        authVC.modalPresentationStyle = .overCurrentContext
-                        self?.present(authVC, animated: false, completion: nil)
-                    }
-                }
-                self?.longinResult = false
-            }
-        })
+        
     }
 }

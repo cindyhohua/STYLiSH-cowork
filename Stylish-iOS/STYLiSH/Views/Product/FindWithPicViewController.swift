@@ -24,23 +24,28 @@ class FindWithPicViewController: UIViewController, UIImagePickerControllerDelega
     }
     
     func setLayout() {
-        selectPhotoButton.setTitle("點此選擇照片", for: .normal)
-        selectPhotoButton.setTitleColor(.B1, for: .normal)
-        selectPhotoButton.addTarget(self, action: #selector(selectPhotoButtonTapped), for: .touchUpInside)
+        self.view.addSubview(selectPhotoButton)
+        selectPhotoButton.tintColor = .B1
+        selectPhotoButton.backgroundColor = .B1
+        selectPhotoButton.setTitle("點 此 選 擇 照 片", for: .normal)
+        selectPhotoButton.setTitleColor(.white, for: .normal)
+        selectPhotoButton.titleLabel?.font = UIFont(name: "Helvetica", size: 18.0)
+        selectPhotoButton.layer.cornerRadius = 5
         selectPhotoButton.translatesAutoresizingMaskIntoConstraints = false
-
-        // 添加其他 UI 元素，例如顯示已選擇照片的UIImageView和上傳按鈕
-
-        view.addSubview(selectPhotoButton)
         selectPhotoButton.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
-        selectPhotoButton.topAnchor.constraint(equalTo: view.topAnchor,constant: 160).isActive = true
+        selectPhotoButton.topAnchor.constraint(equalTo: view.topAnchor, constant: 120).isActive = true
+        selectPhotoButton.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16).isActive = true
+        selectPhotoButton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16).isActive = true
+        selectPhotoButton.heightAnchor.constraint(equalToConstant: 40).isActive = true
+        selectPhotoButton.addTarget(self, action: #selector(selectPhotoButtonTapped), for: .touchUpInside)
         
         view.addSubview(selectedImageView)
         selectedImageView.translatesAutoresizingMaskIntoConstraints = false
-        selectedImageView.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
-        selectedImageView.centerYAnchor.constraint(equalTo: view.centerYAnchor).isActive = true
-        selectedImageView.widthAnchor.constraint(equalToConstant: UIScreen.main.bounds.width-60).isActive = true
-        selectedImageView.heightAnchor.constraint(equalToConstant: UIScreen.main.bounds.width-60).isActive = true
+        selectedImageView.topAnchor.constraint(equalTo: selectPhotoButton.bottomAnchor, constant: 70).isActive = true
+        selectedImageView.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: -100).isActive = true
+        selectedImageView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16).isActive = true
+        selectedImageView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16).isActive = true
+        
 //        selectedImageView.heightAnchor.constraint(equalToConstant: 100).isActive = true
     }
 
@@ -52,7 +57,7 @@ class FindWithPicViewController: UIViewController, UIImagePickerControllerDelega
 
     func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
         if let selectedImage = info[.originalImage] as? UIImage {
-            selectPhotoButton.setTitle("重新選擇照片", for: .normal)
+            selectPhotoButton.setTitle("重 新 選 擇 照 片", for: .normal)
             self.selectedImage = selectedImage
             selectedImageView.image = selectedImage
             selectedImageView.clipsToBounds = true
@@ -67,12 +72,13 @@ class FindWithPicViewController: UIViewController, UIImagePickerControllerDelega
         self.view.addSubview(searchButton)
         searchButton.tintColor = .B1
         searchButton.backgroundColor = .B1
-        searchButton.setTitle("開始以圖搜圖", for: .normal)
+        searchButton.setTitle("開 始 以 圖 搜 圖", for: .normal)
         searchButton.setTitleColor(.white, for: .normal)
+        searchButton.titleLabel?.font = UIFont(name: "Helvetica", size: 18.0)
         searchButton.layer.cornerRadius = 5
         searchButton.translatesAutoresizingMaskIntoConstraints = false
         searchButton.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
-        searchButton.topAnchor.constraint(equalTo: selectedImageView.bottomAnchor, constant: 10).isActive = true
+        searchButton.topAnchor.constraint(equalTo: selectPhotoButton.bottomAnchor, constant: 10).isActive = true
         searchButton.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16).isActive = true
         searchButton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16).isActive = true
         searchButton.heightAnchor.constraint(equalToConstant: 40).isActive = true
@@ -129,9 +135,8 @@ class FindWithPicViewController: UIViewController, UIImagePickerControllerDelega
         }
     }
     
-    
     func uploadImageToAPI(imageData: Data) {
-        LKProgressHUD.showSuccess(text: "資料上傳中，請勿離開頁面")
+        LKProgressHUD.show()
         let url = URL(string: "https://7jiun.shop/api/products/imageSearch")!
         var request = URLRequest(url: url)
         request.httpMethod = "POST"
@@ -151,23 +156,30 @@ class FindWithPicViewController: UIViewController, UIImagePickerControllerDelega
         
         request.httpBody = body as Data
         
-        // 7. 创建 URLSession 任务并发送请求
         let task = URLSession.shared.dataTask(with: request) { (data, response, error) in
             if let error = error {
-                print("请求错误: \(error)")
+                print("error: \(error)")
             } else if let data = data {
                 do {
                     let products = try JSONDecoder().decode(ProductData.self, from: data)
-                    print("解析后的数据: \(products)")
+                    print("Data: \(products)")
                     DispatchQueue.main.async {
-                        self.handleParsedData(products)
+                        LKProgressHUD.dismiss()
+                        DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
+                                if products.data.isEmpty {
+                                    LKProgressHUD.showFailure(text: "沒有相似的產品")
+                                } else {
+                                    self.handleParsedData(products)
+                                }
+                            }
+                        
                     }
                 } catch {
-                    print("解析 JSON 数据时出错: \(error)")
-//                    LKProgressHUD.showFailure(text: "沒有相似的產品")
+                    LKProgressHUD.dismiss()
+                    print("解析 JSON 數據時出錯: \(error)")
                 }
                 let responseString = String(data: data, encoding: .utf8)
-                print("响应数据: \(responseString ?? "无法解析响应数据")")
+                print("Data: \(responseString ?? "無法解析數據QQ")")
                 }
         }
         task.resume()

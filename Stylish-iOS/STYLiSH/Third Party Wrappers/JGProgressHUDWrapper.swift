@@ -31,6 +31,7 @@ class LKProgressHUD {
             showSuccess(text: text)
         case .failure(let text):
             showFailure(text: text)
+            
         }
     }
 
