@@ -114,10 +114,8 @@ class MyOrderListViewController: UIViewController, UITableViewDelegate, UITableV
 //            dateFormatter.timeZone = TimeZone.current
             // 将字符串转换为日期
             if let date = dateFormatter.date(from: dateString) {
-                cell.orderTimeLabel.text = "購賣日期：" + "\(date)"
-                print(date)
-            } else {
                 cell.orderTimeLabel.text = "購賣日期：" + String(dateString.prefix(10))
+                print(date)
             }
                 cell.orderIDLabel.text = "訂單編號：" + "\(datas[0].orders[indexPath.row].order.orderID)"
                 

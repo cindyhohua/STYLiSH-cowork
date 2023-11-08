@@ -9,25 +9,22 @@
 import UIKit
 import Kingfisher
 
-class ProductsOfOrderViewController: UIViewController {
-   
-    
-
+class ProductsOfOrderViewController: UIViewController{
     override func viewDidLoad() {
         super.viewDidLoad()
-
-        // Do any additional setup after loading the view.
         setTable()
         setOrderInfoView()
         setProductListLayout()
         setNavigationAndTab()
-        
-        
-    }
-    override func viewWillAppear(_ animated: Bool) {
-        fetchData()
         setOrderInfoView()
-        productListTable.reloadData()
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        product = []
+        datas = nil
+        fetchData()
+        
     }
     
 
@@ -50,34 +47,60 @@ class ProductsOfOrderViewController: UIViewController {
    
     var didReview = false
     
+    struct ProductCell{
+        let id: Int
+        let mainImage: String?
+        let name: String
+        let price: Int?
+        var context: String
+        let isFeedback: Bool
+    }
+    
+    
     private let marketProvider = MarketProvider(httpClient: HTTPClient())
     var token = KeyChainManager.shared.token
     var processedDataColor: [Int: [String]] = [:]
     var processedDataSize: [Int: [String]] = [:]
     var groupedItems: [Int: [List]] = [:]
+    var product: [ProductCell] = []
     private var datas: OrderDetail? = nil  {
         didSet {
             if let data = datas?.order{
                 let dateString = data.createTime
-                // 创建日期格式化器
-                let dateFormatter = DateFormatter()
-                dateFormatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss.SSSZ"
+                orderTimeLabel.text = "購賣日期：" + String(dateString.prefix(10))
 
-                // 设置时区（如果字符串中有 Z 表示 Zulu 时间，即 UTC）
-                dateFormatter.timeZone = TimeZone(identifier: "UTC")
-        //            dateFormatter.timeZone = TimeZone.current
-                // 将字符串转换为日期
-                if let date = dateFormatter.date(from: dateString) {
-                    orderTimeLabel.text = "購賣日期：" + "\(date)"
-                    print(date)
-                } else {
-                    orderTimeLabel.text = "購賣日期：" + String(dateString.prefix(10))
+                var test: [Int] = []
+                for index in 0..<(data.list?.count ?? 0) {
+                    if !test.contains(data.list?[index].id ?? 0) {
+                        test.append(data.list?[index].id ?? 0)
+                        product.append(ProductCell(id: (data.list?[index].id)!,
+                                                   mainImage: data.list?[index].mainImage,
+                                                   name: (data.list?[index].name)!,
+                                                   price: data.list?[index].price,
+                                                   context: "",
+                                                   isFeedback: (data.list?[index].isFeedback)!))
+                    }
                 }
+                print(test)
+                var test2: [String] = []
+                for index in 0..<test.count {
+                    for data in data.list! {
+                        if data.id == test[index] {
+                            test2.append(data.color.name + data.size)
+                            product[index].context += data.color.name + data.size + " "
+                        }
+                    }
+                    print(test2)
+                    
+                    print("qqqqqqq",product[index].context)
+                    test2 = []
+                }
+                
+                
                 orderIDLabel.text = "訂單編號：\(data.orderID)"
+                productListTable.reloadData()
             }
             
-            
-            productListTable.reloadData()
         }
     }
     
@@ -97,40 +120,42 @@ class ProductsOfOrderViewController: UIViewController {
                 self?.datas = ordersDetail
                 print("\(self?.datas)")
                 
-                self?.groupedItems = [:]
-                self?.processedDataSize = [:]
-                self?.processedDataColor = [:]
-                if let list = self?.datas?.order.list{
-                    for item in list{
-                        
-                        if self?.groupedItems[item.id] == nil {
-                            self?.groupedItems[item.id] = []
-                        }
-                        
-                        self?.groupedItems[item.id]?.append(item)
-                        
-                        // Process color data
-                        if self?.processedDataColor[item.id] == nil {
-                            self?.processedDataColor[item.id] = []
-                        }
-                        
-                        self?.processedDataColor[item.id]!.append(item.color.code)
-                        
-                        // Process size data
-                        if self?.processedDataSize[item.id] == nil {
-                            self?.processedDataSize[item.id] = []
-                        }
-                        if !(self?.processedDataSize[item.id]!.contains(item.size) ?? true) {
-                            self?.processedDataSize[item.id]?.append(item.size)
-                        }
-                    }
-                }
-                print("\(self?.processedDataColor)")
-                print("\(self?.processedDataSize)")
+            
                 
-                DispatchQueue.main.async {
-                    self?.productListTable.reloadData()
-                }
+//                self?.groupedItems = [:]
+//                self?.processedDataSize = [:]
+//                self?.processedDataColor = [:]
+//                if let list = self?.datas?.order.list{
+//                    for item in list{
+//
+//                        if self?.groupedItems[item.id] == nil {
+//                            self?.groupedItems[item.id] = []
+//                        }
+//
+//                        self?.groupedItems[item.id]?.append(item)
+//
+//                        // Process color data
+//                        if self?.processedDataColor[item.id] == nil {
+//                            self?.processedDataColor[item.id] = []
+//                        }
+//
+//                        self?.processedDataColor[item.id]!.append(item.color.code)
+//
+//                        // Process size data
+//                        if self?.processedDataSize[item.id] == nil {
+//                            self?.processedDataSize[item.id] = []
+//                        }
+//                        if !(self?.processedDataSize[item.id]!.contains(item.size) ?? true) {
+//                            self?.processedDataSize[item.id]?.append(item.size)
+//                        }
+//                    }
+//                }
+//                print("\(self?.processedDataColor)")
+//                print("\(self?.processedDataSize)")
+                
+//                DispatchQueue.main.async {
+//                    self?.productListTable.reloadData()
+//                }
             case .failure:
                 LKProgressHUD.showFailure(text: "讀取資料失敗！")
             }
@@ -203,23 +228,29 @@ extension ProductsOfOrderViewController: UITableViewDelegate, UITableViewDataSou
     func seeReviewActive(cell: ProductsOfOrderTableViewCell) {
         let seeVC = SeeReviewViewController()
         if let indexPath = productListTable.indexPath(for: cell){
-            seeVC.productOfColors = cell.productOfColors
-            seeVC.productOfSize = cell.productOfSize
-            seeVC.orderID = (datas?.order.orderID)!
-            seeVC.productID = (datas?.order.list![indexPath.row].id)!
+            seeVC.productOfSize.removeAll()
+            seeVC.productOfSize.removeAll()
+//            seeVC.productOfColors.append(contentsOf: cell.productOfColors)
+//            seeVC.productOfSize.append(contentsOf: cell.productOfSize)
+//            seeVC.orderID = (datas?.order.orderID)!
+//            let keyArray = Array(groupedItems.keys)
+//            let id = keyArray[indexPath.row]
+//            seeVC.productID = (groupedItems[id]![0].id)
+            if let data = datas{
+                seeVC.orderID = data.order.orderID
+                seeVC.productID = product[indexPath.row].id
+            }
+            
             navigationController?.pushViewController(seeVC, animated: true)
            
         }
         
     }
-    
-  
-    
-    
+
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         if let data = datas{
-            return (groupedItems.keys.count)
+            return product.count
         }else{
             return 0
         }
@@ -229,26 +260,41 @@ extension ProductsOfOrderViewController: UITableViewDelegate, UITableViewDataSou
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         if let cell = productListTable.dequeueReusableCell(withIdentifier: "productCell") as? ProductsOfOrderTableViewCell {
             cell.delegate = self
-            if groupedItems.keys.count > 0{
-                let keyArray = Array(groupedItems.keys)
-                let id = keyArray[indexPath.row]
-                if let value = groupedItems[id]{
-                    if value[0].isFeedback{
-                        cell.checkButtonText = CheckButtonText.init().see
-                    }else{
-                        cell.checkButtonText = CheckButtonText.init().edit
-                    }
-                    cell.productImage.kf.setImage(with: URL(string: value[0].mainImage!))
-                    cell.titleLabel.text = value[0].name
-                }
-                cell.productOfColors.removeAll()
-                cell.productOfSize.removeAll()
-                cell.productOfSize = processedDataSize[id]!
-                for colorCode in processedDataColor[id]!{
-                    cell.productOfColors.append(UIColor.hexStringToUIColor(hex: colorCode))
-                }
-                
+            cell.titleLabel.text = product[indexPath.row].name
+            cell.productImage.kf.setImage(with: URL(string: product[indexPath.row].mainImage!))
+            cell.sizeLabelText.text = "規格：\(product[indexPath.row].context)"
+            
+            print("qqqqqqq",product[indexPath.row].name,product[indexPath.row].context)
+            cell.checkButtonType = nil
+            cell.checkButton.setTitle("", for: .normal)
+            if product[indexPath.row].isFeedback {
+                cell.checkButtonType = .see
+            } else {
+                cell.checkButtonType = .edit
             }
+            cell.checkButton.setTitle(cell.checkButtonType?.title, for: .normal)
+//            cell.checkButton.addTarget(<#T##target: Any?##Any?#>, action: <#T##Selector#>, for: <#T##UIControl.Event#>)
+//            if groupedItems.keys.count > 0{
+//                let keyArray = Array(groupedItems.keys)
+//                let id = keyArray[indexPath.row]
+//                cell.productID = id
+//                if let value = groupedItems[id]{
+//                    if value[0].isFeedback{
+//                        cell.checkButtonType = .edit
+//                    }else{
+//                        cell.checkButtonType = .see
+//                    }
+//                    cell.productImage.kf.setImage(with: URL(string: value[0].mainImage!))
+//                    cell.titleLabel.text = value[0].name
+//                }
+//                cell.productOfColors.removeAll()
+//                cell.productOfSize.removeAll()
+//                cell.productOfSize = processedDataSize[id]!
+//                for colorCode in processedDataColor[id]!{
+//                    cell.productOfColors.append(UIColor.hexStringToUIColor(hex: colorCode))
+//                }
+//
+//            }
             
             return cell
         } else {
@@ -263,16 +309,31 @@ extension ProductsOfOrderViewController: UITableViewDelegate, UITableViewDataSou
     
     func reviewActive(cell: ProductsOfOrderTableViewCell) {
         let reviewVC = ReviewViewController()
+//        reviewVC.delegate = self
         if let indexPath = productListTable.indexPath(for: cell){
-            let data = datas?.order.list![indexPath.row]
-            reviewVC.productImage.kf.setImage(with: URL(string: (data?.mainImage)!))
-            reviewVC.titleLabel.text = data?.name
-            reviewVC.productOfSize.removeAll()
-            reviewVC.productOfSize.append(data!.size)
-            reviewVC.productOfColors.removeAll()
-            reviewVC.productOfColors.append(UIColor.hexStringToUIColor(hex: (data?.color.code)!))
-            reviewVC.productId = data!.id
-            reviewVC.orderId = (datas?.order.orderID)!
+//            let keyArray = Array(groupedItems.keys)
+//            let id = keyArray[indexPath.row]
+            if let data = datas{
+                reviewVC.orderId = data.order.orderID
+                reviewVC.productId = (product[indexPath.row].id)
+                reviewVC.productImage.kf.setImage(with: URL(string: product[indexPath.row].mainImage!))
+                reviewVC.titleLabel.text = product[indexPath.row].name
+            }
+            
+//            let data = datas?.order.list![indexPath.row]
+//            reviewVC.productImage.kf.setImage(with: URL(string: (data?.mainImage)!))
+//            reviewVC.titleLabel.text = data?.name
+//            reviewVC.productOfSize.removeAll()
+//            reviewVC.productOfSize.append(data!.size)
+//            reviewVC.productOfColors.removeAll()
+//            reviewVC.productOfColors.append(UIColor.hexStringToUIColor(hex: (data?.color.code)!))
+//            reviewVC.productId = data!.id
+//            reviewVC.orderId = (datas?.order.orderID)!
+           
+//            reviewVC.productOfColors.append(contentsOf: cell.productOfColors)
+//            reviewVC.productOfSize.append(contentsOf: cell.productOfSize)
+//            seeVC.orderID = (datas?.order.orderID)!
+          
         }
         
         

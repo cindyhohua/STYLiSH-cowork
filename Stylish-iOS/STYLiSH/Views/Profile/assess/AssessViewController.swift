@@ -8,8 +8,12 @@
 
 import UIKit
 
-class ReviewViewController: ReviewModelViewController, UITextViewDelegate {
+protocol CindyDelegate{
+    func refresh()
+}
 
+class ReviewViewController: ReviewModelViewController, UITextViewDelegate {
+//    var delegate: CindyDelegate?
     override func viewDidLoad() {
         super.viewDidLoad()
 
@@ -63,34 +67,38 @@ class ReviewViewController: ReviewModelViewController, UITextViewDelegate {
     var comment: String = ""
     private let marketProvider = MarketProvider(httpClient: HTTPClient())
     var token = KeyChainManager.shared.token
-//    let testToken = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjM3LCJpYXQiOjE2OTkyNTg5ODMsImV4cCI6MTY5OTI2MjU4M30.1ZOurs2eGwA7bXrvCcnwNjlVOMeSlMX4tIR9VpqHGeI"
     typealias PostReviewResponse = () -> Void
     let dispatchGroup = DispatchGroup()
-    func postData(afterCommpletion: @escaping PostReviewResponse) {
-        let semaphore = DispatchSemaphore(value: 2)
-        let queue = DispatchQueue(label: "go")
+    func postData() { //afterCommpletion: @escaping PostReviewResponse
+//        let semaphore = DispatchSemaphore(value: 1)
+//        let queue = DispatchQueue(label: "go", attributes: .concurrent)
         comment = reviewTextView.text
-        queue.async { [self] in
-            semaphore.wait() // count-1 ,wait()一定不能在main thread呼叫
+//        queue.async { [self] in
+//            semaphore.wait() // count-1 ,wait()一定不能在main thread呼叫
             if let testToken = testToken{
+            
             marketProvider.postReview(token: testToken, productID: productId, orderID: orderId, score: score, comment: comment, completion:{ [weak self] result in
                 switch result {
                 case .success(let back):
                     //                    sleep(2) // 模擬真正執行的任務e.g. 下載
                     
-                    semaphore.signal() // count+1
-                    semaphore.wait()
-                    LKProgressHUD.showSuccess(text: back)
-                    sleep(3)
-                    semaphore.signal()
-                    afterCommpletion()
-                    return print(back)
+//                    semaphore.signal() // count+1
+//                    LKProgressHUD.showSuccessPost(text: "back")
+//                    , backPerPage: {
+//                        afterCommpletion()
+//                    })
+                    DispatchQueue.main.async {
+                        sleep(1)
+                        self?.navigationController?.popViewController(animated: true)
+//                        delegate
+                    }
+                    
                 case .failure:
                     LKProgressHUD.showFailure(text: "讀取資料失敗！")
                 }
             })
         }
-               }
+//               }
         
        
        
@@ -126,13 +134,8 @@ class ReviewViewController: ReviewModelViewController, UITextViewDelegate {
     }
     
     @objc func checkButtonActive(){
-        postData {
-            DispatchQueue.main.async {
-                self.navigationController?.popViewController(animated: true)
-            }
-            
-        }
-        
+        postData()
+//        delegate?.refresh()
     }
     
     @objc func starButtonActive(_ sender: UIButton){
